@@ -4,7 +4,7 @@ import Hero from "../components/Hero";
 
 export default function Layout() {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen roboto-mono">
       <Header />
       <Hero />
 
