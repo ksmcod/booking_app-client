@@ -3,7 +3,7 @@ import Logo from "./Logo";
 
 export default function Header() {
   return (
-    <div className="bg-blue-800 py-6">
+    <div className="bg-blue-800 py-5">
       <div className="container mx-auto flex justify-between">
         <Logo />
 
