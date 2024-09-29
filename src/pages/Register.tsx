@@ -1,7 +1,137 @@
+import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
+import githubmarkwhite from "../assets/github-mark/github-mark-white.png";
+
+interface RegisterFormData {
+  email: string;
+  firstName: string;
+  lastName: string;
+  password: string;
+  confirmPassword: string;
+}
 export default function Register() {
+  const { register, watch, handleSubmit } = useForm<RegisterFormData>();
+
+  const onSubmit = handleSubmit((data) => {
+    console.log(data);
+  });
+
   return (
-    <form className="flex flex-col gap-5 py-4">
-      <h2 className="text-2xl font-bold text-center">Create an account</h2>
-    </form>
+    <div className="p-4">
+      <div className="border max-w-4xl mx-auto my-6 p-3">
+        <form onSubmit={onSubmit} className="flex flex-col gap-5 p-4 ">
+          <h2 className="text-3xl font-bold text-center">Create an account</h2>
+          <div className="flex flex-col md:flex-row gap-5">
+            {/*First name field  */}
+            <label
+              htmlFor="firstName"
+              className="text-gray-700 text-sm font-bold flex-1"
+            >
+              First Name
+              <input
+                className="border rounded w-full p-2 font-normal"
+                id="firstName"
+                {...register("firstName", {
+                  required: "This field is required",
+                })}
+              />
+            </label>
+
+            {/* Last name field */}
+            <label
+              htmlFor="lastName"
+              className="text-gray-700 text-sm font-bold flex-1"
+            >
+              Last Name
+              <input
+                type="text"
+                className="border rounded w-full p-2 font-normal"
+                id="lastName"
+                {...register("lastName", {
+                  required: "This field is required",
+                })}
+              />
+            </label>
+          </div>
+
+          {/*Email field  */}
+          <label
+            htmlFor="email"
+            className="text-gray-700 text-sm font-bold flex-1"
+          >
+            Email
+            <input
+              type="email"
+              className="border rounded w-full p-2 font-normal"
+              id="email"
+              {...register("email", { required: "This field is required" })}
+            />
+          </label>
+
+          {/* Password field */}
+          <label
+            htmlFor="password"
+            className="text-gray-700 text-sm font-bold flex-1"
+          >
+            Password
+            <input
+              type="password"
+              className="border rounded w-full p-2 font-normal"
+              id="password"
+              {...register("password", {
+                required: "This field is required",
+                minLength: {
+                  value: 8,
+                  message: "Your password should be at least 8 characters",
+                },
+              })}
+            />
+          </label>
+
+          {/* Confirm password field */}
+          <label
+            htmlFor="confirmPassword"
+            className="text-gray-700 text-sm font-bold flex-1"
+          >
+            Confirm password
+            <input
+              type="password"
+              className="border rounded w-full p-2 font-normal"
+              id="confirmPassword"
+              {...register("confirmPassword", {
+                validate: (val) => {
+                  if (!val) {
+                    return "This field is required";
+                  } else if (watch("password") !== val) {
+                    return "Your passwords don't match";
+                  }
+                },
+              })}
+            />
+          </label>
+
+          {/* Submit button */}
+          <button className="bg-blue-600 text-white font-bold p-2 hover:bg-blue-500 active:opacity-90 text-xl rounded">
+            Create account
+          </button>
+          <span className="text-sm text-neutral-500">
+            Already have an account?{" "}
+            <Link to={"/login"} className="hover:underline">
+              Login
+            </Link>
+          </span>
+        </form>
+
+        {/* SOCIAL MEDIA LOGIN */}
+        <hr className="w-5/6 mx-auto" />
+        <div className="my-5 p-4">
+          <button className="w-full py-2 bg-black flex justify-center items-center gap-4 rounded text-white font-bold hover:opacity-90 active:opacity-85">
+            Continue with Github
+            <img src={githubmarkwhite} alt="Github logo" className="w-9" />
+          </button>
+        </div>
+        <br />
+      </div>
+    </div>
   );
 }
