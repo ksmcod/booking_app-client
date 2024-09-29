@@ -10,7 +10,12 @@ interface RegisterFormData {
   confirmPassword: string;
 }
 export default function Register() {
-  const { register, watch, handleSubmit } = useForm<RegisterFormData>();
+  const {
+    register,
+    watch,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegisterFormData>();
 
   const onSubmit = handleSubmit((data) => {
     console.log(data);
@@ -35,6 +40,11 @@ export default function Register() {
                   required: "This field is required",
                 })}
               />
+              {errors.firstName && (
+                <span className="px-1 text-red-500">
+                  {errors.firstName.message}
+                </span>
+              )}
             </label>
 
             {/* Last name field */}
@@ -51,6 +61,11 @@ export default function Register() {
                   required: "This field is required",
                 })}
               />
+              {errors.lastName && (
+                <span className="px-1 text-red-500">
+                  {errors.lastName.message}
+                </span>
+              )}
             </label>
           </div>
 
@@ -66,6 +81,9 @@ export default function Register() {
               id="email"
               {...register("email", { required: "This field is required" })}
             />
+            {errors.email && (
+              <span className="px-1 text-red-500">{errors.email.message}</span>
+            )}
           </label>
 
           {/* Password field */}
@@ -86,6 +104,11 @@ export default function Register() {
                 },
               })}
             />
+            {errors.password && (
+              <span className="px-1 text-red-500">
+                {errors.password.message}
+              </span>
+            )}
           </label>
 
           {/* Confirm password field */}
@@ -108,6 +131,11 @@ export default function Register() {
                 },
               })}
             />
+            {errors.confirmPassword && (
+              <span className="px-1 text-red-500">
+                {errors.confirmPassword.message}
+              </span>
+            )}
           </label>
 
           {/* Submit button */}
@@ -122,8 +150,9 @@ export default function Register() {
           </span>
         </form>
 
-        {/* SOCIAL MEDIA LOGIN */}
         <hr className="w-5/6 mx-auto" />
+
+        {/* SOCIAL MEDIA LOGIN */}
         <div className="my-5 p-4">
           <button className="w-full py-2 bg-black flex justify-center items-center gap-4 rounded text-white font-bold hover:opacity-90 active:opacity-85">
             Continue with Github

@@ -14,7 +14,7 @@ export default function Layout() {
       </div>
 
       {/* <div className="flex-1 max-w-7xl mx-auto w-full mt-16"> */}
-      <div className="flex-1 max-w-7xl mx-auto w-full">
+      <div className="flex-1 max-w-6xl mx-auto w-full">
         <Outlet />
       </div>
 

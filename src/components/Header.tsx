@@ -5,7 +5,7 @@ export default function Header() {
   return (
     // <div className="bg-blue-800 p-5 fixed w-full">
     <div className="bg-blue-800 p-5">
-      <div className="max-w-5xl mx-auto flex justify-between">
+      <div className="max-w-7xl mx-auto flex justify-between">
         <Logo />
 
         <span className="flex space-x-2">
