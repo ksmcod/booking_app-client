@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import githubmarkwhite from "../assets/github-mark/github-mark-white.png";
 
-interface RegisterFormData {
+export interface RegisterFormData {
   email: string;
   firstName: string;
   lastName: string;
