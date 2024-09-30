@@ -1,9 +1,14 @@
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+
+import { useAppDispatch } from "../app/hooks";
+import { setUser } from "../app/slices/userSlice";
+
 import { useRegisterUserMutation } from "../app/api/usersApi";
 import githubmarkwhite from "../assets/github-mark/github-mark-white.png";
 import Loader from "../components/Loader";
-import toast from "react-hot-toast";
 
 export interface RegisterFormData {
   email: string;
@@ -13,8 +18,11 @@ export interface RegisterFormData {
   confirmPassword: string;
 }
 export default function Register() {
-  const [registerMutation, { isLoading, isSuccess }] =
+  const [registerMutation, { isLoading, isSuccess, data }] =
     useRegisterUserMutation();
+
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const {
     register,
@@ -32,20 +40,22 @@ export default function Register() {
       })
       .catch((error) => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        toast.error(error.data.message, {
+        toast.error(error?.data?.message ?? "An error occured", {
           position: "top-center",
         });
       });
   });
 
+  if (isSuccess) {
+    console.log("SUCCESS!\ndata is: ", data);
+    dispatch(setUser(data));
+    navigate("/");
+  }
+
   // if (isError) {
   //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   //   toast.error((error as any).data.message);
   // }
-
-  if (isSuccess) {
-    console.log("SUCCESS!!");
-  }
 
   return (
     <div className="p-4">
