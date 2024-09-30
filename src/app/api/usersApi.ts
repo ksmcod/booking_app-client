@@ -2,7 +2,7 @@ import { api } from "./api";
 import { RegisterFormData } from "../../pages/Register";
 import { User } from "../../types";
 
-// const AUTH_URL = "/auth";
+const AUTH_URL = "/auth";
 const USER_URL = "/users";
 
 const usersApi = api.injectEndpoints({
@@ -15,7 +15,12 @@ const usersApi = api.injectEndpoints({
         credentials: "include",
       }),
     }),
+    checkUser: builder.query<User, void>({
+      query: () => ({
+        url: `${AUTH_URL}/check`,
+      }),
+    }),
   }),
 });
 
-export const { useRegisterUserMutation } = usersApi;
+export const { useCheckUserQuery, useRegisterUserMutation } = usersApi;
