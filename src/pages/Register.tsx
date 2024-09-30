@@ -1,6 +1,9 @@
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import { useRegisterUserMutation } from "../app/api/usersApi";
 import githubmarkwhite from "../assets/github-mark/github-mark-white.png";
+import Loader from "../components/Loader";
+import toast from "react-hot-toast";
 
 export interface RegisterFormData {
   email: string;
@@ -10,6 +13,9 @@ export interface RegisterFormData {
   confirmPassword: string;
 }
 export default function Register() {
+  const [registerMutation, { isLoading, isSuccess }] =
+    useRegisterUserMutation();
+
   const {
     register,
     watch,
@@ -18,8 +24,25 @@ export default function Register() {
   } = useForm<RegisterFormData>();
 
   const onSubmit = handleSubmit((data) => {
-    console.log(data);
+    registerMutation(data)
+      .unwrap()
+      .then((payload) => console.log("Fulfilled: ", payload))
+      .catch((error) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        toast.error(error.data.message, {
+          position: "top-center",
+        });
+      });
   });
+
+  // if (isError) {
+  //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  //   toast.error((error as any).data.message);
+  // }
+
+  if (isSuccess) {
+    console.log("SUCCESS!!");
+  }
 
   return (
     <div className="p-4">
@@ -139,9 +162,13 @@ export default function Register() {
           </label>
 
           {/* Submit button */}
-          <button className="bg-blue-600 text-white font-bold p-2 hover:bg-blue-500 active:opacity-90 text-xl rounded">
-            Create account
+          <button
+            disabled={isLoading}
+            className="bg-blue-600 text-white font-bold p-2 hover:bg-blue-500 active:opacity-90 text-xl rounded flex justify-center items-center disabled:cursor-not-allowed"
+          >
+            {isLoading ? <Loader /> : "Create account"}
           </button>
+
           <span className="text-sm text-neutral-500">
             Already have an account?{" "}
             <Link to={"/login"} className="hover:underline">
