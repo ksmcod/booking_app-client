@@ -26,7 +26,10 @@ export default function Register() {
   const onSubmit = handleSubmit((data) => {
     registerMutation(data)
       .unwrap()
-      .then((payload) => console.log("Fulfilled: ", payload))
+      .then((payload) => {
+        console.log("Success... Payload: ", payload);
+        toast.success("Registration successful");
+      })
       .catch((error) => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         toast.error(error.data.message, {
