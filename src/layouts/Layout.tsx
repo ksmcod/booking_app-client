@@ -12,7 +12,7 @@ export default function Layout() {
   const location = useLocation();
   const dispatch = useAppDispatch();
 
-  const { isFetching, refetch } = useCheckUserQuery();
+  const { refetch, isLoading } = useCheckUserQuery();
 
   const check = useCallback(async () => {
     await refetch()
@@ -40,7 +40,7 @@ export default function Layout() {
   }, [location.key, check]);
 
   return (
-    !isFetching && (
+    !isLoading && (
       <div className="flex flex-col min-h-screen justify-between roboto relative">
         {/* <Header /> */}
         <div className="">

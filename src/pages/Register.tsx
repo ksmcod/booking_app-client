@@ -1,12 +1,13 @@
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 
 import { useAppDispatch } from "../app/hooks";
 import { setUser } from "../app/slices/userSlice";
 
 import { useRegisterUserMutation } from "../app/api/usersApi";
+
 import githubmarkwhite from "../assets/github-mark/github-mark-white.png";
 import Loader from "../components/Loader";
 
@@ -18,11 +19,11 @@ export interface RegisterFormData {
   confirmPassword: string;
 }
 export default function Register() {
-  const [registerMutation, { isLoading, isSuccess, data }] =
-    useRegisterUserMutation();
+  const [registerMutation, { isLoading }] = useRegisterUserMutation();
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const {
     register,
@@ -37,6 +38,8 @@ export default function Register() {
       .then((payload) => {
         console.log("Success... Payload: ", payload);
         toast.success("Registration successful");
+        dispatch(setUser(payload));
+        navigate("/");
       })
       .catch((error) => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -46,16 +49,25 @@ export default function Register() {
       });
   });
 
-  if (isSuccess) {
-    console.log("SUCCESS!\ndata is: ", data);
-    dispatch(setUser(data));
-    navigate("/");
+  const handleGithubLogin = () => {
+    window.location.href = `${import.meta.env.VITE_API_URL}/auth/github`;
+  };
+
+  function authError() {
+    const isError = searchParams.has("error");
+
+    if (isError) {
+      const errorMessage = searchParams.get("error");
+      toast.error(errorMessage);
+      searchParams.delete("error");
+      setSearchParams(searchParams);
+    }
   }
 
-  // if (isError) {
-  //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  //   toast.error((error as any).data.message);
-  // }
+  // Runs everytime an auth page loads to show message
+  useEffect(() => {
+    authError();
+  }, []);
 
   return (
     <div className="p-4">
@@ -194,7 +206,10 @@ export default function Register() {
 
         {/* SOCIAL MEDIA LOGIN */}
         <div className="my-5 p-4">
-          <button className="w-full py-2 bg-black flex justify-center items-center gap-4 rounded text-white font-bold hover:opacity-90 active:opacity-85">
+          <button
+            onClick={() => handleGithubLogin()}
+            className="w-full py-2 bg-black flex justify-center items-center gap-4 rounded text-white font-bold hover:opacity-90 active:opacity-85"
+          >
             Continue with Github
             <img src={githubmarkwhite} alt="Github logo" className="w-9" />
           </button>

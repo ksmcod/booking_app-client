@@ -10,10 +10,10 @@ export default function Header() {
 
         <span className="flex space-x-2">
           <Link
-            to={"/login"}
+            to={"/register"}
             className="flex items-center justify-center text-blue-600 px-6 rounded-sm font-bold bg-white hover:bg-gray-100"
           >
-            Login
+            Register
           </Link>
         </span>
       </div>
