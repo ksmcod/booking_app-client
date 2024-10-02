@@ -20,6 +20,7 @@ export default function Layout() {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const isLoggedIn = useAppSelector((state) => state.user.isLoggedIn);
+  const currentUser = useAppSelector((state) => state.user.user);
 
   const [getUser] = useLazyGetUserQuery();
   const [checkToken, { isLoading }] = useLazyCheckTokenQuery();
@@ -46,21 +47,23 @@ export default function Layout() {
   // Fetch User info ONCE, when layout is hydrated for the first time
   useEffect(() => {
     async function getUserFn() {
-      await getUser()
-        .unwrap()
-        .then((payload) => {
-          dispatch(setUser(payload));
-        })
-        .catch((err) => {
-          console.log("ERROR IN GET USER: ", err);
-          if (err?.status === 401) {
-            dispatch(clearUser());
-          }
-        });
+      if (!currentUser) {
+        await getUser()
+          .unwrap()
+          .then((payload) => {
+            dispatch(setUser(payload));
+          })
+          .catch((err) => {
+            console.log("ERROR IN GET USER: ", err);
+            if (err?.status === 401) {
+              dispatch(clearUser());
+            }
+          });
+      }
     }
 
     getUserFn();
-  }, [dispatch, getUser, isLoggedIn]);
+  }, [dispatch, getUser, isLoggedIn, currentUser]);
 
   // Send request on every page load, to check token availability
   useEffect(() => {

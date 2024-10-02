@@ -1,6 +1,7 @@
 import { api } from "./api";
 import { RegisterFormData } from "../../pages/Register";
 import { User } from "../../types";
+import { LoginFormData } from "../../pages/Login";
 
 const AUTH_URL = "/auth";
 const USER_URL = "/users";
@@ -12,7 +13,13 @@ const usersApi = api.injectEndpoints({
         url: `${USER_URL}/register`,
         method: "POST",
         body,
-        credentials: "include",
+      }),
+    }),
+    loginUser: builder.mutation<User, LoginFormData>({
+      query: (body) => ({
+        url: `${AUTH_URL}/login`,
+        method: "POST",
+        body,
       }),
     }),
     getUser: builder.query<User, void>({
@@ -30,4 +37,5 @@ export const {
   useLazyGetUserQuery,
   useLazyCheckTokenQuery,
   useRegisterUserMutation,
+  useLoginUserMutation,
 } = usersApi;

@@ -1,10 +1,9 @@
-import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useSearchParams, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 import { useAppDispatch } from "../app/hooks";
-import { setUser } from "../app/slices/userSlice";
+import { setIsLoggedIn, setUser } from "../app/slices/userSlice";
 
 import { useRegisterUserMutation } from "../app/api/usersApi";
 
@@ -19,11 +18,10 @@ export interface RegisterFormData {
   confirmPassword: string;
 }
 export default function Register() {
-  const [registerMutation, { isLoading }] = useRegisterUserMutation();
+  const [registerUser, { isLoading }] = useRegisterUserMutation();
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [searchParams, setSearchParams] = useSearchParams();
 
   const {
     register,
@@ -33,16 +31,16 @@ export default function Register() {
   } = useForm<RegisterFormData>();
 
   const onSubmit = handleSubmit((data) => {
-    registerMutation(data)
+    registerUser(data)
       .unwrap()
       .then((payload) => {
-        console.log("Success... Payload: ", payload);
+        // console.log("Success... Payload: ", payload);
         toast.success("Registration successful");
+        dispatch(setIsLoggedIn());
         dispatch(setUser(payload));
         navigate("/");
       })
       .catch((error) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         toast.error(error?.data?.message ?? "An error occured", {
           position: "top-center",
         });
@@ -53,25 +51,9 @@ export default function Register() {
     window.location.href = `${import.meta.env.VITE_API_URL}/auth/github`;
   };
 
-  const authError = useCallback(() => {
-    const isError = searchParams.has("error");
-
-    if (isError) {
-      const errorMessage = searchParams.get("error");
-      toast.error(errorMessage);
-      searchParams.delete("error");
-      setSearchParams(searchParams);
-    }
-  }, [searchParams, setSearchParams]);
-
-  // Runs everytime an auth page loads to show message
-  useEffect(() => {
-    authError();
-  }, [authError]);
-
   return (
     <div className="p-4">
-      <div className="border max-w-4xl mx-auto my-6 p-3">
+      <div className="border max-w-4xl mx-auto p-3">
         <form onSubmit={onSubmit} className="flex flex-col gap-5 p-4 ">
           <h2 className="text-3xl font-bold text-center">Create an account</h2>
           <div className="flex flex-col md:flex-row gap-5">
@@ -187,25 +169,27 @@ export default function Register() {
           </label>
 
           {/* Submit button */}
-          <button
-            disabled={isLoading}
-            className="bg-blue-600 text-white font-bold p-2 hover:bg-blue-500 active:opacity-90 text-xl rounded flex justify-center items-center disabled:cursor-not-allowed"
-          >
-            {isLoading ? <Loader /> : "Create account"}
-          </button>
+          <div className="flex flex-col gap-1">
+            <button
+              disabled={isLoading}
+              className="bg-blue-600 text-white font-bold p-2 hover:bg-blue-500 active:opacity-90 text-xl rounded flex justify-center items-center disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {isLoading ? <Loader /> : "Create account"}
+            </button>
 
-          <span className="text-sm text-neutral-500">
-            Already have an account?
-            <Link to={"/login"} className="hover:underline">
-              Login
-            </Link>
-          </span>
+            <span className="text-sm text-neutral-500 flex gap-1">
+              Already have an account?
+              <Link to={"/login"} className="hover:underline">
+                Login
+              </Link>
+            </span>
+          </div>
         </form>
 
         <hr className="w-5/6 mx-auto" />
 
         {/* SOCIAL MEDIA LOGIN */}
-        <div className="my-5 p-4">
+        <div className="my-1 px-4 py-2">
           <button
             onClick={() => handleGithubLogin()}
             className="w-full py-2 bg-black flex justify-center items-center gap-4 rounded text-white font-bold hover:opacity-90 active:opacity-85"
@@ -214,7 +198,6 @@ export default function Register() {
             <img src={githubmarkwhite} alt="Github logo" className="w-9" />
           </button>
         </div>
-        <br />
       </div>
     </div>
   );
