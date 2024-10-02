@@ -25,25 +25,6 @@ export default function Layout() {
   const [getUser] = useLazyGetUserQuery();
   const [checkToken, { isLoading }] = useLazyCheckTokenQuery();
 
-  // const getUserFn = useCallback(async () => {
-  //   await getUser()
-  //     .unwrap()
-  //     .then((payload) => {
-  //       dispatch(setUser(payload));
-  //     })
-  //     .catch((err) => {
-  //       if (err?.status === 401) {
-  //         dispatch(clearUser());
-  //       }
-  //     });
-  // }, [getUser, dispatch]);
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  // if (isError && (error as any)?.status === 401) {
-  //   console.log("ERROR HERE -> ", error);
-  //   dispatch(clearUser());
-  // }
-
   // Fetch User info ONCE, when layout is hydrated for the first time
   useEffect(() => {
     async function getUserFn() {
