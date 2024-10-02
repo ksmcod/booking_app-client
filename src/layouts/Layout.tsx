@@ -75,7 +75,7 @@ export default function Layout() {
 
   return (
     !isLoading && (
-      <div className="flex flex-col min-h-screen justify-between roboto relative">
+      <div className="flex flex-col min-h-screen justify-between roboto relative bg-white">
         {/* <Header /> */}
         <div className="">
           <Header />

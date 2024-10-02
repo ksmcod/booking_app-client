@@ -195,7 +195,7 @@ export default function Register() {
           </button>
 
           <span className="text-sm text-neutral-500">
-            Already have an account?{" "}
+            Already have an account?
             <Link to={"/login"} className="hover:underline">
               Login
             </Link>
