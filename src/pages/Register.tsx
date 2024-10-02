@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -53,7 +53,7 @@ export default function Register() {
     window.location.href = `${import.meta.env.VITE_API_URL}/auth/github`;
   };
 
-  function authError() {
+  const authError = useCallback(() => {
     const isError = searchParams.has("error");
 
     if (isError) {
@@ -62,12 +62,12 @@ export default function Register() {
       searchParams.delete("error");
       setSearchParams(searchParams);
     }
-  }
+  }, [searchParams, setSearchParams]);
 
   // Runs everytime an auth page loads to show message
   useEffect(() => {
     authError();
-  }, []);
+  }, [authError]);
 
   return (
     <div className="p-4">

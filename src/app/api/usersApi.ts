@@ -15,12 +15,19 @@ const usersApi = api.injectEndpoints({
         credentials: "include",
       }),
     }),
-    checkUser: builder.query<User, void>({
+    getUser: builder.query<User, void>({
       query: () => ({
-        url: `${AUTH_URL}/check`,
+        url: `${AUTH_URL}/get-user`,
       }),
+    }),
+    checkToken: builder.query<void, void>({
+      query: () => `${AUTH_URL}/check-token`,
     }),
   }),
 });
 
-export const { useCheckUserQuery, useRegisterUserMutation } = usersApi;
+export const {
+  useLazyGetUserQuery,
+  useLazyCheckTokenQuery,
+  useRegisterUserMutation,
+} = usersApi;

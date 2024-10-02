@@ -3,31 +3,39 @@ import Header from "../components/Header";
 import Hero from "../components/Hero";
 import Footer from "../components/Footer";
 
-import { useCheckUserQuery } from "../app/api/usersApi";
-import { useAppDispatch } from "../app/hooks";
-import { setUser, clearUser } from "../app/slices/userSlice";
-import { useCallback, useEffect } from "react";
+import {
+  useLazyCheckTokenQuery,
+  useLazyGetUserQuery,
+} from "../app/api/usersApi";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import {
+  setUser,
+  clearUser,
+  setIsLoggedIn,
+  clearIsLoggedIn,
+} from "../app/slices/userSlice";
+import { useEffect } from "react";
 
 export default function Layout() {
   const location = useLocation();
   const dispatch = useAppDispatch();
+  const isLoggedIn = useAppSelector((state) => state.user.isLoggedIn);
 
-  const { refetch, isLoading } = useCheckUserQuery();
+  const [getUser] = useLazyGetUserQuery();
+  const [checkToken, { isLoading }] = useLazyCheckTokenQuery();
 
-  const check = useCallback(async () => {
-    await refetch()
-      .unwrap()
-      .then((payload) => {
-        console.log("SUCCESS -> ", payload);
-        dispatch(setUser(payload));
-      })
-      .catch((err) => {
-        if (err?.status === 401) {
-          console.log("ERROR -> ", err);
-          dispatch(clearUser());
-        }
-      });
-  }, []);
+  // const getUserFn = useCallback(async () => {
+  //   await getUser()
+  //     .unwrap()
+  //     .then((payload) => {
+  //       dispatch(setUser(payload));
+  //     })
+  //     .catch((err) => {
+  //       if (err?.status === 401) {
+  //         dispatch(clearUser());
+  //       }
+  //     });
+  // }, [getUser, dispatch]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   // if (isError && (error as any)?.status === 401) {
@@ -35,9 +43,35 @@ export default function Layout() {
   //   dispatch(clearUser());
   // }
 
+  // Fetch User info ONCE, when layout is hydrated for the first time
   useEffect(() => {
-    check();
-  }, [location.key, check]);
+    async function getUserFn() {
+      await getUser()
+        .unwrap()
+        .then((payload) => {
+          dispatch(setUser(payload));
+        })
+        .catch((err) => {
+          console.log("ERROR IN GET USER: ", err);
+          if (err?.status === 401) {
+            dispatch(clearUser());
+          }
+        });
+    }
+
+    getUserFn();
+  }, [dispatch, getUser, isLoggedIn]);
+
+  // Send request on every page load, to check token availability
+  useEffect(() => {
+    checkToken()
+      .unwrap()
+      .then(() => dispatch(setIsLoggedIn()))
+      .catch(() => {
+        // dispatch(clearUser());
+        dispatch(clearIsLoggedIn());
+      });
+  }, [checkToken, dispatch, location.key]);
 
   return (
     !isLoading && (
