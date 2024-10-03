@@ -15,8 +15,6 @@ import {
 
 import { Avatar, AvatarImage } from "./ui/avatar";
 
-import placeholder from "@/assets/placeholder.png";
-
 import Logo from "./Logo";
 import { clearIsLoggedIn, clearUser } from "@/app/slices/userSlice";
 import toast from "react-hot-toast";
@@ -60,9 +58,9 @@ export default function Header() {
         {user ? (
           <DropdownMenu>
             <DropdownMenuTrigger className="focus:outline-none">
-              <Avatar>
+              <Avatar className="text-white hover:outline hover:outline-4 hover:outline-blue-300">
                 {user.image ? (
-                  <AvatarImage src={user.image ?? placeholder} />
+                  <AvatarImage src={user.image} />
                 ) : (
                   <HiOutlineUserCircle className="w-full h-full text-white" />
                 )}
@@ -92,7 +90,7 @@ export default function Header() {
         ) : (
           <DropdownMenu>
             <DropdownMenuTrigger className="focus:outline-none">
-              <Avatar className="text-white">
+              <Avatar className="text-white hover:outline hover:outline-4 hover:outline-blue-300">
                 <HiOutlineUserCircle className="w-full h-full" />
               </Avatar>
             </DropdownMenuTrigger>
