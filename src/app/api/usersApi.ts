@@ -30,6 +30,12 @@ const usersApi = api.injectEndpoints({
     checkToken: builder.query<void, void>({
       query: () => `${AUTH_URL}/check-token`,
     }),
+    logoutUser: builder.mutation<void, void>({
+      query: () => ({
+        url: `${AUTH_URL}/logout`,
+        method: "POST",
+      }),
+    }),
   }),
 });
 
@@ -38,4 +44,5 @@ export const {
   useLazyCheckTokenQuery,
   useRegisterUserMutation,
   useLoginUserMutation,
+  useLogoutUserMutation,
 } = usersApi;

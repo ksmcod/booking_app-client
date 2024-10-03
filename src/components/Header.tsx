@@ -1,4 +1,9 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { HiOutlineUserCircle } from "react-icons/hi2";
+
+import { useAppDispatch, useAppSelector } from "@/app/hooks";
+import { useLogoutUserMutation } from "@/app/api/usersApi";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,24 +13,33 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Avatar, AvatarImage } from "./ui/avatar";
 
 import placeholder from "@/assets/placeholder.png";
 
 import Logo from "./Logo";
-import { useAppSelector } from "@/app/hooks";
+import { clearIsLoggedIn, clearUser } from "@/app/slices/userSlice";
+import toast from "react-hot-toast";
 
 export default function Header() {
   const user = useAppSelector((state) => state.user.user);
+  const dispatch = useAppDispatch();
 
   const navigate = useNavigate();
 
-  const linkToRegisterPage = () => {
-    navigate("/register");
-  };
+  const [logoutUser] = useLogoutUserMutation();
 
-  const linkToLoginPage = () => {
-    navigate("/login");
+  const handleLogout = async () => {
+    await logoutUser()
+      .then(() => {
+        dispatch(clearIsLoggedIn());
+        dispatch(clearUser());
+        toast.success("See you soon...");
+        navigate("/");
+      })
+      .catch(() => {
+        toast.error("An error occured");
+      });
   };
 
   return (
@@ -47,50 +61,51 @@ export default function Header() {
           <DropdownMenu>
             <DropdownMenuTrigger className="focus:outline-none">
               <Avatar>
-                <AvatarImage src={user.image ?? placeholder} />
-                <AvatarFallback>
-                  {user.name.split(" ")[0]}
-                  {user.name.split(" ")[1]}
-                </AvatarFallback>
+                {user.image ? (
+                  <AvatarImage src={user.image ?? placeholder} />
+                ) : (
+                  <HiOutlineUserCircle className="w-full h-full text-white" />
+                )}
               </Avatar>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="font-bold">
+            <DropdownMenuContent className="font-bold border shadow w-48 mx-4">
               <DropdownMenuLabel className="text-center">
                 My Account
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>My Bookings</DropdownMenuItem>
-              <DropdownMenuItem>My Hotels</DropdownMenuItem>
-              <DropdownMenuItem>Team</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Sign out</DropdownMenuItem>
+              <DropdownMenuItem className="w-full px-2">
+                My Bookings
+              </DropdownMenuItem>
+              <DropdownMenuItem className="w-full px-2">
+                My Hotels
+              </DropdownMenuItem>
+              <DropdownMenuItem className="w-full px-2">Team</DropdownMenuItem>
+              <DropdownMenuSeparator className="w-full px-2" />
+              <DropdownMenuItem
+                className="w-full px-2 cursor-pointer"
+                onClick={() => handleLogout()}
+              >
+                Sign out
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
           <DropdownMenu>
             <DropdownMenuTrigger className="focus:outline-none">
-              <Avatar>
-                <AvatarImage src={placeholder} />
+              <Avatar className="text-white">
+                <HiOutlineUserCircle className="w-full h-full" />
               </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="min-w-40 shadow">
-              <DropdownMenuItem
-                className="cursor-pointer"
-                onClick={() => linkToRegisterPage()}
-              >
-                {/* <Link to={"register"} className="w-full">
+              <DropdownMenuItem className="cursor-pointer flex">
+                <Link to={"register"} className="w-full">
                   Register
-                </Link> */}
-                Register
+                </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem
-                className="cursor-pointer"
-                onClick={() => linkToLoginPage()}
-              >
-                {/* <Link to={"login"} className="w-full">
+              <DropdownMenuItem className="cursor-pointer">
+                <Link to={"login"} className="w-full">
                   Login
-                </Link> */}
-                Login
+                </Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

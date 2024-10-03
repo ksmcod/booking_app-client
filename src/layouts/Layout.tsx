@@ -28,7 +28,7 @@ export default function Layout() {
   // Fetch User info ONCE, when layout is hydrated for the first time
   useEffect(() => {
     async function getUserFn() {
-      if (!currentUser) {
+      if (!currentUser || !isLoggedIn) {
         await getUser()
           .unwrap()
           .then((payload) => {
