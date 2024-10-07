@@ -10,6 +10,8 @@ import { useRegisterUserMutation } from "../app/api/usersApi";
 import githubmarkwhite from "../assets/github-mark/github-mark-white.png";
 import Loader from "../components/Loader";
 
+import handleGithubLogin from "@/lib/utils/handleGithub";
+
 export interface RegisterFormData {
   email: string;
   firstName: string;
@@ -46,10 +48,6 @@ export default function Register() {
         });
       });
   });
-
-  const handleGithubLogin = () => {
-    window.location.href = `${import.meta.env.VITE_API_URL}/auth/github`;
-  };
 
   return (
     <div className="p-4">

@@ -11,6 +11,8 @@ import { useLoginUserMutation } from "../app/api/usersApi";
 import { useAppDispatch } from "../app/hooks";
 import { setUser, setIsLoggedIn } from "../app/slices/userSlice";
 
+import handleGithubLogin from "@/lib/utils/handleGithub";
+
 export interface LoginFormData {
   email: string;
   password: string;
@@ -44,10 +46,6 @@ export default function Login() {
         toast.error(error?.data?.message ?? "An error occured");
       });
   });
-
-  const handleGithubLogin = () => {
-    window.location.href = `${import.meta.env.VITE_API_URL}/auth/github`;
-  };
 
   const authError = useCallback(() => {
     const isError = searchParams.has("error");
