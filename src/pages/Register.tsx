@@ -10,7 +10,7 @@ import { useRegisterUserMutation } from "../app/api/usersApi";
 import githubmarkwhite from "../assets/github-mark/github-mark-white.png";
 import Loader from "../components/Loader";
 
-import handleGithubLogin from "@/lib/utils/handleGithub";
+import handleGithubLogin from "@/utils/handleGithub";
 
 export interface RegisterFormData {
   email: string;

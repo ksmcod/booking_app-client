@@ -11,7 +11,7 @@ import { useLoginUserMutation } from "../app/api/usersApi";
 import { useAppDispatch } from "../app/hooks";
 import { setUser, setIsLoggedIn } from "../app/slices/userSlice";
 
-import handleGithubLogin from "@/lib/utils/handleGithub";
+import handleGithubLogin from "@/utils/handleGithub";
 
 export interface LoginFormData {
   email: string;
