@@ -35,7 +35,7 @@ export default function Register() {
       .unwrap()
       .then((payload) => {
         // console.log("Success... Payload: ", payload);
-        toast.success("Registration successful");
+        toast.success("Welcome aboard");
         dispatch(setIsLoggedIn());
         dispatch(setUser(payload));
         navigate("/");

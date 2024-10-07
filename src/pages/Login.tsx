@@ -114,9 +114,9 @@ export default function Login() {
             </button>
 
             <span className="text-sm text-neutral-500 flex gap-1">
-              Already have an account?
-              <Link to={"/login"} className="hover:underline">
-                Login
+              Don't have an account?
+              <Link to={"/register"} className="hover:underline">
+                Create one
               </Link>
             </span>
           </div>

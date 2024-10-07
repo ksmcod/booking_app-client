@@ -42,8 +42,8 @@ export default function Header() {
 
   return (
     // <div className="bg-blue-800 p-5 fixed w-full">
-    <div className="bg-blue-800 p-5">
-      <div className="max-w-7xl mx-auto flex justify-between">
+    <div className="bg-blue-800 p-5 shadow-md">
+      <div className="max-w-7xl mx-auto flex justify-between items-center">
         <Logo />
 
         {/* <span className="flex space-x-2">
@@ -57,7 +57,10 @@ export default function Header() {
 
         {user ? (
           <DropdownMenu>
-            <DropdownMenuTrigger className="focus:outline-none">
+            <DropdownMenuTrigger
+              className="focus:outline-none"
+              aria-label="dropdown-btn"
+            >
               <Avatar className="text-white hover:outline hover:outline-4 hover:outline-blue-300">
                 {user.image ? (
                   <AvatarImage src={user.image} />
@@ -72,10 +75,14 @@ export default function Header() {
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="w-full px-2">
-                My Bookings
+                <Link to={"/my-bookings"} className="w-full">
+                  My Bookings
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem className="w-full px-2">
-                My Hotels
+                <Link to={"/my-hotels"} className="w-full">
+                  My Hotels
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem className="w-full px-2">Team</DropdownMenuItem>
               <DropdownMenuSeparator className="w-full px-2" />
@@ -88,25 +95,15 @@ export default function Header() {
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
-          <DropdownMenu>
-            <DropdownMenuTrigger className="focus:outline-none">
-              <Avatar className="text-white hover:outline hover:outline-4 hover:outline-blue-300">
-                <HiOutlineUserCircle className="w-full h-full" />
-              </Avatar>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="min-w-40 shadow">
-              <DropdownMenuItem className="cursor-pointer flex">
-                <Link to={"register"} className="w-full">
-                  Register
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer">
-                <Link to={"login"} className="w-full">
-                  Login
-                </Link>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <div className="flex items-center gap-2 text-white">
+            <Link
+              to={"/login"}
+              className="px-8 py-2 rounded border-2  border-white hover:bg-blue-500"
+            >
+              Login
+            </Link>
+            {/* <Link to={"/register"}>Register</Link> */}
+          </div>
         )}
       </div>
     </div>
