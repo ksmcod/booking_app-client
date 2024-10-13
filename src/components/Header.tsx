@@ -21,6 +21,8 @@ import toast from "react-hot-toast";
 
 export default function Header() {
   const user = useAppSelector((state) => state.user.user);
+  const isLoggedIn = useAppSelector((state) => state.user.isLoggedIn);
+
   const dispatch = useAppDispatch();
 
   const navigate = useNavigate();
@@ -55,14 +57,14 @@ export default function Header() {
           </Link>
         </span> */}
 
-        {user ? (
+        {isLoggedIn && (
           <DropdownMenu>
             <DropdownMenuTrigger
               className="focus:outline-none"
               aria-label="dropdown-btn"
             >
               <Avatar className="text-white hover:outline hover:outline-4 hover:outline-blue-300">
-                {user.image ? (
+                {user?.image ? (
                   <AvatarImage src={user.image} />
                 ) : (
                   <HiOutlineUserCircle className="w-full h-full text-white" />
@@ -94,7 +96,8 @@ export default function Header() {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        ) : (
+        )}
+        {!isLoggedIn && (
           <div className="flex items-center gap-2 text-white">
             <Link
               to={"/login"}

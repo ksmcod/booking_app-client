@@ -3,10 +3,7 @@ import Header from "../components/Header";
 import Hero from "../components/Hero";
 import Footer from "../components/Footer";
 
-import {
-  useLazyCheckTokenQuery,
-  useLazyGetUserQuery,
-} from "../app/api/usersApi";
+import { useLazyGetUserQuery, useCheckTokenQuery } from "../app/api/usersApi";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import {
   setUser,
@@ -23,7 +20,8 @@ export default function Layout() {
   const currentUser = useAppSelector((state) => state.user.user);
 
   const [getUser] = useLazyGetUserQuery();
-  const [checkToken, { isLoading }] = useLazyCheckTokenQuery();
+  // const [checkToken, { isLoading }] = useLazyCheckTokenQuery();
+  const { refetch, isLoading } = useCheckTokenQuery();
 
   // Fetch User info ONCE, when layout is hydrated for the first time
   useEffect(() => {
@@ -48,14 +46,14 @@ export default function Layout() {
 
   // Send request on every page load, to check token availability
   useEffect(() => {
-    checkToken()
+    refetch()
       .unwrap()
       .then(() => dispatch(setIsLoggedIn()))
       .catch(() => {
         // dispatch(clearUser());
         dispatch(clearIsLoggedIn());
       });
-  }, [checkToken, dispatch, location.key]);
+  }, [refetch, dispatch, location.key]);
 
   return (
     !isLoading && (
