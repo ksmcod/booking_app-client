@@ -82,8 +82,8 @@ export default function Header() {
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem className="w-full px-2">
-                <Link to={"/my-hotels"} className="w-full">
-                  My Hotels
+                <Link to={"/add-hotel"} className="w-full">
+                  Add Hotel
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem className="w-full px-2">Team</DropdownMenuItem>
