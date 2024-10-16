@@ -18,6 +18,8 @@ export default function DetailsSection() {
     <div className="flex flex-col gap-4">
       <h1 className="text-3xl font-bold text-center">Add Hotel</h1>
 
+      <h2 className="text-2xl">Details</h2>
+
       <label htmlFor="name" className="text-gray-700 text-sm font-bold flex-1">
         Name
         <input
