@@ -67,7 +67,7 @@ export default function Login() {
     <div className="p-4">
       <div className="border max-w-4xl mx-auto p-3">
         <form className="flex flex-col gap-5 p-4" onSubmit={onSubmit}>
-          <h2 className="text-3xl font-bold text-center">Login</h2>
+          <h1 className="text-3xl font-bold text-center">Login</h1>
           <div className=""></div>
           <label
             htmlFor="email"
