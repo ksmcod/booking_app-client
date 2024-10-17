@@ -1,5 +1,5 @@
 import { useFormContext } from "react-hook-form";
-import { hotelTypes } from "@/utils/hotelTypes";
+import { hotelTypes } from "@/utils/hotelConfigs";
 import { HotelFormData } from "./ManageHotelForm";
 
 import { Label } from "@/components/ui/label";

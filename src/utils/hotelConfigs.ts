@@ -3,6 +3,8 @@ interface HotelType {
   description: string;
 }
 
+type HotelFacilities = string[];
+
 export const hotelTypes: HotelType[] = [
   {
     type: "Budget",
@@ -48,8 +50,20 @@ export const hotelTypes: HotelType[] = [
     description:
       "Hotels catering to guests who need to stay for longer periods, offering kitchen facilities and more home-like amenities.",
   },
-  {
-    type: "Pet Friendly",
-    description: "Hotels which allows for pets.",
-  },
+];
+
+export const hotelFacilities: HotelFacilities = [
+  "Free WiFi",
+  "Pool",
+  "Gym",
+  "Spa",
+  "Restaurant",
+  "Bar",
+  "Parking",
+  "Room Service",
+  "Laundy Service",
+  "Conference Rooms",
+  "Pet Friendly",
+  "Games",
+  "Parking",
 ];
