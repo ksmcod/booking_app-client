@@ -65,5 +65,4 @@ export const hotelFacilities: HotelFacilities = [
   "Conference Rooms",
   "Pet Friendly",
   "Games",
-  "Parking",
 ];

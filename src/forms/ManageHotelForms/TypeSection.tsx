@@ -25,6 +25,7 @@ export default function TypeSection() {
       <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
         {hotelTypes.map((type) => (
           <Label
+            key={type.type}
             htmlFor={type.type}
             className={`cursor-pointer text-md rounded-full sm:px-6 sm:py-3 px-4 py-2 font-normal flex items-center justify-center  shadow ${
               type.type === typeWatch ? "bg-blue-300" : "bg-neutral-100"

@@ -1,6 +1,7 @@
 import { FormProvider, useForm } from "react-hook-form";
 import DetailsSection from "./DetailsSection";
 import TypeSection from "./TypeSection";
+import FacilitiesSection from "./FacilitiesSection";
 
 export interface HotelFormData {
   name: string;
@@ -23,8 +24,14 @@ export default function ManageHotelForm() {
       <div className="p-4">
         <form className="p-3 space-y-6 border max-w-5xl mx-auto">
           <DetailsSection />
+
           <hr className="w-full" />
+
           <TypeSection />
+
+          <hr className="w-full" />
+
+          <FacilitiesSection />
         </form>
       </div>
     </FormProvider>
