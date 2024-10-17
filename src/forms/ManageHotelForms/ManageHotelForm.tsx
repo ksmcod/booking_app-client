@@ -1,9 +1,13 @@
 import { FormProvider, useForm } from "react-hook-form";
+import { useAddHotelMutation } from "@/app/api/myHotelsApi";
+
 import DetailsSection from "./DetailsSection";
 import TypeSection from "./TypeSection";
 import FacilitiesSection from "./FacilitiesSection";
 import GuestsSection from "./GuestsSection";
 import ImagesSection from "./ImagesSection";
+import Loader from "@/components/Loader";
+import toast from "react-hot-toast";
 
 export interface HotelFormData {
   name: string;
@@ -21,10 +25,38 @@ export interface HotelFormData {
 
 export default function ManageHotelForm() {
   const formMethods = useForm<HotelFormData>();
-  const { handleSubmit } = formMethods;
+  const { handleSubmit, reset } = formMethods;
+
+  const [addHotelMutation, { isLoading }] = useAddHotelMutation();
 
   const onSubmit = handleSubmit((data) => {
-    console.log(data);
+    const formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("country", data.country.toLowerCase());
+    formData.append("city", data.city.toLowerCase());
+    formData.append("description", data.description);
+    formData.append("price", data.price.toString());
+    formData.append("starRating", data.starRating.toString());
+    formData.append("type", data.type.toLowerCase());
+    formData.append("adultCount", data.adultCount.toString());
+    formData.append("childrenCount", data.childrenCount.toString());
+
+    data.facilities.forEach((facility, index) => {
+      formData.append(`facilities[${index}]`, facility.toLowerCase());
+    });
+
+    Array.from(data.imageFiles).forEach((image) => {
+      formData.append("imageFiles", image);
+    });
+
+    console.log(formData);
+    addHotelMutation(formData)
+      .unwrap()
+      .then(() => {
+        toast.success("Hotel added successfully");
+        reset();
+      })
+      .catch((err) => toast.error(err?.data?.message ?? "An error occured"));
   });
 
   return (
@@ -53,12 +85,11 @@ export default function ManageHotelForm() {
           <ImagesSection />
 
           <button
-            // disabled={isLoading}
+            disabled={isLoading}
             type="submit"
             className="bg-blue-600 text-white font-bold p-2 hover:bg-blue-500 active:opacity-90 text-xl rounded flex justify-center items-center disabled:cursor-not-allowed disabled:opacity-60 w-full"
           >
-            {/* {isLoading ? <Loader /> : "Login"} */}
-            Submit
+            {isLoading ? <Loader /> : "Submit"}
           </button>
         </form>
       </div>

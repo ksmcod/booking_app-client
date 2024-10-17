@@ -13,9 +13,10 @@ export default function GuestsSection() {
     <div>
       <h2 className="text-2xl mb-3">Guests</h2>
 
-      <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+      <div className="flex flex-col sm:flex-row gap-4">
         {/* Adults */}
         <Label htmlFor="adults" className="text-gray-700 text-sm flex-1">
+          Adults
           <Input
             id="adults"
             type="number"
@@ -38,6 +39,7 @@ export default function GuestsSection() {
 
         {/* Children */}
         <Label htmlFor="children" className="text-gray-700 text-sm flex-1">
+          Children
           <Input
             id="children"
             type="number"
@@ -51,7 +53,6 @@ export default function GuestsSection() {
               value: 0,
             })}
           />
-
           {errors.childrenCount && (
             <span className="text-red-500 text-xs">
               {errors.childrenCount.message}
