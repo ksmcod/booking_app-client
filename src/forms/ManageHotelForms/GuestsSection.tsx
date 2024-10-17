@@ -30,7 +30,9 @@ export default function GuestsSection() {
             })}
           />
           {errors.adultCount && (
-            <span className="text-red-500">{errors.adultCount.message}</span>
+            <span className="text-red-500 text-xs">
+              {errors.adultCount.message}
+            </span>
           )}
         </Label>
 
@@ -51,7 +53,9 @@ export default function GuestsSection() {
           />
 
           {errors.childrenCount && (
-            <span className="text-red-500">{errors.childrenCount.message}</span>
+            <span className="text-red-500 text-xs">
+              {errors.childrenCount.message}
+            </span>
           )}
         </Label>
       </div>

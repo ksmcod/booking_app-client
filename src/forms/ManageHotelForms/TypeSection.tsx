@@ -38,7 +38,7 @@ export default function TypeSection() {
         ))}
       </div>
       {errors.type && (
-        <span className="text-red-500">{errors.type.message}</span>
+        <span className="text-red-500 text-xs">{errors.type.message}</span>
       )}
     </div>
   );

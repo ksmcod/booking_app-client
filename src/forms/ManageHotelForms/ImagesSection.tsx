@@ -52,7 +52,9 @@ export default function ImagesSection() {
         />
       </div>
       {errors.imageFiles && (
-        <span className="text-red-500">{errors.imageFiles.message}</span>
+        <span className="text-red-500 text-xs">
+          {errors.imageFiles.message}
+        </span>
       )}
     </div>
   );

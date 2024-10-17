@@ -26,7 +26,7 @@ export default function DetailsSection() {
           {...register("name", { required: "This field is required" })}
         />
         {errors.name && (
-          <span className="text-red-500">{errors.name.message}</span>
+          <span className="text-red-500 text-xs">{errors.name.message}</span>
         )}
       </Label>
 
@@ -42,7 +42,9 @@ export default function DetailsSection() {
             {...register("country", { required: "This field is required" })}
           />
           {errors.country && (
-            <span className="text-red-500">{errors.country.message}</span>
+            <span className="text-red-500 text-xs">
+              {errors.country.message}
+            </span>
           )}
         </Label>
 
@@ -56,7 +58,7 @@ export default function DetailsSection() {
             {...register("city", { required: "This field is required" })}
           />
           {errors.city && (
-            <span className="text-red-500">{errors.city.message}</span>
+            <span className="text-red-500 text-xs">{errors.city.message}</span>
           )}
         </Label>
       </div>
@@ -71,7 +73,9 @@ export default function DetailsSection() {
           {...register("description", { required: "This field is required" })}
         />
         {errors.description && (
-          <span className="text-red-500">{errors.description.message}</span>
+          <span className="text-red-500 text-xs">
+            {errors.description.message}
+          </span>
         )}
       </Label>
 
@@ -86,7 +90,7 @@ export default function DetailsSection() {
           {...register("price", { required: "This field is required" })}
         />
         {errors.price && (
-          <span className="text-red-500">{errors.price.message}</span>
+          <span className="text-red-500 text-xs">{errors.price.message}</span>
         )}
       </Label>
 
@@ -109,7 +113,9 @@ export default function DetailsSection() {
           ))}
         </select>
         {errors.starRating && (
-          <span className="text-red-500">{errors.starRating.message}</span>
+          <span className="text-red-500 text-xs">
+            {errors.starRating.message}
+          </span>
         )}
       </Label>
     </div>

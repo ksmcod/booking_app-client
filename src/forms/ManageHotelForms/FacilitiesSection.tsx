@@ -40,7 +40,9 @@ export default function Facilities() {
         ))}
       </div>
       {errors.facilities && (
-        <span className="text-red-500">{errors.facilities.message}</span>
+        <span className="text-red-500 text-xs">
+          {errors.facilities.message}
+        </span>
       )}
     </div>
   );
