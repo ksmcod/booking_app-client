@@ -3,6 +3,7 @@ import DetailsSection from "./DetailsSection";
 import TypeSection from "./TypeSection";
 import FacilitiesSection from "./FacilitiesSection";
 import GuestsSection from "./GuestsSection";
+import ImagesSection from "./ImagesSection";
 
 export interface HotelFormData {
   name: string;
@@ -37,6 +38,10 @@ export default function ManageHotelForm() {
           <hr className="w-full" />
 
           <GuestsSection />
+
+          <hr className="w-full" />
+
+          <ImagesSection />
         </form>
       </div>
     </FormProvider>
