@@ -36,6 +36,10 @@ export default function Facilities() {
               value={facility}
               {...register("facilities", {
                 required: "This field is required",
+                minLength: {
+                  value: 1,
+                  message: "Please select one or more facilities",
+                },
               })}
             />
 
