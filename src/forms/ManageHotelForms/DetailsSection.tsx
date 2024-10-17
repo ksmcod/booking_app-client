@@ -1,12 +1,9 @@
 import { useFormContext } from "react-hook-form";
 import { HotelFormData } from "./ManageHotelForm";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function DetailsSection() {
   const {
@@ -20,9 +17,9 @@ export default function DetailsSection() {
 
       <h2 className="text-2xl">Details</h2>
 
-      <label htmlFor="name" className="text-gray-700 text-sm font-bold flex-1">
+      <Label htmlFor="name" className="text-gray-700 text-sm flex-1">
         Name
-        <input
+        <Input
           type="text"
           className="border rounded w-full p-2 font-normal"
           id="name"
@@ -31,17 +28,14 @@ export default function DetailsSection() {
         {errors.name && (
           <span className="text-red-500">{errors.name.message}</span>
         )}
-      </label>
+      </Label>
 
       {/* City and Country */}
       <div className="flex flex-col sm:flex-row gap-4">
         {/* COUNTRY FIELD */}
-        <label
-          htmlFor="country"
-          className="text-gray-700 text-sm font-bold flex-1"
-        >
+        <Label htmlFor="country" className="text-gray-700 text-sm flex-1">
           Country
-          <input
+          <Input
             type="text"
             className="border rounded w-full p-2 font-normal"
             id="country"
@@ -50,15 +44,12 @@ export default function DetailsSection() {
           {errors.country && (
             <span className="text-red-500">{errors.country.message}</span>
           )}
-        </label>
+        </Label>
 
         {/* CITY FIELD */}
-        <label
-          htmlFor="city"
-          className="text-gray-700 text-sm font-bold flex-1"
-        >
+        <Label htmlFor="city" className="text-gray-700 text-sm flex-1">
           City
-          <input
+          <Input
             type="text"
             className="border rounded w-full p-2 font-normal"
             id="city"
@@ -67,30 +58,27 @@ export default function DetailsSection() {
           {errors.city && (
             <span className="text-red-500">{errors.city.message}</span>
           )}
-        </label>
+        </Label>
       </div>
 
       {/* DESCRIPTION */}
-      <label
-        htmlFor="description"
-        className="text-gray-700 text-sm font-bold flex-1"
-      >
+      <Label htmlFor="description" className="text-gray-700 text-sm flex-1">
         Description
-        <textarea
+        <Textarea
           rows={7}
           className="border rounded w-full p-2 font-normal"
           id="description"
           {...register("description", { required: "This field is required" })}
-        ></textarea>
+        />
         {errors.description && (
           <span className="text-red-500">{errors.description.message}</span>
         )}
-      </label>
+      </Label>
 
       {/* PRICE */}
-      <label htmlFor="price" className="text-gray-700 text-sm font-bold flex-1">
-        Price per night
-        <input
+      <Label htmlFor="price" className="text-gray-700 text-sm flex-1">
+        Price per night ($USD)
+        <Input
           type="number"
           min={1}
           className="border rounded w-full p-2 font-normal"
@@ -100,32 +88,30 @@ export default function DetailsSection() {
         {errors.price && (
           <span className="text-red-500">{errors.price.message}</span>
         )}
-      </label>
+      </Label>
 
       {/* STAR RATING */}
-      <label htmlFor="price" className="text-gray-700 text-sm font-bold flex-1">
+      <Label htmlFor="price" className="text-gray-700 text-sm flex-1">
         Star Rating
-        <Select
+        <select
+          id="starRating"
+          className="w-full bg-white border rounded p-4 font-normal text-gray-700"
           {...register("starRating", { required: "This field is required" })}
         >
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Select a star rating" />
-          </SelectTrigger>
-          <SelectContent className="">
-            {[1, 2, 3, 4, 5].map((num) => (
-              <SelectItem value={`${num}`}>{num}</SelectItem>
-            ))}
-            {/* <SelectItem value="1">1</SelectItem>
-            <SelectItem value="2">2</SelectItem>
-            <SelectItem value="3">3</SelectItem>
-            <SelectItem value="4">4</SelectItem>
-            <SelectItem value="5">5</SelectItem> */}
-          </SelectContent>
-        </Select>
+          <option value="" className="hidden">
+            Select star rating
+          </option>
+
+          {[1, 2, 3, 4, 5].map((i) => (
+            <option key={i} value={i} className="">
+              {i}
+            </option>
+          ))}
+        </select>
         {errors.starRating && (
           <span className="text-red-500">{errors.starRating.message}</span>
         )}
-      </label>
+      </Label>
     </div>
   );
 }
