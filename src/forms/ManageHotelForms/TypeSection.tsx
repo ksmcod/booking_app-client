@@ -3,7 +3,6 @@ import { hotelTypes } from "@/utils/hotelConfigs";
 import { HotelFormData } from "./ManageHotelForm";
 
 import { Label } from "@/components/ui/label";
-import { useEffect } from "react";
 import { Input } from "@/components/ui/input";
 
 export default function TypeSection() {
@@ -14,10 +13,6 @@ export default function TypeSection() {
   } = useFormContext<HotelFormData>();
 
   const typeWatch = watch("type");
-
-  useEffect(() => {
-    console.log("Typewatch is: ", typeWatch);
-  }, [typeWatch]);
 
   return (
     <div>

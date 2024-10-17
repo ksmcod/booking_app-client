@@ -3,20 +3,12 @@ import { HotelFormData } from "./ManageHotelForm";
 import { hotelFacilities } from "@/utils/hotelConfigs";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { useEffect } from "react";
 
 export default function Facilities() {
   const {
     register,
-    watch,
     formState: { errors },
   } = useFormContext<HotelFormData>();
-
-  const facilities = watch("facilities");
-
-  useEffect(() => {
-    console.log("Facilities: ", facilities);
-  }, [facilities]);
 
   return (
     <div>
