@@ -12,6 +12,7 @@ import {
   clearIsLoggedIn,
 } from "../app/slices/userSlice";
 import { useEffect } from "react";
+// import toast from "react-hot-toast";
 
 export default function Layout() {
   const location = useLocation();
@@ -46,6 +47,9 @@ export default function Layout() {
 
   // Send request on every page load, to check token availability
   useEffect(() => {
+    // toast.success("hello");
+    // toast.error("goodbye");
+    // toast("See you");
     refetch()
       .unwrap()
       .then(() => dispatch(setIsLoggedIn()))
