@@ -54,6 +54,7 @@ export default function ManageHotelForm() {
       .then(() => {
         toast.success("Hotel added successfully");
         reset();
+        window.scrollTo({ top: 0, behavior: "smooth" });
       })
       .catch((err) => {
         if (err.message === "Aborted") {
