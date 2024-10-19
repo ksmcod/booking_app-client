@@ -39,7 +39,6 @@ export default function DetailsSection() {
         label: city.name,
         value: city.name,
       }));
-
       return cities;
     }
     return [];

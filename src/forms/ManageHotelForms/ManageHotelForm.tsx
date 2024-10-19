@@ -49,14 +49,18 @@ export default function ManageHotelForm() {
       formData.append("imageFiles", image);
     });
 
-    console.log(formData);
     addHotelMutation(formData)
       .unwrap()
       .then(() => {
         toast.success("Hotel added successfully");
         reset();
       })
-      .catch((err) => toast.error(err?.data?.message ?? "An error occured"));
+      .catch((err) => {
+        if (err.message === "Aborted") {
+          return toast.error("A network error occured");
+        }
+        toast.error(err?.data?.message ?? "An error occured");
+      });
   });
 
   return (

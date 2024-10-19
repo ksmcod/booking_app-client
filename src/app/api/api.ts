@@ -7,7 +7,7 @@ export const api = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: API_URL,
     credentials: "include",
-    timeout: 10000,
+    timeout: 60000,
   }),
   endpoints: () => ({}),
 });
