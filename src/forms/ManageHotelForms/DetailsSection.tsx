@@ -1,15 +1,77 @@
 import { useFormContext } from "react-hook-form";
+
+import { City, Country } from "country-state-city";
+import Select from "react-select";
+
 import { HotelFormData } from "./ManageHotelForm";
 
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { useMemo, useState } from "react";
 
 export default function DetailsSection() {
+  const allCountryNames = Country.getAllCountries().map((country) => ({
+    value: country.name,
+    label: `${country.flag} ${country.name}`,
+  }));
+
   const {
     register,
     formState: { errors },
+    watch,
+    setValue,
+    resetField,
   } = useFormContext<HotelFormData>();
+
+  const countryWatch = watch("country");
+
+  const selectedCountry = useMemo(() => {
+    return Country.getAllCountries().find(
+      (country) => country.name === countryWatch
+    );
+  }, [countryWatch]);
+
+  const citiesByCountry = () => {
+    if (selectedCountry) {
+      const countryCities = City.getCitiesOfCountry(selectedCountry.isoCode);
+      const cities = countryCities?.map((city) => ({
+        label: city.name,
+        value: city.name,
+      }));
+
+      return cities;
+    }
+    return [];
+  };
+
+  const [selectedCity, setSelectedCity] = useState<{
+    value: string;
+    label: string;
+  } | null>(null);
+
+  const starRatingOptions = [
+    {
+      label: "1",
+      value: 1,
+    },
+    {
+      label: "2",
+      value: 2,
+    },
+    {
+      label: "3",
+      value: 3,
+    },
+    {
+      label: "4",
+      value: 4,
+    },
+    {
+      label: "5",
+      value: 5,
+    },
+  ];
 
   return (
     <div className="flex flex-col gap-4">
@@ -32,14 +94,22 @@ export default function DetailsSection() {
 
       {/* City and Country */}
       <div className="flex flex-col sm:flex-row gap-4">
+        {/* ------------------------------------------------------------ */}
+
         {/* COUNTRY FIELD */}
         <Label htmlFor="country" className="text-gray-700 text-sm flex-1">
           Country
-          <Input
-            type="text"
-            className="border rounded w-full p-2 font-normal"
-            id="country"
+          <Select
             {...register("country", { required: "This field is required" })}
+            options={allCountryNames}
+            placeholder="Select a country"
+            onChange={(e) => {
+              if (e) {
+                setValue("country", e.value);
+                resetField("city");
+                setSelectedCity({ value: "", label: "" });
+              }
+            }}
           />
           {errors.country && (
             <span className="text-red-500 text-xs">
@@ -51,11 +121,23 @@ export default function DetailsSection() {
         {/* CITY FIELD */}
         <Label htmlFor="city" className="text-gray-700 text-sm flex-1">
           City
-          <Input
-            type="text"
-            className="border rounded w-full p-2 font-normal"
-            id="city"
+          <Select
             {...register("city", { required: "This field is required" })}
+            options={citiesByCountry()}
+            placeholder="Select a city"
+            onChange={(e) => {
+              if (e) {
+                setValue("city", e.value);
+                setSelectedCity(e);
+              }
+            }}
+            noOptionsMessage={() => {
+              if (countryWatch) {
+                return "No cities";
+              }
+              return "Please select a country";
+            }}
+            value={selectedCity}
           />
           {errors.city && (
             <span className="text-red-500 text-xs">{errors.city.message}</span>
@@ -95,9 +177,9 @@ export default function DetailsSection() {
       </Label>
 
       {/* STAR RATING */}
-      <Label htmlFor="price" className="text-gray-700 text-sm flex-1">
+      <Label htmlFor="starRating" className="text-gray-700 text-sm flex-1">
         Star Rating
-        <select
+        {/* <select
           id="starRating"
           className="w-full bg-white border rounded p-4 font-normal text-gray-700"
           {...register("starRating", { required: "This field is required" })}
@@ -111,7 +193,14 @@ export default function DetailsSection() {
               {i}
             </option>
           ))}
-        </select>
+        </select> */}
+        <Select
+          id="starRating"
+          {...register("starRating", { required: "This field is required" })}
+          options={starRatingOptions}
+          onChange={(e) => e && setValue("starRating", e.value)}
+          placeholder="Select a star rating"
+        />
         {errors.starRating && (
           <span className="text-red-500 text-xs">
             {errors.starRating.message}
