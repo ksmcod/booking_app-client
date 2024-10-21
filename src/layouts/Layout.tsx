@@ -50,6 +50,7 @@ export default function Layout() {
     // toast.success("hello");
     // toast.error("goodbye");
     // toast("See you");
+
     refetch()
       .unwrap()
       .then(() => dispatch(setIsLoggedIn()))

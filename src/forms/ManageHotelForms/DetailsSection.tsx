@@ -49,6 +49,11 @@ export default function DetailsSection() {
     label: string;
   } | null>(null);
 
+  // const [selectedCountry, setSelectedCountry] = useState<{
+  //   value: string;
+  //   label: string;
+  // } | null>(null);
+
   const starRatingOptions = [
     {
       label: "1",

@@ -8,6 +8,7 @@ import GuestsSection from "./GuestsSection";
 import ImagesSection from "./ImagesSection";
 import Loader from "@/components/Loader";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 export interface HotelFormData {
   name: string;
@@ -26,6 +27,8 @@ export interface HotelFormData {
 export default function ManageHotelForm() {
   const formMethods = useForm<HotelFormData>();
   const { handleSubmit, reset } = formMethods;
+
+  const navigate = useNavigate();
 
   const [addHotelMutation, { isLoading }] = useAddHotelMutation();
 
@@ -54,7 +57,6 @@ export default function ManageHotelForm() {
       .then(() => {
         toast.success("Hotel added successfully");
         reset();
-        window.scrollTo({ top: 0, behavior: "smooth" });
       })
       .catch((err) => {
         if (err.message === "Aborted") {
@@ -62,6 +64,9 @@ export default function ManageHotelForm() {
         }
         toast.error(err?.data?.message ?? "An error occured");
       });
+
+    toast.success("Hotel added");
+    navigate("/");
   });
 
   return (
