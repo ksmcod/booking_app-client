@@ -3,13 +3,13 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
-import Loader from "../components/Loader";
+import Loader from "@/components/Loader";
 
-import githubmarkwhite from "../assets/github-mark/github-mark-white.png";
+import githubmarkwhite from "@/assets/github-mark/github-mark-white.png";
 
-import { useLoginUserMutation } from "../app/api/usersApi";
-import { useAppDispatch } from "../app/hooks";
-import { setUser, setIsLoggedIn } from "../app/slices/userSlice";
+import { useLoginUserMutation } from "@/app/api/usersApi";
+import { useAppDispatch } from "@/app/hooks";
+import { setUser, setIsLoggedIn } from "@/app/slices/userSlice";
 
 import handleGithubLogin from "@/utils/handleGithub";
 
@@ -18,7 +18,7 @@ export interface LoginFormData {
   password: string;
 }
 
-export default function Login() {
+export default function LoginPage() {
   const {
     register,
     handleSubmit,

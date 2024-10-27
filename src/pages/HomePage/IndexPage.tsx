@@ -1,6 +1,6 @@
 export default function Index() {
   return (
-    <div className="text-7xl font-bl">
+    <div className="text-xl font-bl">
       Lorem ipsum dolor, sit amet consectetur adipisicing elit. Animi at itaque
       dolorem tempora, obcaecati, eius voluptatibus voluptate doloribus commodi
       doloremque illo ab explicabo veniam adipisci totam saepe, distinctio hic.

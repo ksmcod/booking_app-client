@@ -2,13 +2,13 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
-import { useAppDispatch } from "../app/hooks";
-import { setIsLoggedIn, setUser } from "../app/slices/userSlice";
+import { useAppDispatch } from "@/app/hooks";
+import { setIsLoggedIn, setUser } from "@/app/slices/userSlice";
 
-import { useRegisterUserMutation } from "../app/api/usersApi";
+import { useRegisterUserMutation } from "@/app/api/usersApi";
 
-import githubmarkwhite from "../assets/github-mark/github-mark-white.png";
-import Loader from "../components/Loader";
+import githubmarkwhite from "@/assets/github-mark/github-mark-white.png";
+import Loader from "@/components/Loader";
 
 import handleGithubLogin from "@/utils/handleGithub";
 
@@ -19,7 +19,7 @@ export interface RegisterFormData {
   password: string;
   confirmPassword: string;
 }
-export default function Register() {
+export default function RegisterPage() {
   const [registerUser, { isLoading }] = useRegisterUserMutation();
 
   const navigate = useNavigate();

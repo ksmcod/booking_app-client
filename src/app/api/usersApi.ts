@@ -1,7 +1,7 @@
 import { api } from "./api";
-import { RegisterFormData } from "../../pages/Register";
+import { RegisterFormData } from "../../pages/RegisterPage/RegisterPage";
 import { UserType } from "../../types";
-import { LoginFormData } from "../../pages/Login";
+import { LoginFormData } from "../../pages/LoginPage/LoginPage";
 
 const AUTH_URL = "/auth";
 const USER_URL = "/users";

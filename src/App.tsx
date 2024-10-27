@@ -5,19 +5,17 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import Layout from "./layouts/Layout";
-import Register from "./pages/Register";
-import Index from "./pages/Index";
-import Login from "./pages/Login";
 import ProtectedRoutes from "./utils/ProtectedRoutes";
-import AddHotelPage from "./pages/AddHotelPage";
+
+import { IndexPage, LoginPage, RegisterPage, AddHotelPage } from "./pages";
 
 export default function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<Layout />}>
-        <Route index element={<Index />} />
-        <Route path="register" element={<Register />} />
-        <Route path="login" element={<Login />} />
+        <Route index element={<IndexPage />} />
+        <Route path="register" element={<RegisterPage />} />
+        <Route path="login" element={<LoginPage />} />
         <Route path="search" element={<p>Search page</p>} />
 
         {/* PROTECTED ROUTES */}
