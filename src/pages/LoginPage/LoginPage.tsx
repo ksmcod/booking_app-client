@@ -12,6 +12,7 @@ import { useAppDispatch } from "@/app/hooks";
 import { setUser, setIsLoggedIn } from "@/app/slices/userSlice";
 
 import handleGithubLogin from "@/utils/handleGithub";
+import Button from "@/components/ui/button";
 
 export interface LoginFormData {
   email: string;
@@ -104,12 +105,16 @@ export default function LoginPage() {
 
           {/* Submit button */}
           <div className="flex flex-col gap-1">
-            <button
+            <Button disabled={isLoading} variant="primary">
+              {isLoading ? <Loader /> : "Login"}
+            </Button>
+
+            {/* <button
               disabled={isLoading}
               className="bg-blue-600 text-white font-bold p-2 hover:bg-blue-500 active:opacity-90 text-xl rounded flex justify-center items-center disabled:cursor-not-allowed disabled:opacity-60"
             >
               {isLoading ? <Loader /> : "Login"}
-            </button>
+            </button> */}
 
             <span className="text-sm text-neutral-500 flex gap-1">
               Don't have an account?
@@ -123,14 +128,19 @@ export default function LoginPage() {
         <hr className="w-5/6 mx-auto" />
 
         {/* SOCIAL MEDIA LOGIN */}
-        <div className="my-1 px-4 py-2">
-          <button
+        <div className="my-1 px-4 py-2 space-y-5">
+          <Button variant="black" onClick={() => handleGithubLogin()}>
+            <span>Continue with Github</span>
+            <img src={githubmarkwhite} alt="Github logo" className="w-9" />
+          </Button>
+
+          {/* <button
             onClick={() => handleGithubLogin()}
             className="w-full py-2 bg-black flex justify-center items-center gap-4 rounded text-white font-bold hover:opacity-90 active:opacity-85"
           >
             Continue with Github
             <img src={githubmarkwhite} alt="Github logo" className="w-9" />
-          </button>
+          </button> */}
         </div>
       </div>
     </div>
