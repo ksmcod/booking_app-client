@@ -1,3 +1,4 @@
+import { Hotel } from "@/types";
 import { api } from "./api";
 
 const HOTEL_URL = "/my-hotels";
@@ -11,7 +12,13 @@ const myHotelsApi = api.injectEndpoints({
         body,
       }),
     }),
+    getUserHotels: builder.query<Hotel[], void>({
+      query: () => ({
+        url: `${HOTEL_URL}`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
-export const { useAddHotelMutation } = myHotelsApi;
+export const { useAddHotelMutation, useGetUserHotelsQuery } = myHotelsApi;
