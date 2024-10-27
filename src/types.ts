@@ -1,10 +1,10 @@
-export interface User {
+export interface UserType {
   name: string;
   email: string;
   image?: string;
 }
 
-export interface Hotel {
+export interface HotelType {
   id: string;
   name: string;
   city: string;

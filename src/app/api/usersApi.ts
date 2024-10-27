@@ -1,6 +1,6 @@
 import { api } from "./api";
 import { RegisterFormData } from "../../pages/Register";
-import { User } from "../../types";
+import { UserType } from "../../types";
 import { LoginFormData } from "../../pages/Login";
 
 const AUTH_URL = "/auth";
@@ -8,21 +8,21 @@ const USER_URL = "/users";
 
 const usersApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    registerUser: builder.mutation<User, RegisterFormData>({
+    registerUser: builder.mutation<UserType, RegisterFormData>({
       query: (body) => ({
         url: `${USER_URL}/register`,
         method: "POST",
         body,
       }),
     }),
-    loginUser: builder.mutation<User, LoginFormData>({
+    loginUser: builder.mutation<UserType, LoginFormData>({
       query: (body) => ({
         url: `${AUTH_URL}/login`,
         method: "POST",
         body,
       }),
     }),
-    getUser: builder.query<User, void>({
+    getUser: builder.query<UserType, void>({
       query: () => ({
         url: `${AUTH_URL}/get-user`,
       }),
