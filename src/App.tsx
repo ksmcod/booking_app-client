@@ -7,7 +7,13 @@ import {
 import Layout from "./layouts/Layout";
 import ProtectedRoutes from "./utils/ProtectedRoutes";
 
-import { IndexPage, LoginPage, RegisterPage, AddHotelPage } from "./pages";
+import {
+  IndexPage,
+  LoginPage,
+  RegisterPage,
+  AddHotelPage,
+  MyHotelsPage,
+} from "./pages";
 
 export default function App() {
   const router = createBrowserRouter(
@@ -21,6 +27,7 @@ export default function App() {
         {/* PROTECTED ROUTES */}
         <Route element={<ProtectedRoutes />}>
           <Route path="add-hotel" element={<AddHotelPage />} />
+          <Route path="my-hotels" element={<MyHotelsPage />} />
         </Route>
       </Route>
     )
