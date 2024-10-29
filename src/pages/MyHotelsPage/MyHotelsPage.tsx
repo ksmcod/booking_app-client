@@ -1,9 +1,10 @@
 import ButtonLink from "@/components/ui/buttonLink";
 import { useGetUserHotelsQuery } from "@/app/api/myHotelsApi";
 import HotelItem from "./HotelItem";
+import Loader from "@/components/Loader";
 
 export default function MyHotelsPage() {
-  const { data } = useGetUserHotelsQuery();
+  const { data, isLoading } = useGetUserHotelsQuery();
   console.log("Fetched Hotels: ", data);
   return (
     <div className="p-3">
@@ -12,11 +13,15 @@ export default function MyHotelsPage() {
         <ButtonLink target="/add-hotel">Add Hotel</ButtonLink>
       </div>
 
-      <div className="flex flex-col gap-4 my-4">
-        <HotelItem />
-        <HotelItem />
-        <HotelItem />
-      </div>
+      {isLoading ? (
+        <div className="flex justify-center">
+          <Loader className="size" size={40} />
+        </div>
+      ) : (
+        <div className="flex flex-col gap-4 my-4">
+          <HotelItem />
+        </div>
+      )}
     </div>
   );
 }
