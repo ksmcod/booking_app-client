@@ -57,6 +57,7 @@ export default function ManageHotelForm() {
       .then(() => {
         toast.success("Hotel added successfully");
         reset();
+        navigate("/my-hotels");
       })
       .catch((err) => {
         if (err.message === "Aborted") {
@@ -64,9 +65,6 @@ export default function ManageHotelForm() {
         }
         toast.error(err?.data?.message ?? "An error occured");
       });
-
-    toast.success("Hotel added");
-    navigate("/");
   });
 
   return (
