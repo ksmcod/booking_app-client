@@ -8,7 +8,7 @@ interface HotelItemProps {
   city: string;
   country: string;
   type: string;
-  price: string;
+  price: number;
   adultCount: number;
   childrenCount: number;
   starRating: number;
@@ -37,14 +37,16 @@ export default function HotelItem({
           {/* <FaMapLocationDot /> */}
           <MapPinned size={20} /> |
           <div className="flex gap-1">
-            {city},<span className="font-bold">{country}</span>
+            <span className="capitalize">{city}</span>,
+            <span className="font-bold capitalize">{country}</span>
           </div>
         </div>
 
         {/* Type */}
         <div className="border border-slate-300 rounded-sm p-2 flex items-center gap-2 flex-1">
           {/* <FaBuilding /> */}
-          <Building size={20} />|<div className="font-bold">{type}</div>
+          <Building size={20} />|
+          <div className="font-bold capitalize">{type}</div>
         </div>
 
         {/* Price */}

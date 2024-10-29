@@ -1,6 +1,6 @@
 import ButtonLink from "@/components/ui/buttonLink";
 import { useGetUserHotelsQuery } from "@/app/api/myHotelsApi";
-// import HotelItem from "./HotelItem";
+import HotelItem from "./HotelItem";
 
 export default function MyHotelsPage() {
   const { data, isLoading } = useGetUserHotelsQuery();
@@ -23,6 +23,22 @@ export default function MyHotelsPage() {
               <h2 className="text-3xl text-center">No hotels found</h2>
             </div>
           )}
+
+          {data &&
+            data.map((hotel) => (
+              <HotelItem
+                key={hotel.id}
+                name={hotel.name}
+                description={hotel.description}
+                country={hotel.country}
+                city={hotel.city}
+                type={hotel.type}
+                adultCount={hotel.adultCount}
+                childrenCount={hotel.childrenCount}
+                price={hotel.price}
+                starRating={hotel.starRating}
+              />
+            ))}
         </div>
       )}
     </div>
