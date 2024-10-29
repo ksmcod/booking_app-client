@@ -1,7 +1,6 @@
 import ButtonLink from "@/components/ui/buttonLink";
 import { useGetUserHotelsQuery } from "@/app/api/myHotelsApi";
-import HotelItem from "./HotelItem";
-import Loader from "@/components/Loader";
+// import HotelItem from "./HotelItem";
 
 export default function MyHotelsPage() {
   const { data, isLoading } = useGetUserHotelsQuery();
@@ -14,12 +13,16 @@ export default function MyHotelsPage() {
       </div>
 
       {isLoading ? (
-        <div className="flex justify-center">
-          <Loader className="size" size={40} />
+        <div className="flex justify-center items-center mt-24">
+          <span className="loading loading-spinner w-16 text-blue-500"></span>
         </div>
       ) : (
-        <div className="flex flex-col gap-4 my-4">
-          <HotelItem />
+        <div className="flex flex-col gap-4 mt-10">
+          {data && !data.length && (
+            <div className="">
+              <h2 className="text-3xl text-center">No hotels found</h2>
+            </div>
+          )}
         </div>
       )}
     </div>

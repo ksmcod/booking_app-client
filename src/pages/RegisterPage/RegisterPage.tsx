@@ -12,6 +12,7 @@ import Loader from "@/components/Loader";
 
 import handleGithubLogin from "@/utils/handleGithub";
 import Button from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export interface RegisterFormData {
   email: string;
@@ -62,7 +63,7 @@ export default function RegisterPage() {
               className="text-gray-700 text-sm font-bold flex-1"
             >
               First Name
-              <input
+              <Input
                 className="border rounded w-full p-2 font-normal"
                 id="firstName"
                 {...register("firstName", {
@@ -82,7 +83,7 @@ export default function RegisterPage() {
               className="text-gray-700 text-sm font-bold flex-1"
             >
               Last Name
-              <input
+              <Input
                 type="text"
                 className="border rounded w-full p-2 font-normal"
                 id="lastName"
@@ -104,7 +105,7 @@ export default function RegisterPage() {
             className="text-gray-700 text-sm font-bold flex-1"
           >
             Email
-            <input
+            <Input
               type="email"
               className="border rounded w-full p-2 font-normal"
               id="email"
@@ -121,7 +122,7 @@ export default function RegisterPage() {
             className="text-gray-700 text-sm font-bold flex-1"
           >
             Password
-            <input
+            <Input
               type="password"
               className="border rounded w-full p-2 font-normal"
               id="password"
@@ -146,7 +147,7 @@ export default function RegisterPage() {
             className="text-gray-700 text-sm font-bold flex-1"
           >
             Confirm password
-            <input
+            <Input
               type="password"
               className="border rounded w-full p-2 font-normal"
               id="confirmPassword"
@@ -170,7 +171,7 @@ export default function RegisterPage() {
           {/* Submit button */}
           <div className="flex flex-col gap-1">
             <Button disabled={isLoading} variant="primary">
-              {isLoading ? <Loader /> : "Create account"}
+              {isLoading ? <Loader className="size-7" /> : "Create account"}
             </Button>
 
             {/* <button

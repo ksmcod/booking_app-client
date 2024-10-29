@@ -99,7 +99,7 @@ export default function ManageHotelForm() {
             type="submit"
             className="bg-blue-600 text-white font-bold p-2 hover:bg-blue-500 active:opacity-90 text-xl rounded flex justify-center items-center disabled:cursor-not-allowed disabled:opacity-60 w-full"
           >
-            {isLoading ? <Loader /> : "Submit"}
+            {isLoading ? <Loader className="size-7" /> : "Submit"}
           </button>
         </form>
       </div>

@@ -13,6 +13,7 @@ import { setUser, setIsLoggedIn } from "@/app/slices/userSlice";
 
 import handleGithubLogin from "@/utils/handleGithub";
 import Button from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export interface LoginFormData {
   email: string;
@@ -75,7 +76,7 @@ export default function LoginPage() {
             className="text-gray-700 text-sm font-bold flex-1"
           >
             Email
-            <input
+            <Input
               type="email"
               className="border rounded w-full p-2 font-normal"
               id="email"
@@ -92,7 +93,7 @@ export default function LoginPage() {
             className="text-gray-700 text-sm font-bold flex-1"
           >
             Password
-            <input
+            <Input
               type="password"
               className="border rounded w-full p-2 font-normal"
               id="password"
@@ -106,7 +107,7 @@ export default function LoginPage() {
           {/* Submit button */}
           <div className="flex flex-col gap-1">
             <Button disabled={isLoading} variant="primary">
-              {isLoading ? <Loader /> : "Login"}
+              {isLoading ? <Loader className="size-7" /> : "Login"}
             </Button>
 
             {/* <button
