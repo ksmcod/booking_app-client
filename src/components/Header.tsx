@@ -3,25 +3,19 @@ import { HiOutlineUserCircle } from "react-icons/hi2";
 
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { useLogoutUserMutation } from "@/app/api/usersApi";
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
-
 import { Avatar, AvatarImage } from "./ui/avatar";
 
 import Logo from "./Logo";
 import { clearIsLoggedIn, clearUser } from "@/app/slices/userSlice";
 import toast from "react-hot-toast";
+import { useState } from "react";
+import ButtonLink from "./ui/buttonLink";
 
 export default function Header() {
   const user = useAppSelector((state) => state.user.user);
   const isLoggedIn = useAppSelector((state) => state.user.isLoggedIn);
+
+  const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
 
@@ -42,75 +36,89 @@ export default function Header() {
       });
   };
 
+  window.addEventListener("click", () => {
+    if (isDropdownOpen) {
+      console.log("Window event called!!");
+      setIsDropdownOpen(!isDropdownOpen);
+    }
+  });
+
+  function toggleDropdown(e: React.MouseEvent<HTMLSpanElement, MouseEvent>) {
+    console.log("Toggle dropdown function!!");
+    e.stopPropagation();
+    setIsDropdownOpen(!isDropdownOpen);
+  }
+
   return (
-    // <div className="bg-blue-800 p-5 fixed w-full">
-    <div className="bg-blue-800 p-5 shadow-md">
-      <div className="max-w-7xl mx-auto flex justify-between items-center">
+    <div className="bg-blue-800 p-3 shadow-md">
+      <div className="max-w-7xl mx-auto flex justify-between items-center sm:relative py-1">
         <Logo />
 
-        {/* <span className="flex space-x-2">
-          <Link
-            to={"/register"}
-            className="flex items-center justify-center text-blue-600 px-6 rounded-sm font-bold bg-white hover:bg-gray-100"
-          >
-            Register
-          </Link>
-        </span> */}
-
         {isLoggedIn && (
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              className="focus:outline-none"
-              aria-label="dropdown-btn"
+          <div className="">
+            <Avatar
+              className="text-white hover:outline hover:outline-4 hover:outline-blue-300 size-10 hover:cursor-pointer"
+              onClick={(e) => toggleDropdown(e)}
             >
-              <Avatar className="text-white hover:outline hover:outline-4 hover:outline-blue-300">
-                {user?.image ? (
-                  <AvatarImage src={user.image} />
-                ) : (
-                  <HiOutlineUserCircle className="w-full h-full text-white" />
-                )}
-              </Avatar>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="font-bold border shadow w-48 mx-4">
-              <DropdownMenuLabel className="text-center">
-                My Account
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className="w-full px-2">
-                <Link to={"/my-bookings"} className="w-full">
-                  My Bookings
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem className="w-full px-2">
-                <Link to={"/add-hotel"} className="w-full">
-                  Add Hotel
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem className="w-full px-2">
-                <Link to={"/my-hotels"} className="w-full">
-                  My Hotels
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem className="w-full px-2">Team</DropdownMenuItem>
-              <DropdownMenuSeparator className="w-full px-2" />
-              <DropdownMenuItem
-                className="w-full px-2 cursor-pointer"
-                onClick={() => handleLogout()}
-              >
-                Sign out
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+              {user?.image ? (
+                <AvatarImage src={user.image} />
+              ) : (
+                <HiOutlineUserCircle className="w-full h-full text-white" />
+              )}
+            </Avatar>
+
+            {/* Dropdown Zone */}
+            {isDropdownOpen && (
+              <div className="p-2 absolute right-0 w-screen sm:w-60 ">
+                <div className="bg-white p-1 shadow-md border rounded-sm w-full sm:top-full flex flex-col space-y-1">
+                  <Link
+                    to={"/my-account"}
+                    className="w-full px-2 py-2 flex items-center rounded-sm hover:bg-blue-100 hover:underline hover:underline-offset-2"
+                  >
+                    My Account
+                  </Link>
+                  <Link
+                    to={"/my-bookings"}
+                    className="w-full px-2 py-2 flex items-center rounded-sm hover:bg-blue-100 hover:underline hover:underline-offset-2"
+                  >
+                    My Bookings
+                  </Link>
+                  <Link
+                    to={"/my-hotels"}
+                    className="w-full px-2 py-2 flex items-center rounded-sm hover:bg-blue-100 hover:underline hover:underline-offset-2"
+                  >
+                    My Hotels
+                  </Link>
+
+                  <hr />
+
+                  <div
+                    className="w-full px-2 py-2 flex items-center rounded-sm hover:bg-blue-100 hover:underline hover:underline-offset-2 hover:cursor-pointer"
+                    onClick={handleLogout}
+                  >
+                    Sign out
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         )}
+
         {!isLoggedIn && (
-          <div className="flex items-center gap-2 text-white">
-            <Link
-              to={"/login"}
-              className="px-8 py-2 rounded border-2  border-white hover:bg-blue-500"
+          <div className="flex items-center gap-2">
+            <ButtonLink
+              target="/login"
+              className="bg-blue-800 hover:bg-blue-600 font-normal hover:text-white hover:underline underline-offset-2"
             >
-              Login
-            </Link>
-            {/* <Link to={"/register"}>Register</Link> */}
+              Sign in
+            </ButtonLink>
+
+            <ButtonLink
+              target="/register"
+              className="hidden sm:block hover:bg-blue-950 hover:text-blue-400 bg-blue-900  hover:underline underline-offset-2"
+            >
+              Create account
+            </ButtonLink>
           </div>
         )}
       </div>

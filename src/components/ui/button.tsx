@@ -15,12 +15,12 @@ export default function Button({
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`${"w-full text-white font-bold p-2 text-xl rounded flex justify-center items-center disabled:cursor-not-allowed disabled:opacity-60 active:opacity-90"}
+      className={`${"w-full text-white font-bold p-2 text-xl rounded flex justify-center items-center disabled:cursor-not-allowed disabled:opacity-60 active:opacity-90 transition-all"}
                 
                 ${variant === "primary" && "bg-blue-600 hover:bg-blue-500"}
                 ${
                   variant === "black" &&
-                  "bg-black gap-4 hover:opacity-90 active:opacity-85 text-base"
+                  "bg-black gap-4 hover:bg-gray-900 active:opacity-85 text-base"
                 }
                 `}
     >

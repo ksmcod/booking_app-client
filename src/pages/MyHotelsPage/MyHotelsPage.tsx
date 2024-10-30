@@ -1,10 +1,16 @@
 import ButtonLink from "@/components/ui/buttonLink";
 import { useGetUserHotelsQuery } from "@/app/api/myHotelsApi";
 import HotelItem from "./HotelItem";
+import toast from "react-hot-toast";
 
 export default function MyHotelsPage() {
-  const { data, isLoading } = useGetUserHotelsQuery();
+  const { data, isLoading, isError } = useGetUserHotelsQuery();
   console.log("Fetched Hotels: ", data);
+
+  if (isError) {
+    toast.error("An error occured");
+  }
+
   return (
     <div className="p-3">
       <div className="flex justify-between items-center p-2">

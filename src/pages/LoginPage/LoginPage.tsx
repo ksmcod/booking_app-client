@@ -134,14 +134,6 @@ export default function LoginPage() {
             <span>Continue with Github</span>
             <img src={githubmarkwhite} alt="Github logo" className="w-9" />
           </Button>
-
-          {/* <button
-            onClick={() => handleGithubLogin()}
-            className="w-full py-2 bg-black flex justify-center items-center gap-4 rounded text-white font-bold hover:opacity-90 active:opacity-85"
-          >
-            Continue with Github
-            <img src={githubmarkwhite} alt="Github logo" className="w-9" />
-          </button> */}
         </div>
       </div>
     </div>

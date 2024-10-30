@@ -37,7 +37,7 @@ export default function HotelItem({
           {/* <FaMapLocationDot /> */}
           <MapPinned size={20} /> |
           <div className="flex gap-1">
-            <span className="capitalize">{city}</span>,
+            <span className="capitalize">{city}</span> -
             <span className="font-bold capitalize">{country}</span>
           </div>
         </div>
