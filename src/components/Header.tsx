@@ -36,15 +36,19 @@ export default function Header() {
       });
   };
 
-  window.addEventListener("click", () => {
+  const wel = () => {
     if (isDropdownOpen) {
-      console.log("Window event called!!");
+      // console.log("Window event called!!");
       setIsDropdownOpen(!isDropdownOpen);
     }
-  });
+
+    window.removeEventListener("click", wel);
+  };
+
+  window.addEventListener("click", wel);
 
   function toggleDropdown(e: React.MouseEvent<HTMLSpanElement, MouseEvent>) {
-    console.log("Toggle dropdown function!!");
+    // console.log("Toggle dropdown function!!");
     e.stopPropagation();
     setIsDropdownOpen(!isDropdownOpen);
   }

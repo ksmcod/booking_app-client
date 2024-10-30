@@ -5,20 +5,32 @@ const HOTEL_URL = "/my-hotels";
 
 const myHotelsApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    addHotel: builder.mutation<void, FormData>({
+    addMyHotel: builder.mutation<void, FormData>({
       query: (body) => ({
         url: `${HOTEL_URL}`,
         method: "POST",
         body,
       }),
     }),
-    getUserHotels: builder.query<HotelType[], void>({
+
+    getMyHotels: builder.query<HotelType[], void>({
       query: () => ({
         url: `${HOTEL_URL}`,
+        method: "GET",
+      }),
+    }),
+
+    getMyHotelBySlug: builder.query<HotelType, string>({
+      query: (slug) => ({
+        url: `${HOTEL_URL}/${slug}`,
         method: "GET",
       }),
     }),
   }),
 });
 
-export const { useAddHotelMutation, useGetUserHotelsQuery } = myHotelsApi;
+export const {
+  useAddMyHotelMutation,
+  useGetMyHotelsQuery,
+  useGetMyHotelBySlugQuery,
+} = myHotelsApi;

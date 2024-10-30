@@ -1,15 +1,18 @@
 import ButtonLink from "@/components/ui/buttonLink";
-import { useGetUserHotelsQuery } from "@/app/api/myHotelsApi";
+import { useGetMyHotelsQuery } from "@/app/api/myHotelsApi";
 import HotelItem from "./HotelItem";
-import toast from "react-hot-toast";
+import { ApiErrorType } from "@/types";
+import handleApiError from "@/utils/handleApiError";
+import { useEffect } from "react";
 
 export default function MyHotelsPage() {
-  const { data, isLoading, isError } = useGetUserHotelsQuery();
-  console.log("Fetched Hotels: ", data);
+  const { data, isLoading, isError, error } = useGetMyHotelsQuery();
 
-  if (isError) {
-    toast.error("An error occured");
-  }
+  useEffect(() => {
+    if (isError) {
+      handleApiError(error as ApiErrorType);
+    }
+  }, [isError, error]);
 
   return (
     <div className="p-3">

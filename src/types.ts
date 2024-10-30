@@ -21,3 +21,12 @@ export interface HotelType {
   updatedAt: Date;
   userId: string;
 }
+
+export interface ApiErrorType {
+  status?: number;
+  data?: {
+    message: string;
+  };
+  name?: string;
+  message?: string;
+}

@@ -1,5 +1,5 @@
 import { FormProvider, useForm } from "react-hook-form";
-import { useAddHotelMutation } from "@/app/api/myHotelsApi";
+import { useAddMyHotelMutation } from "@/app/api/myHotelsApi";
 
 import DetailsSection from "./DetailsSection";
 import TypeSection from "./TypeSection";
@@ -30,7 +30,7 @@ export default function ManageHotelForm() {
 
   const navigate = useNavigate();
 
-  const [addHotelMutation, { isLoading }] = useAddHotelMutation();
+  const [addMyHotelMutation, { isLoading }] = useAddMyHotelMutation();
 
   const onSubmit = handleSubmit((data) => {
     const formData = new FormData();
@@ -52,7 +52,7 @@ export default function ManageHotelForm() {
       formData.append("imageFiles", image);
     });
 
-    addHotelMutation(formData)
+    addMyHotelMutation(formData)
       .unwrap()
       .then(() => {
         toast.success("Hotel added successfully");
