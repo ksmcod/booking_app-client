@@ -13,6 +13,8 @@ import Loader from "@/components/Loader";
 import handleGithubLogin from "@/utils/handleGithub";
 import Button from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import handleApiError from "@/utils/handleApiError";
+import { ApiErrorType } from "@/types";
 
 export interface RegisterFormData {
   email: string;
@@ -45,9 +47,10 @@ export default function RegisterPage() {
         navigate("/");
       })
       .catch((error) => {
-        toast.error(error?.data?.message ?? "An error occured", {
-          position: "top-center",
-        });
+        // toast.error(error?.data?.message ?? "An error occured", {
+        //   position: "top-center",
+        // });
+        handleApiError(error as ApiErrorType);
       });
   });
 
