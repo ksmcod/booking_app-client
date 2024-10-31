@@ -1,36 +1,17 @@
 import ButtonLink from "@/components/ui/buttonLink";
+import { HotelType } from "@/types";
 import { Banknote, Building, MapPinned, Star, Users } from "lucide-react";
 // import { FaBuilding, FaMapLocationDot, FaMoneyBillWave } from "react-icons/fa6";
 
 interface HotelItemProps {
-  name: string;
-  description: string;
-  city: string;
-  country: string;
-  type: string;
-  price: number;
-  adultCount: number;
-  childrenCount: number;
-  starRating: number;
-  slug: string;
+  hotel: HotelType;
 }
 
-export default function HotelItem({
-  name,
-  description,
-  city,
-  country,
-  type,
-  price,
-  adultCount,
-  childrenCount,
-  starRating,
-  slug,
-}: HotelItemProps) {
+export default function HotelItem({ hotel }: HotelItemProps) {
   return (
     <div className="flex flex-col justify-between border border-slate-300 rounded p-4 gap-3">
-      <h2 className="text-xl font-bold">{name}</h2>
-      <div className="whitespace-pre-line">{description}</div>
+      <h2 className="text-xl font-bold">{hotel.name}</h2>
+      <div className="whitespace-pre-line">{hotel.description}</div>
 
       {/* Grid Section */}
       <div className="flex flex-col sm:flex-row flex-wrap gap-2 text-sm text-nowrap">
@@ -39,8 +20,8 @@ export default function HotelItem({
           {/* <FaMapLocationDot /> */}
           <MapPinned size={20} /> |
           <div className="flex gap-1">
-            <span className="capitalize">{city}</span> -
-            <span className="font-bold capitalize">{country}</span>
+            <span className="capitalize">{hotel.city}</span> -
+            <span className="font-bold capitalize">{hotel.country}</span>
           </div>
         </div>
 
@@ -48,7 +29,7 @@ export default function HotelItem({
         <div className="border border-slate-300 rounded-sm p-2 flex items-center gap-2 flex-1">
           {/* <FaBuilding /> */}
           <Building size={20} />|
-          <div className="font-bold capitalize">{type}</div>
+          <div className="font-bold capitalize">{hotel.type}</div>
         </div>
 
         {/* Price */}
@@ -56,7 +37,7 @@ export default function HotelItem({
           {/* <FaMoneyBillWave /> */}
           <Banknote size={25} /> |
           <div className="flex gap-1">
-            <span className="font-bold">${price}</span>
+            <span className="font-bold">${hotel.price}</span>
             per night
           </div>
         </div>
@@ -65,8 +46,8 @@ export default function HotelItem({
         <div className="border border-slate-300 rounded-sm p-2 flex items-center gap-2 flex-1">
           <Users size={20} /> |
           <div className="flex gap-1">
-            <span className="font-bold">{adultCount}</span> adults,
-            <span className="font-bold">{childrenCount}</span> children
+            <span className="font-bold">{hotel.adultCount}</span> adults,
+            <span className="font-bold">{hotel.childrenCount}</span> children
           </div>
         </div>
 
@@ -74,12 +55,12 @@ export default function HotelItem({
         <div className="border border-slate-300 rounded-sm p-2 flex items-center gap-2 flex-1">
           <Star size={20} /> |
           <div>
-            <span className="font-bold">{starRating}</span> Star Hotel
+            <span className="font-bold">{hotel.starRating}</span> Star Hotel
           </div>
         </div>
       </div>
 
-      <ButtonLink target={`/edit-hotel/${slug}`}>View Details</ButtonLink>
+      <ButtonLink target={`/edit-hotel/${hotel.slug}`}>View Details</ButtonLink>
     </div>
   );
 }
