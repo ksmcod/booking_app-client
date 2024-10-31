@@ -34,21 +34,7 @@ export default function MyHotelsPage() {
           )}
 
           {data &&
-            data.map((hotel) => (
-              <HotelItem
-                key={hotel.id}
-                name={hotel.name}
-                description={hotel.description}
-                country={hotel.country}
-                city={hotel.city}
-                type={hotel.type}
-                adultCount={hotel.adultCount}
-                childrenCount={hotel.childrenCount}
-                price={hotel.price}
-                starRating={hotel.starRating}
-                slug={hotel.slug}
-              />
-            ))}
+            data.map((hotel) => <HotelItem key={hotel.id} hotel={hotel} />)}
         </div>
       )}
     </div>
