@@ -46,6 +46,7 @@ export default function MyHotelsPage() {
                 childrenCount={hotel.childrenCount}
                 price={hotel.price}
                 starRating={hotel.starRating}
+                slug={hotel.slug}
               />
             ))}
         </div>

@@ -13,7 +13,10 @@ import {
   RegisterPage,
   AddHotelPage,
   MyHotelsPage,
+  EditHotelPage,
+  NotFound404,
 } from "./pages";
+import Redirect from "./utils/Redirect";
 
 export default function App() {
   const router = createBrowserRouter(
@@ -28,7 +31,14 @@ export default function App() {
         <Route element={<ProtectedRoutes />}>
           <Route path="add-hotel" element={<AddHotelPage />} />
           <Route path="my-hotels" element={<MyHotelsPage />} />
+          <Route path="edit-hotel">
+            <Route index element={<Redirect target="/my-hotels" />} />
+            <Route path=":slug" element={<EditHotelPage />} />
+          </Route>
         </Route>
+
+        {/* 404 Page */}
+        <Route path="*" element={<NotFound404 />} />
       </Route>
     )
   );

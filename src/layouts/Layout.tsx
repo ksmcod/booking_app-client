@@ -70,7 +70,7 @@ export default function Layout() {
         </div>
 
         {/* <div className="flex-1 max-w-7xl mx-auto w-full mt-16"> */}
-        <div className="flex-1 max-w-5xl mx-auto w-full px-2">
+        <div className="flex-1 flex flex-col max-w-5xl mx-auto w-full px-2">
           <Outlet />
         </div>
 

@@ -20,6 +20,7 @@ export interface HotelType {
   createdAt: Date;
   updatedAt: Date;
   userId: string;
+  slug: string;
 }
 
 export interface ApiErrorType {

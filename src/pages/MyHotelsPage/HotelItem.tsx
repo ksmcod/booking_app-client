@@ -12,6 +12,7 @@ interface HotelItemProps {
   adultCount: number;
   childrenCount: number;
   starRating: number;
+  slug: string;
 }
 
 export default function HotelItem({
@@ -24,6 +25,7 @@ export default function HotelItem({
   adultCount,
   childrenCount,
   starRating,
+  slug,
 }: HotelItemProps) {
   return (
     <div className="flex flex-col justify-between border border-slate-300 rounded p-4 gap-3">
@@ -77,7 +79,7 @@ export default function HotelItem({
         </div>
       </div>
 
-      <ButtonLink target="/">View Details</ButtonLink>
+      <ButtonLink target={`/edit-hotel/${slug}`}>View Details</ButtonLink>
     </div>
   );
 }
