@@ -82,6 +82,9 @@ export default function ManageHotelForm({ hotel }: ManageHotelFormProps) {
             name={hotel?.name}
             city={hotel?.city}
             country={hotel?.country}
+            description={hotel?.description}
+            price={hotel?.price}
+            starRating={hotel?.starRating}
           />
 
           <hr className="w-full" />

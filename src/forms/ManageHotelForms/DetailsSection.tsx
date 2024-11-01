@@ -14,12 +14,18 @@ interface DetailsSectionProps {
   name?: string;
   city?: string;
   country?: string;
+  description?: string;
+  price?: number;
+  starRating?: number;
 }
 
 export default function DetailsSection({
   name,
   city,
   country,
+  description,
+  price,
+  starRating,
 }: DetailsSectionProps) {
   const allCountryNames = Country.getAllCountries().map((country) => ({
     value: country.name,
@@ -35,6 +41,10 @@ export default function DetailsSection({
   } = useFormContext<HotelFormData>();
 
   const countryWatch = watch("country");
+  const cityWatch = watch("city");
+  const descriptionWatch = watch("description");
+  const priceWatch = watch("price");
+  const starRatingWatch = watch("starRating");
 
   const selectedCountry = useMemo(() => {
     return Country.getAllCountries().find(
@@ -97,16 +107,45 @@ export default function DetailsSection({
     [resetField, setValue]
   );
 
-  // Populate the form if entering editing mode
+  // Onchange function to select city
+  const selectCity = useCallback(
+    (e: { value: string; label: string }) => {
+      setValue("city", e.value);
+      setSelectedCity(e);
+    },
+    [setValue]
+  );
 
+  // UseEffect function to populate the form if entering in editing mode
   useEffect(() => {
-    if (name && city && country) {
+    if (name && city && country && description && price && starRating) {
+      // Set hotel name
       setValue("name", name);
-      selectCountry({ value: country, label: country });
-      // setValue("country", country);
-      console.log("Country value is: ", countryWatch);
+
+      // Set hotel country
+      selectCountry({ value: country, label: "" });
+
+      // Set hotel city
+      setValue("city", city);
+      setSelectedCity({ value: city, label: city });
+
+      // Set hotel description
+      setValue("description", description);
     }
-  }, [name, city, country, setValue, countryWatch, selectCountry]);
+  }, [
+    name,
+    city,
+    country,
+    setValue,
+    selectCountry,
+    description,
+    price,
+    starRating,
+  ]);
+
+  console.log("Country value is: ", countryWatch);
+  console.log("City value is: ", cityWatch);
+  console.log("Description value: ", description);
 
   return (
     <div className="flex flex-col gap-4">
@@ -168,8 +207,7 @@ export default function DetailsSection({
             placeholder="Select a city"
             onChange={(e) => {
               if (e) {
-                setValue("city", e.value);
-                setSelectedCity(e);
+                selectCity(e);
               }
             }}
             noOptionsMessage={() => {
