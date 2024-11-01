@@ -8,9 +8,19 @@ import { HotelFormData } from "./ManageHotelForm";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
-export default function DetailsSection() {
+interface DetailsSectionProps {
+  name?: string;
+  city?: string;
+  country?: string;
+}
+
+export default function DetailsSection({
+  name,
+  city,
+  country,
+}: DetailsSectionProps) {
   const allCountryNames = Country.getAllCountries().map((country) => ({
     value: country.name,
     label: `${country.flag} ${country.name}`,
@@ -77,6 +87,27 @@ export default function DetailsSection() {
     },
   ];
 
+  /* Onchange function to select country */
+  const selectCountry = useCallback(
+    (e: { value: string; label: string }) => {
+      setValue("country", e.value);
+      resetField("city");
+      setSelectedCity({ value: "", label: "" });
+    },
+    [resetField, setValue]
+  );
+
+  // Populate the form if entering editing mode
+
+  useEffect(() => {
+    if (name && city && country) {
+      setValue("name", name);
+      selectCountry({ value: country, label: country });
+      // setValue("country", country);
+      console.log("Country value is: ", countryWatch);
+    }
+  }, [name, city, country, setValue, countryWatch, selectCountry]);
+
   return (
     <div className="flex flex-col gap-4">
       <h1 className="text-3xl font-bold text-center">Add Hotel</h1>
@@ -109,11 +140,17 @@ export default function DetailsSection() {
             placeholder="Select a country"
             onChange={(e) => {
               if (e) {
-                setValue("country", e.value);
-                resetField("city");
-                setSelectedCity({ value: "", label: "" });
+                selectCountry(e);
               }
             }}
+            blurInputOnSelect
+            defaultValue={
+              country &&
+              allCountryNames.find(
+                (countryData: { value: string; label: string }) =>
+                  countryData.value === country
+              )
+            }
           />
           {errors.country && (
             <span className="text-red-500 text-xs">
@@ -142,6 +179,7 @@ export default function DetailsSection() {
               return "Please select a country";
             }}
             value={selectedCity}
+            blurInputOnSelect
           />
           {errors.city && (
             <span className="text-red-500 text-xs">{errors.city.message}</span>

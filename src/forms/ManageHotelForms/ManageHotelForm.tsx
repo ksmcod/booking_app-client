@@ -9,7 +9,11 @@ import ImagesSection from "./ImagesSection";
 import Loader from "@/components/Loader";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { HotelType } from "@/types";
 
+interface ManageHotelFormProps {
+  hotel?: HotelType;
+}
 export interface HotelFormData {
   name: string;
   city: string;
@@ -24,7 +28,7 @@ export interface HotelFormData {
   imageFiles: FileList;
 }
 
-export default function ManageHotelForm() {
+export default function ManageHotelForm({ hotel }: ManageHotelFormProps) {
   const formMethods = useForm<HotelFormData>();
   const { handleSubmit, reset } = formMethods;
 
@@ -35,8 +39,8 @@ export default function ManageHotelForm() {
   const onSubmit = handleSubmit((data) => {
     const formData = new FormData();
     formData.append("name", data.name);
-    formData.append("country", data.country.toLowerCase());
-    formData.append("city", data.city.toLowerCase());
+    formData.append("country", data.country);
+    formData.append("city", data.city);
     formData.append("description", data.description);
     formData.append("price", data.price.toString());
     formData.append("starRating", data.starRating.toString());
@@ -74,7 +78,11 @@ export default function ManageHotelForm() {
           className="p-3 space-y-6 border max-w-5xl mx-auto"
           onSubmit={onSubmit}
         >
-          <DetailsSection />
+          <DetailsSection
+            name={hotel?.name}
+            city={hotel?.city}
+            country={hotel?.country}
+          />
 
           <hr className="w-full" />
 
@@ -97,7 +105,7 @@ export default function ManageHotelForm() {
             type="submit"
             className="bg-blue-600 text-white font-bold p-2 hover:bg-blue-500 active:opacity-90 text-xl rounded flex justify-center items-center disabled:cursor-not-allowed disabled:opacity-60 w-full"
           >
-            {isLoading ? <Loader className="size-7" /> : "Submit"}
+            {isLoading ? <Loader className="size-7 text-white" /> : "Submit"}
           </button>
         </form>
       </div>

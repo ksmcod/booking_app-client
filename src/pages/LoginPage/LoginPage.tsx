@@ -109,15 +109,8 @@ export default function LoginPage() {
           {/* Submit button */}
           <div className="flex flex-col gap-1">
             <Button disabled={isLoading} variant="primary">
-              {isLoading ? <Loader className="size-7" /> : "Login"}
+              {isLoading ? <Loader className="size-7 text-white" /> : "Login"}
             </Button>
-
-            {/* <button
-              disabled={isLoading}
-              className="bg-blue-600 text-white font-bold p-2 hover:bg-blue-500 active:opacity-90 text-xl rounded flex justify-center items-center disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {isLoading ? <Loader /> : "Login"}
-            </button> */}
 
             <span className="text-sm text-neutral-500 flex gap-1">
               Don't have an account?

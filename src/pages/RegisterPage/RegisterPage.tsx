@@ -174,15 +174,12 @@ export default function RegisterPage() {
           {/* Submit button */}
           <div className="flex flex-col gap-1">
             <Button disabled={isLoading} variant="primary">
-              {isLoading ? <Loader className="size-7" /> : "Create account"}
+              {isLoading ? (
+                <Loader className="size-7 text-white" />
+              ) : (
+                "Create account"
+              )}
             </Button>
-
-            {/* <button
-              disabled={isLoading}
-              className="bg-blue-600 text-white font-bold p-2 hover:bg-blue-500 active:opacity-90 text-xl rounded flex justify-center items-center disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {isLoading ? <Loader /> : "Create account"}
-            </button> */}
 
             <span className="text-sm text-neutral-500 flex gap-1">
               Already have an account?

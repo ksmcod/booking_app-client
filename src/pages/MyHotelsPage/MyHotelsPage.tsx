@@ -4,6 +4,7 @@ import HotelItem from "./HotelItem";
 import { ApiErrorType } from "@/types";
 import handleApiError from "@/utils/handleApiError";
 import { useEffect } from "react";
+import Loader from "@/components/Loader";
 
 export default function MyHotelsPage() {
   const { data, isLoading, isError, error } = useGetMyHotelsQuery();
@@ -15,15 +16,16 @@ export default function MyHotelsPage() {
   }, [isError, error]);
 
   return (
-    <div className="p-3">
+    <div className="p-3 flex-1 flex flex-col">
       <div className="flex justify-between items-center p-2">
         <h1 className="text-3xl font-bold">My Hotels</h1>
         <ButtonLink target="/add-hotel">Add Hotel</ButtonLink>
       </div>
 
       {isLoading ? (
-        <div className="flex justify-center items-center mt-24">
-          <span className="loading loading-spinner w-16 text-blue-500"></span>
+        <div className="flex-1 flex justify-center items-center">
+          {/* <span className="loading loading-spinner w-16 text-blue-500"></span> */}
+          <Loader className="size-16" />
         </div>
       ) : (
         <div className="flex flex-col gap-4 mt-10">

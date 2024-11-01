@@ -1,4 +1,6 @@
 import { useGetMyHotelBySlugQuery } from "@/app/api/myHotelsApi";
+import Loader from "@/components/Loader";
+import ManageHotelForm from "@/forms/ManageHotelForms/ManageHotelForm";
 import { ApiErrorType } from "@/types";
 import { Link, useParams } from "react-router-dom";
 
@@ -9,8 +11,13 @@ export default function EditHotelPage() {
     slug as string
   );
 
-  console.log("Slug is: ", slug);
-  console.log("Data obtained is: ", data);
+  if (isLoading) {
+    return (
+      <div className="flex-1 flex justify-center items-center">
+        {isLoading && <Loader className="size-16" />}
+      </div>
+    );
+  }
 
   if (isError && (error as ApiErrorType).status === 404) {
     return (
@@ -26,5 +33,5 @@ export default function EditHotelPage() {
     );
   }
 
-  return <div>{isLoading && "Loading..."}</div>;
+  return <ManageHotelForm hotel={data} />;
 }

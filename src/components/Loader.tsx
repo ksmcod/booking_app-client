@@ -3,5 +3,9 @@ interface LoaderProps {
 }
 
 export default function Loader({ className }: LoaderProps) {
-  return <span className={`loading loading-spinner ${className}`}></span>;
+  return (
+    <span
+      className={`loading loading-spinner text-blue-500 ${className}`}
+    ></span>
+  );
 }
