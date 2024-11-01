@@ -131,6 +131,9 @@ export default function DetailsSection({
 
       // Set hotel description
       setValue("description", description);
+
+      // Set hotel price
+      setValue("price", price);
     }
   }, [
     name,
@@ -145,7 +148,9 @@ export default function DetailsSection({
 
   console.log("Country value is: ", countryWatch);
   console.log("City value is: ", cityWatch);
-  console.log("Description value: ", description);
+  console.log("Description value: ", descriptionWatch);
+  console.log("Price is: ", priceWatch);
+  console.log("Star rating is: ", starRatingWatch);
 
   return (
     <div className="flex flex-col gap-4">
