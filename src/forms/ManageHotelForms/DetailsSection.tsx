@@ -41,10 +41,6 @@ export default function DetailsSection({
   } = useFormContext<HotelFormData>();
 
   const countryWatch = watch("country");
-  const cityWatch = watch("city");
-  const descriptionWatch = watch("description");
-  const priceWatch = watch("price");
-  const starRatingWatch = watch("starRating");
 
   const selectedCountry = useMemo(() => {
     return Country.getAllCountries().find(
@@ -148,12 +144,6 @@ export default function DetailsSection({
     price,
     starRating,
   ]);
-
-  console.log("Country value is: ", countryWatch);
-  console.log("City value is: ", cityWatch);
-  console.log("Description value: ", descriptionWatch);
-  console.log("Price is: ", priceWatch);
-  console.log("Star rating is: ", starRatingWatch);
 
   return (
     <div className="flex flex-col gap-4">
