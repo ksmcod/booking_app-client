@@ -134,6 +134,9 @@ export default function DetailsSection({
 
       // Set hotel price
       setValue("price", price);
+
+      // Set hotel star rating
+      setValue("starRating", starRating);
     }
   }, [
     name,
@@ -264,27 +267,16 @@ export default function DetailsSection({
       {/* STAR RATING */}
       <Label htmlFor="starRating" className="text-gray-700 text-sm flex-1">
         Star Rating
-        {/* <select
-          id="starRating"
-          className="w-full bg-white border rounded p-4 font-normal text-gray-700"
-          {...register("starRating", { required: "This field is required" })}
-        >
-          <option value="" className="hidden">
-            Select star rating
-          </option>
-
-          {[1, 2, 3, 4, 5].map((i) => (
-            <option key={i} value={i} className="">
-              {i}
-            </option>
-          ))}
-        </select> */}
         <Select
           id="starRating"
           {...register("starRating", { required: "This field is required" })}
           options={starRatingOptions}
           onChange={(e) => e && setValue("starRating", e.value)}
           placeholder="Select a star rating"
+          defaultValue={
+            starRating &&
+            starRatingOptions.find((rating) => rating.value === starRating)
+          }
         />
         {errors.starRating && (
           <span className="text-red-500 text-xs">
