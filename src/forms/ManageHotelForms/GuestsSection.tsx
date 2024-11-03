@@ -2,12 +2,29 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useFormContext } from "react-hook-form";
 import { HotelFormData } from "./ManageHotelForm";
+import { useEffect } from "react";
 
-export default function GuestsSection() {
+interface GuestsSectionProps {
+  adults?: number;
+  children?: number;
+}
+
+export default function GuestsSection({
+  adults,
+  children,
+}: GuestsSectionProps) {
   const {
     register,
     formState: { errors },
+    setValue,
   } = useFormContext<HotelFormData>();
+
+  useEffect(() => {
+    if (adults !== undefined && children !== undefined) {
+      setValue("adultCount", adults);
+      setValue("childrenCount", children);
+    }
+  }, [adults, children, setValue]);
 
   return (
     <div>

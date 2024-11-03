@@ -4,36 +4,61 @@ import { HotelFormData } from "./ManageHotelForm";
 
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { useEffect } from "react";
 
-export default function TypeSection() {
+interface TypeSectionProps {
+  type?: string;
+}
+
+export default function TypeSection({ type }: TypeSectionProps) {
   const {
     register,
     watch,
     formState: { errors },
+    setValue,
   } = useFormContext<HotelFormData>();
 
   const typeWatch = watch("type");
 
+  useEffect(() => {
+    if (type) {
+      setTimeout(() => {
+        setValue("type", type);
+        console.log("If statement EXECUTED!");
+      }, 0);
+    }
+  }, [type, setValue]);
+
+  // useEffect(() => {
+  //   if (type) {
+  //     setValue("type", type);
+  //     console.log("If statement EXECUTED!");
+  //   }
+  // }, [type, setValue]);
+
+  console.log("Type value is: ", typeWatch);
   return (
     <div>
       <h2 className="text-2xl mb-3">Hotel type</h2>
       <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
-        {hotelTypes.map((type) => (
+        {hotelTypes.map((hotelType) => (
           <Label
-            key={type.type}
-            htmlFor={type.type}
+            key={hotelType.type}
+            htmlFor={hotelType.type}
             className={`cursor-pointer text-md rounded-full sm:px-6 sm:py-3 px-4 py-2 font-normal flex items-center justify-center  shadow ${
-              type.type === typeWatch ? "bg-blue-300" : "bg-neutral-100"
+              hotelType.type === typeWatch
+                ? "bg-blue-300 font-bold"
+                : "bg-neutral-100"
             }`}
           >
             <Input
               type="radio"
-              value={type.type}
+              value={hotelType.type}
               {...register("type", { required: "This field is required" })}
-              id={type.type}
+              id={hotelType.type}
               className="hidden"
             />
-            <span>{type.type}</span>
+            <span>{hotelType.type}</span>
           </Label>
         ))}
       </div>

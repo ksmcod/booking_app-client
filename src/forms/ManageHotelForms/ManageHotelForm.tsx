@@ -44,12 +44,12 @@ export default function ManageHotelForm({ hotel }: ManageHotelFormProps) {
     formData.append("description", data.description);
     formData.append("price", data.price.toString());
     formData.append("starRating", data.starRating.toString());
-    formData.append("type", data.type.toLowerCase());
+    formData.append("type", data.type);
     formData.append("adultCount", data.adultCount.toString());
     formData.append("childrenCount", data.childrenCount.toString());
 
     data.facilities.forEach((facility, index) => {
-      formData.append(`facilities[${index}]`, facility.toLowerCase());
+      formData.append(`facilities[${index}]`, facility);
     });
 
     Array.from(data.imageFiles).forEach((image) => {
@@ -71,6 +71,7 @@ export default function ManageHotelForm({ hotel }: ManageHotelFormProps) {
       });
   });
 
+  console.log("Form RELOADING");
   return (
     <FormProvider {...formMethods}>
       <div className="p-4">
@@ -89,15 +90,18 @@ export default function ManageHotelForm({ hotel }: ManageHotelFormProps) {
 
           <hr className="w-full" />
 
-          <TypeSection />
+          <TypeSection type={hotel?.type} />
 
           <hr className="w-full" />
 
-          <FacilitiesSection />
+          <FacilitiesSection facilities={hotel?.facilities} />
 
           <hr className="w-full" />
 
-          <GuestsSection />
+          <GuestsSection
+            adults={hotel?.adultCount}
+            children={hotel?.childrenCount}
+          />
 
           <hr className="w-full" />
 
