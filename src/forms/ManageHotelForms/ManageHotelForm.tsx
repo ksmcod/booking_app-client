@@ -105,7 +105,7 @@ export default function ManageHotelForm({ hotel }: ManageHotelFormProps) {
 
           <hr className="w-full" />
 
-          <ImagesSection />
+          <ImagesSection imageUrls={hotel?.imageUrls} />
 
           <button
             disabled={isLoading}
