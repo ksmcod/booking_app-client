@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 
 import { HotelFormData } from "./ManageHotelForm";
@@ -30,7 +30,7 @@ export default function ImagesSection({ imageUrls }: ImagesSectionProps) {
       "image/webp",
     ];
     const images = Array.from(e.target.files || []);
-    const imageFilesArray: File[] = selectedImages;
+    const imageFilesArray: File[] = Array.from(selectedImages);
 
     images.forEach((image) => {
       if (!validImageTypes.includes(image.type)) {
@@ -56,7 +56,7 @@ export default function ImagesSection({ imageUrls }: ImagesSectionProps) {
   ) {
     e.preventDefault();
 
-    const imageFilesArray: File[] = selectedImages;
+    const imageFilesArray: File[] = Array.from(selectedImages);
 
     const filteredImageFilesArray: File[] = imageFilesArray.filter(
       (image) => image !== imageFile
@@ -105,7 +105,6 @@ export default function ImagesSection({ imageUrls }: ImagesSectionProps) {
             multiple
             accept="image/*"
             placeholder="Select images of your hotel"
-            aria-placeholder="Noob"
             type="file"
             className="hidden"
             {...register("imageFiles", {
