@@ -68,5 +68,5 @@ export default function EditHotelPage() {
     );
   }
 
-  return <ManageHotelForm hotel={data} />;
+  return <ManageHotelForm hotel={data} title="Edit Hotel" />;
 }

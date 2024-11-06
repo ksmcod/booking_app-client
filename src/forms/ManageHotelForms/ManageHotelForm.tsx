@@ -13,6 +13,7 @@ import { HotelType } from "@/types";
 
 interface ManageHotelFormProps {
   hotel?: HotelType;
+  title: string;
 }
 export interface HotelFormData {
   name: string;
@@ -26,9 +27,13 @@ export interface HotelFormData {
   adultCount: number;
   childrenCount: number;
   imageFiles: FileList;
+  imageUrls: string[];
 }
 
-export default function ManageHotelForm({ hotel }: ManageHotelFormProps) {
+export default function ManageHotelForm({
+  hotel,
+  title,
+}: ManageHotelFormProps) {
   const formMethods = useForm<HotelFormData>();
   const { handleSubmit, reset } = formMethods;
 
@@ -56,6 +61,10 @@ export default function ManageHotelForm({ hotel }: ManageHotelFormProps) {
       formData.append("imageFiles", image);
     });
 
+    data.imageUrls.forEach((url, index) => {
+      formData.append(`imageUrls[${index}]`, url);
+    });
+
     addMyHotelMutation(formData)
       .unwrap()
       .then(() => {
@@ -71,7 +80,6 @@ export default function ManageHotelForm({ hotel }: ManageHotelFormProps) {
       });
   });
 
-  console.log("Form RELOADING");
   return (
     <FormProvider {...formMethods}>
       <div className="p-4">
@@ -86,6 +94,7 @@ export default function ManageHotelForm({ hotel }: ManageHotelFormProps) {
             description={hotel?.description}
             price={hotel?.price}
             starRating={hotel?.starRating}
+            title={title}
           />
 
           <hr className="w-full" />

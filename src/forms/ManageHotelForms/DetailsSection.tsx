@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 interface DetailsSectionProps {
+  title: string;
   name?: string;
   city?: string;
   country?: string;
@@ -26,6 +27,7 @@ export default function DetailsSection({
   description,
   price,
   starRating,
+  title,
 }: DetailsSectionProps) {
   const allCountryNames = Country.getAllCountries().map((country) => ({
     value: country.name,
@@ -147,7 +149,7 @@ export default function DetailsSection({
 
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="text-3xl font-bold text-center">Add Hotel</h1>
+      <h1 className="text-3xl font-bold text-center">{title}</h1>
 
       <h2 className="text-2xl">Details</h2>
 

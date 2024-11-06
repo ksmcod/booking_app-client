@@ -19,7 +19,16 @@ export default function ImagesSection({ imageUrls }: ImagesSectionProps) {
     register,
     formState: { errors },
     setValue,
+    watch,
   } = useFormContext<HotelFormData>();
+
+  useEffect(() => {
+    if (imageUrls) {
+      setValue("imageUrls", imageUrls);
+    }
+  }, [imageUrls, setValue]);
+
+  const existingImageUrls = watch("imageUrls");
 
   // Function to add an image
   function addImage(e: React.ChangeEvent<HTMLInputElement>) {
@@ -69,12 +78,26 @@ export default function ImagesSection({ imageUrls }: ImagesSectionProps) {
     setValue("imageFiles", dataTransfer.files);
   }
 
+  // Function to delete url image
+  function deleteUrlImage(
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    imageUrl: string
+  ) {
+    e.preventDefault();
+
+    setValue(
+      "imageUrls",
+      existingImageUrls.filter((url) => url !== imageUrl)
+    );
+  }
+
   return (
     <div>
       <h2 className="text-2xl mb-3">Images</h2>
 
       <div className="rounded p-4 flex flex-col gap-4">
         <div className="flex flex-col sm:flex-row items-center gap-2">
+          {/* DISPLAY selected local images */}
           {selectedImages.map((image, index) => (
             <div
               key={index}
@@ -93,6 +116,30 @@ export default function ImagesSection({ imageUrls }: ImagesSectionProps) {
               </button>
             </div>
           ))}
+
+          {/* DISPLAY url images if any */}
+          {existingImageUrls && (
+            <div className="flex flex-col sm:flex-row items-center gap-2">
+              {existingImageUrls.map((url, index) => (
+                <div
+                  key={index}
+                  className="relative group w-full sm:w-auto h-52 sm:h-44"
+                >
+                  <img
+                    src={url}
+                    alt={`Image ${index}`}
+                    className="h-full w-full object-cover object-center"
+                  />
+                  <button
+                    className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-70 opacity-0 group-hover:opacity-100 text-white font-bold"
+                    onClick={(e) => deleteUrlImage(e, url)}
+                  >
+                    <Trash2 size={26} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
         <Label
           htmlFor="imageInput"
@@ -109,7 +156,8 @@ export default function ImagesSection({ imageUrls }: ImagesSectionProps) {
             className="hidden"
             {...register("imageFiles", {
               validate: (imageFiles) => {
-                const totalLength = imageFiles.length;
+                const totalLength =
+                  imageFiles.length + (imageUrls?.length || 0);
 
                 if (totalLength === 0) {
                   return "Please upload at least one image of your hotel";
