@@ -1,5 +1,8 @@
 import { FormProvider, useForm } from "react-hook-form";
-import { useAddMyHotelMutation } from "@/app/api/myHotelsApi";
+import {
+  useAddMyHotelMutation,
+  useUpdateMyHotelMutation,
+} from "@/app/api/myHotelsApi";
 
 import DetailsSection from "./DetailsSection";
 import TypeSection from "./TypeSection";
@@ -9,11 +12,13 @@ import ImagesSection from "./ImagesSection";
 import Loader from "@/components/Loader";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { HotelType } from "@/types";
+import { ApiErrorType, HotelType } from "@/types";
+import handleApiError from "@/utils/handleApiError";
 
 interface ManageHotelFormProps {
   hotel?: HotelType;
   title: string;
+  mode: "create" | "edit";
 }
 export interface HotelFormData {
   name: string;
@@ -33,13 +38,17 @@ export interface HotelFormData {
 export default function ManageHotelForm({
   hotel,
   title,
+  mode,
 }: ManageHotelFormProps) {
   const formMethods = useForm<HotelFormData>();
   const { handleSubmit, reset } = formMethods;
 
   const navigate = useNavigate();
 
-  const [addMyHotelMutation, { isLoading }] = useAddMyHotelMutation();
+  const [addMyHotelMutation, { isLoading: isLoading1 }] =
+    useAddMyHotelMutation();
+  const [updateMyHotelMutation, { isLoading: isLoading2 }] =
+    useUpdateMyHotelMutation();
 
   const onSubmit = handleSubmit((data) => {
     const formData = new FormData();
@@ -65,19 +74,36 @@ export default function ManageHotelForm({
       formData.append(`imageUrls[${index}]`, url);
     });
 
-    addMyHotelMutation(formData)
-      .unwrap()
-      .then(() => {
-        toast.success("Hotel added successfully");
-        reset();
-        navigate("/my-hotels");
-      })
-      .catch((err) => {
-        if (err.message === "Aborted") {
-          return toast.error("A network error occured");
-        }
-        toast.error(err?.data?.message ?? "An error occured");
-      });
+    if (mode === "create") {
+      addMyHotelMutation(formData)
+        .unwrap()
+        .then(() => {
+          toast.success("Hotel added successfully");
+          reset();
+          navigate("/my-hotels");
+        })
+        .catch((err) => {
+          if (err.message === "Aborted") {
+            return toast.error("A network error occured");
+          }
+          toast.error(err?.data?.message ?? "An error occured");
+        });
+    }
+
+    if (mode === "edit") {
+      if (hotel) {
+        updateMyHotelMutation({ slug: hotel.slug as string, body: formData })
+          .unwrap()
+          .then(() => {
+            toast.success("Hotel updated successfully");
+            reset();
+            navigate("/my-hotels");
+          })
+          .catch((error) => {
+            handleApiError(error as ApiErrorType);
+          });
+      }
+    }
   });
 
   return (
@@ -117,11 +143,15 @@ export default function ManageHotelForm({
           <ImagesSection imageUrls={hotel?.imageUrls} />
 
           <button
-            disabled={isLoading}
+            disabled={isLoading1 || isLoading2}
             type="submit"
             className="bg-blue-600 text-white font-bold p-2 hover:bg-blue-500 active:opacity-90 text-xl rounded flex justify-center items-center disabled:cursor-not-allowed disabled:opacity-60 w-full"
           >
-            {isLoading ? <Loader className="size-7 text-white" /> : "Submit"}
+            {isLoading1 || isLoading2 ? (
+              <Loader className="size-7 text-white" />
+            ) : (
+              "Submit"
+            )}
           </button>
         </form>
       </div>

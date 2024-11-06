@@ -26,6 +26,13 @@ const myHotelsApi = api.injectEndpoints({
         method: "GET",
       }),
     }),
+    updateMyHotel: builder.mutation<void, { slug: string; body: FormData }>({
+      query: ({ slug, body }: { slug: string; body: FormData }) => ({
+        url: `${HOTEL_URL}/${slug}`,
+        method: "PUT",
+        body,
+      }),
+    }),
   }),
 });
 
@@ -33,4 +40,5 @@ export const {
   useAddMyHotelMutation,
   useGetMyHotelsQuery,
   useGetMyHotelBySlugQuery,
+  useUpdateMyHotelMutation,
 } = myHotelsApi;
