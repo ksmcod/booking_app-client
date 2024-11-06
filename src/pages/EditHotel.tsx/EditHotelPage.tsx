@@ -1,20 +1,32 @@
-import { useGetMyHotelBySlugQuery } from "@/app/api/myHotelsApi";
+import {
+  useGetMyHotelBySlugQuery,
+  useUpdateMyHotelMutation,
+} from "@/app/api/myHotelsApi";
 import Loader from "@/components/Loader";
 import ManageHotelForm from "@/forms/ManageHotelForms/ManageHotelForm";
 import { ApiErrorType } from "@/types";
-import { Link, useParams } from "react-router-dom";
+import handleApiError from "@/utils/handleApiError";
+import toast from "react-hot-toast";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 export default function EditHotelPage() {
   const { slug } = useParams();
 
-  const { isLoading, data, isError, error } = useGetMyHotelBySlugQuery(
-    slug as string
-  );
+  const {
+    isLoading: loading,
+    data,
+    isError,
+    error,
+  } = useGetMyHotelBySlugQuery(slug as string);
 
-  if (isLoading) {
+  const [updateHotelMutation, { isLoading }] = useUpdateMyHotelMutation();
+
+  const navigate = useNavigate();
+
+  if (loading) {
     return (
       <div className="flex-1 flex justify-center items-center">
-        {isLoading && <Loader className="size-16" />}
+        <Loader className="size-16" />
       </div>
     );
   }
@@ -68,5 +80,23 @@ export default function EditHotelPage() {
     );
   }
 
-  return <ManageHotelForm hotel={data} title="Edit Hotel" mode="edit" />;
+  const submitFunction = ({ slug, body }: { slug: string; body: FormData }) => {
+    updateHotelMutation({ slug: slug, body: body })
+      .unwrap()
+      .then(() => {
+        toast.success("Hotel updated successfully");
+        navigate("/my-hotels");
+      })
+      .catch((err) => handleApiError(err as ApiErrorType));
+  };
+
+  return (
+    <ManageHotelForm
+      hotel={data}
+      title="Edit Hotel"
+      slug={slug as string}
+      isLoading={isLoading}
+      submitFunction={submitFunction}
+    />
+  );
 }
