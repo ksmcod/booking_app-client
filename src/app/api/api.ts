@@ -9,5 +9,6 @@ export const api = createApi({
     credentials: "include",
     timeout: 50000,
   }),
+  tagTypes: ["allHotels", "oneHotel"],
   endpoints: () => ({}),
 });

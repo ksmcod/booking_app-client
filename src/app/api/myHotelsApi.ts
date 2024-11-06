@@ -11,6 +11,7 @@ const myHotelsApi = api.injectEndpoints({
         method: "POST",
         body,
       }),
+      invalidatesTags: ["allHotels"],
     }),
 
     getMyHotels: builder.query<HotelType[], void>({
@@ -18,6 +19,7 @@ const myHotelsApi = api.injectEndpoints({
         url: `${HOTEL_URL}`,
         method: "GET",
       }),
+      providesTags: ["allHotels"],
     }),
 
     getMyHotelBySlug: builder.query<HotelType, string>({
@@ -25,6 +27,7 @@ const myHotelsApi = api.injectEndpoints({
         url: `${HOTEL_URL}/${slug}`,
         method: "GET",
       }),
+      providesTags: ["oneHotel"],
     }),
     updateMyHotel: builder.mutation<void, { slug: string; body: FormData }>({
       query: ({ slug, body }: { slug: string; body: FormData }) => ({
@@ -32,6 +35,7 @@ const myHotelsApi = api.injectEndpoints({
         method: "PUT",
         body,
       }),
+      invalidatesTags: ["oneHotel", "allHotels"],
     }),
   }),
 });

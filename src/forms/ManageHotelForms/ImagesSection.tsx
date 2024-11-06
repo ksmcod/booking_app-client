@@ -97,26 +97,6 @@ export default function ImagesSection({ imageUrls }: ImagesSectionProps) {
 
       <div className="rounded p-4 flex flex-col gap-4">
         <div className="flex flex-col sm:flex-row items-center gap-2">
-          {/* DISPLAY selected local images */}
-          {selectedImages.map((image, index) => (
-            <div
-              key={index}
-              className="relative group w-full sm:w-auto h-52 sm:h-44"
-            >
-              <img
-                src={URL.createObjectURL(image)}
-                alt={`Image ${index}`}
-                className="h-full w-full object-cover object-center"
-              />
-              <button
-                className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-70 opacity-0 group-hover:opacity-100 text-white font-bold"
-                onClick={(e) => deleteSelectedImage(e, image)}
-              >
-                <Trash2 size={26} />
-              </button>
-            </div>
-          ))}
-
           {/* DISPLAY url images if any */}
           {existingImageUrls && (
             <div className="flex flex-col sm:flex-row items-center gap-2">
@@ -140,6 +120,26 @@ export default function ImagesSection({ imageUrls }: ImagesSectionProps) {
               ))}
             </div>
           )}
+
+          {/* DISPLAY selected local images */}
+          {selectedImages.map((image, index) => (
+            <div
+              key={index}
+              className="relative group w-full sm:w-auto h-52 sm:h-44"
+            >
+              <img
+                src={URL.createObjectURL(image)}
+                alt={`Image ${index}`}
+                className="h-full w-full object-cover object-center"
+              />
+              <button
+                className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-70 opacity-0 group-hover:opacity-100 text-white font-bold"
+                onClick={(e) => deleteSelectedImage(e, image)}
+              >
+                <Trash2 size={26} />
+              </button>
+            </div>
+          ))}
         </div>
         <Label
           htmlFor="imageInput"
