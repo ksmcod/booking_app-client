@@ -24,7 +24,6 @@ export default function TypeSection({ type }: TypeSectionProps) {
     if (type) {
       setTimeout(() => {
         setValue("type", type);
-        console.log("If statement EXECUTED!");
       }, 0);
     }
   }, [type, setValue]);
@@ -36,7 +35,6 @@ export default function TypeSection({ type }: TypeSectionProps) {
   //   }
   // }, [type, setValue]);
 
-  console.log("Type value is: ", typeWatch);
   return (
     <div>
       <h2 className="text-2xl mb-3">Hotel type</h2>
