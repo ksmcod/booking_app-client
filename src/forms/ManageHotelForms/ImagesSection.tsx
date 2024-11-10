@@ -96,7 +96,7 @@ export default function ImagesSection({ imageUrls }: ImagesSectionProps) {
       <h2 className="text-2xl mb-3">Images</h2>
 
       <div className="rounded p-4 flex flex-col gap-4">
-        <div className="flex flex-col sm:flex-row items-center gap-2">
+        <div className="flex flex-col sm:flex-row items-center gap-2 flex-wrap">
           {/* DISPLAY url images if any */}
           {existingImageUrls && (
             <div className="flex flex-col sm:flex-row items-center gap-2">

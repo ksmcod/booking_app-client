@@ -2,6 +2,7 @@ interface ButtonProps {
   disabled?: boolean;
   variant?: "primary" | "black";
   onClick?: () => void;
+  className?: string;
   children: React.ReactNode;
 }
 
@@ -10,6 +11,7 @@ export default function Button({
   children,
   onClick,
   variant,
+  className,
 }: ButtonProps) {
   return (
     <button
@@ -22,6 +24,7 @@ export default function Button({
                   variant === "black" &&
                   "bg-black gap-4 hover:bg-gray-900 active:opacity-85 text-base"
                 }
+                ${className}
                 `}
     >
       {children}

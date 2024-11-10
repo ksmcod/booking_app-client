@@ -31,3 +31,12 @@ export interface ApiErrorType {
   name?: string;
   message?: string;
 }
+
+export interface HotelSearchResponse {
+  hotels: HotelType[];
+  pagination: {
+    pageNumber: number;
+    itemsPerPage: number;
+    pages: number;
+  };
+}

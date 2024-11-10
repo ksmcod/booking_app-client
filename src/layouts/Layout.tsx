@@ -12,6 +12,7 @@ import {
   clearIsLoggedIn,
 } from "../app/slices/userSlice";
 import { useEffect } from "react";
+import SearchBar from "@/components/SearchBar";
 // import toast from "react-hot-toast";
 
 export default function Layout() {
@@ -62,15 +63,20 @@ export default function Layout() {
 
   return (
     !isLoading && (
-      <div className="flex flex-col min-h-screen justify-between roboto relative bg-white">
+      <div className="flex flex-col gap-2 min-h-screen justify-between roboto relative bg-white">
         {/* <Header /> */}
         <div className="">
           <Header />
-          {location.pathname === "/" && <Hero />}
+          {location.pathname === "/" && (
+            <>
+              <Hero />
+              <SearchBar />
+            </>
+          )}
         </div>
 
         {/* <div className="flex-1 max-w-7xl mx-auto w-full mt-16"> */}
-        <div className="flex-1 flex flex-col max-w-5xl mx-auto w-full px-2">
+        <div className="flex-1 flex flex-col max-w-6xl mx-auto w-full px-2">
           <Outlet />
         </div>
 
