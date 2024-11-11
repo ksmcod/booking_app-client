@@ -6,6 +6,8 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import Button from "./ui/button";
 import { useCallback, useState } from "react";
+import CalendarComponent from "./Calendar";
+import { RangeKeyDict } from "react-date-range";
 
 interface SearchParams {
   country: {
@@ -20,15 +22,27 @@ interface SearchParams {
   };
   adultCount: number;
   childrenCount: number;
+  startDate: Date;
+  endDate: Date;
 }
 
 export default function SearchBar() {
+  const [dateRange, setDateRange] = useState<RangeKeyDict>({
+    selection: {
+      startDate: new Date(),
+      endDate: new Date(),
+      key: "selection",
+    },
+  });
+
   const [searchParams, setSearchParams] = useState<SearchParams>({
-    country: { value: "", label: "Choose country", isoCode: "" },
-    city: { value: "", label: "Choose city" },
+    country: { value: "", label: "Country", isoCode: "" },
+    city: { value: "", label: "City" },
     adultCount: 1,
     childrenCount: 0,
     isoCode: "",
+    startDate: dateRange.selection.startDate ?? new Date(),
+    endDate: dateRange.selection.endDate ?? new Date(),
   });
 
   //   Get all country names to fill into Select component
@@ -55,7 +69,7 @@ export default function SearchBar() {
     // Clear the city field
     setSearchParams((prev) => ({
       ...prev,
-      city: { value: "", label: "Choose city" },
+      city: { value: "", label: "City" },
     }));
   }
 
@@ -67,37 +81,45 @@ export default function SearchBar() {
     }));
   }
 
-  console.log("Search params is: ", searchParams);
+  function handleCalendarChange(item: RangeKeyDict) {
+    setDateRange(item);
+    setSearchParams((prev) => ({
+      ...prev,
+      startDate: item.selection.startDate ?? new Date(),
+      endDate: item.selection.endDate ?? new Date(),
+    }));
+  }
+
+  // console.log("Daterange is now: ", dateRange);
+  console.log("Search params: ", searchParams);
   return (
     <div className="px-5">
-      <form className="max-w-5xl mx-auto rounded-sm bg-orange-400 p-3 text-base shadow-md grid grid-cols-1 sm:grid-cols-2 sm:-translate-y-1/3 lg:grid-cols-4 gap-1 items-center">
+      <form className="max-w-5xl mx-auto rounded-sm bg-orange-400 p-3 text-base shadow-md grid grid-cols-1 -translate-y-10 sm:grid-cols-2 sm:-translate-y-1/3 lg:grid-cols-6 gap-1 items-center">
         {/* Dropdown to choose destination country */}
-        <div className="">
-          <Select
-            placeholder="Destination country"
-            options={allCountryNames}
-            onChange={(e) => e && selectCountry(e)}
-            value={searchParams.country}
-            hideSelectedOptions
-          />
-        </div>
+        {/* <div className="grid grid-cols-2 gap-1"> */}
+        <Select
+          placeholder="Destination country"
+          options={allCountryNames}
+          onChange={(e) => e && selectCountry(e)}
+          value={searchParams.country}
+          hideSelectedOptions
+        />
 
         {/* Dropdown to choose destination city */}
-        <div className="">
-          <Select
-            placeholder="Destination city"
-            options={cityOptions()}
-            onChange={(e) => e && selectCity(e)}
-            value={searchParams.city}
-            hideSelectedOptions
-            noOptionsMessage={() => {
-              if (searchParams.country.value) {
-                return "No cities found";
-              }
-              return "Please select a country";
-            }}
-          />
-        </div>
+        <Select
+          placeholder="Destination city"
+          options={cityOptions()}
+          onChange={(e) => e && selectCity(e)}
+          value={searchParams.city}
+          hideSelectedOptions
+          noOptionsMessage={() => {
+            if (searchParams.country.value) {
+              return "No cities found";
+            }
+            return "Please select a country";
+          }}
+        />
+        {/* </div> */}
 
         {/* Select number of adults and children */}
         <div className="bg-white grid grid-cols-2 items-center rounded-sm">
@@ -109,7 +131,7 @@ export default function SearchBar() {
             <Input
               id="adults"
               type="number"
-              className="border-none max-w-32"
+              className="border-none"
               min={1}
               value={searchParams.adultCount}
               onChange={(e) => {
@@ -132,7 +154,7 @@ export default function SearchBar() {
             <Input
               id="children"
               type="number"
-              className="border-none max-w-32"
+              className="border-none"
               min={0}
               value={searchParams.childrenCount}
               onChange={(e) => {
@@ -148,21 +170,24 @@ export default function SearchBar() {
           </Label>
         </div>
 
+        {/* Calendar for choosing date */}
+        <CalendarComponent
+          dateRange={dateRange}
+          onChange={(newDateRange) => handleCalendarChange(newDateRange)}
+        />
         {/* Search and clear buttons */}
-        <div className="flex items-center gap-1">
-          <Button
-            variant="primary"
-            className="flex justify-center items-center px-3 self-stretch"
-          >
-            <Search />
-            <span>Search</span>
-          </Button>
+        <Button
+          variant="primary"
+          className="flex justify-center items-center px-3 gap-2"
+        >
+          <Search />
+          <span>Search</span>
+        </Button>
 
-          <Button className="flex justify-center items-center bg-red-500 px-3">
-            <SearchX />
-            <span>Clear</span>
-          </Button>
-        </div>
+        <Button className="flex justify-center items-center bg-red-500 px-3 gap-2">
+          <SearchX />
+          <span>Clear</span>
+        </Button>
       </form>
     </div>
   );
