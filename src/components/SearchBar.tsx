@@ -94,7 +94,7 @@ export default function SearchBar() {
   console.log("Search params: ", searchParams);
   return (
     <div className="px-5">
-      <form className="max-w-5xl mx-auto rounded-sm bg-orange-400 p-3 text-base shadow-md grid grid-cols-1 -translate-y-10 sm:grid-cols-2 sm:-translate-y-1/3 lg:grid-cols-6 gap-1 items-center">
+      <form className="max-w-5xl mx-auto rounded-sm bg-orange-400 p-3 text-base shadow-md grid grid-cols-1 -translate-y-10 sm:grid-cols-2 sm:-translate-y-1/3 lg:grid-cols-3 gap-1 items-center">
         {/* Dropdown to choose destination country */}
         {/* <div className="grid grid-cols-2 gap-1"> */}
         <Select
@@ -122,7 +122,7 @@ export default function SearchBar() {
         {/* </div> */}
 
         {/* Select number of adults and children */}
-        <div className="bg-white grid grid-cols-2 items-center rounded-sm">
+        <div className="bg-white flex justify-center items-center gap-2 rounded-sm">
           <Label
             htmlFor="adults"
             className="flex justify-center items-center px-1"
@@ -131,7 +131,7 @@ export default function SearchBar() {
             <Input
               id="adults"
               type="number"
-              className="border-none"
+              className="border-none h-full w-full"
               min={1}
               value={searchParams.adultCount}
               onChange={(e) => {
@@ -154,7 +154,7 @@ export default function SearchBar() {
             <Input
               id="children"
               type="number"
-              className="border-none"
+              className="border-none h-full w-full"
               min={0}
               value={searchParams.childrenCount}
               onChange={(e) => {

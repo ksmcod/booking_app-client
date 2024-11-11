@@ -1,5 +1,5 @@
-import { Calendar } from "lucide-react";
-import { useRef, useState, useEffect } from "react";
+import { Calendar1 } from "lucide-react";
+import { useRef, useState, useEffect, useMemo } from "react";
 import { DateRange, RangeKeyDict } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
@@ -35,6 +35,42 @@ export default function CalendarComponent({
     };
   }, [showCalendar]);
 
+  const calendarLabel = useMemo(() => {
+    if (dateRange.selection.startDate && dateRange.selection.endDate) {
+      if (
+        dateRange.selection.startDate.getTime() ===
+          new Date(new Date().setHours(0, 0, 0, 0)).getTime() &&
+        dateRange.selection.endDate.getTime() > new Date().getTime()
+      ) {
+        const startDate = dateRange.selection.startDate.toLocaleString(
+          "default",
+          { dateStyle: "medium" }
+        );
+        const endDate = dateRange.selection.endDate.toLocaleString("default", {
+          dateStyle: "medium",
+        });
+
+        return `${startDate} - ${endDate}`;
+      }
+
+      if (
+        dateRange.selection.startDate.getTime() >= new Date().getTime() &&
+        dateRange.selection.endDate.getTime() > new Date().getTime()
+      ) {
+        const startDate = dateRange.selection.startDate.toLocaleString(
+          "default",
+          { dateStyle: "medium" }
+        );
+        const endDate = dateRange.selection.endDate.toLocaleString("default", {
+          dateStyle: "medium",
+        });
+
+        return `${startDate} - ${endDate}`;
+      }
+    }
+
+    return "Select date";
+  }, [dateRange.selection.endDate, dateRange.selection.startDate]);
   return (
     <div
       ref={calendarRef}
@@ -57,8 +93,8 @@ export default function CalendarComponent({
           />
         </div>
       )}
-      <Calendar />
-      <span>Select date</span>
+      <Calendar1 />
+      <span>{calendarLabel}</span>
     </div>
   );
 }
