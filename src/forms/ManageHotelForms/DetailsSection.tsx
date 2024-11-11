@@ -1,3 +1,4 @@
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useFormContext } from "react-hook-form";
 
 import { City, Country } from "country-state-city";
@@ -8,7 +9,6 @@ import { HotelFormData } from "./ManageHotelForm";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useCallback, useEffect, useMemo, useState } from "react";
 
 interface DetailsSectionProps {
   title: string;
