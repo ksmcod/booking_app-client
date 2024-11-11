@@ -71,6 +71,7 @@ export default function CalendarComponent({
 
     return "Select date";
   }, [dateRange.selection.endDate, dateRange.selection.startDate]);
+
   return (
     <div
       ref={calendarRef}

@@ -1,7 +1,7 @@
 interface ButtonProps {
   disabled?: boolean;
   variant?: "primary" | "black";
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent) => void;
   className?: string;
   children: React.ReactNode;
 }

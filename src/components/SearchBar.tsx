@@ -90,8 +90,29 @@ export default function SearchBar() {
     }));
   }
 
-  // console.log("Daterange is now: ", dateRange);
-  console.log("Search params: ", searchParams);
+  // Function to clear search params
+  function clearSearchParams(e: React.MouseEvent) {
+    e.preventDefault();
+
+    setDateRange({
+      selection: {
+        startDate: new Date(),
+        endDate: new Date(),
+        key: "selection",
+      },
+    });
+
+    setSearchParams({
+      country: { value: "", label: "Country", isoCode: "" },
+      city: { value: "", label: "City" },
+      adultCount: 1,
+      childrenCount: 0,
+      isoCode: "",
+      startDate: new Date(),
+      endDate: new Date(),
+    });
+  }
+
   return (
     <div className="px-5">
       <form className="max-w-5xl mx-auto rounded-sm bg-orange-400 p-3 text-base shadow-md grid grid-cols-1 -translate-y-10 sm:grid-cols-2 sm:-translate-y-1/3 lg:grid-cols-3 gap-1 items-center">
@@ -184,7 +205,10 @@ export default function SearchBar() {
           <span>Search</span>
         </Button>
 
-        <Button className="flex justify-center items-center bg-red-500 px-3 gap-2">
+        <Button
+          className="flex justify-center items-center bg-red-500 px-3 gap-2"
+          onClick={(e: React.MouseEvent) => clearSearchParams(e)}
+        >
           <SearchX />
           <span>Clear</span>
         </Button>
