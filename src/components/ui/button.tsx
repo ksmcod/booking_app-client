@@ -3,6 +3,7 @@ interface ButtonProps {
   variant?: "primary" | "black";
   onClick?: (e: React.MouseEvent) => void;
   className?: string;
+  type?: "button" | "reset" | "submit";
   children: React.ReactNode;
 }
 
@@ -12,11 +13,13 @@ export default function Button({
   onClick,
   variant,
   className,
+  type,
 }: ButtonProps) {
   return (
     <button
       onClick={onClick}
       disabled={disabled}
+      type={type}
       className={`${"w-full text-white font-bold p-2 text-xl rounded flex justify-center items-center disabled:cursor-not-allowed disabled:opacity-60 active:opacity-90 transition-all"}
                 
                 ${variant === "primary" && "bg-blue-600 hover:bg-blue-500"}

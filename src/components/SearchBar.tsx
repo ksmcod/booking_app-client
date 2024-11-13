@@ -8,8 +8,9 @@ import Button from "./ui/button";
 import { useCallback, useState } from "react";
 import CalendarComponent from "./Calendar";
 import { RangeKeyDict } from "react-date-range";
+import { useSearchParams } from "react-router-dom";
 
-interface SearchParams {
+interface SearchValuesType {
   country: {
     value: string;
     label: string;
@@ -35,7 +36,9 @@ export default function SearchBar() {
     },
   });
 
-  const [searchParams, setSearchParams] = useState<SearchParams>({
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const [searchValues, setSearchValues] = useState<SearchValuesType>({
     country: { value: "", label: "Choose destination Country", isoCode: "" },
     city: { value: "", label: "Choose destination City" },
     adultCount: 1,
@@ -54,20 +57,20 @@ export default function SearchBar() {
 
   //   Get all cities within the selected country
   const cityOptions = useCallback(() => {
-    const cities = City.getCitiesOfCountry(searchParams.country.isoCode);
+    const cities = City.getCitiesOfCountry(searchValues.country.isoCode);
     return cities?.map((city) => ({ label: city.name, value: city.name }));
-  }, [searchParams.country.isoCode]);
+  }, [searchValues.country.isoCode]);
 
   //   Function to execute when user selects a country in the dropdown
   function selectCountry(e: { value: string; label: string; isoCode: string }) {
     // Set the selected country
-    setSearchParams((prev) => ({
+    setSearchValues((prev) => ({
       ...prev,
       country: { value: e.value, label: e.label, isoCode: e.isoCode },
     }));
 
     // Clear the city field
-    setSearchParams((prev) => ({
+    setSearchValues((prev) => ({
       ...prev,
       city: { value: "", label: "Choose destination City" },
     }));
@@ -75,7 +78,7 @@ export default function SearchBar() {
 
   //   Function to run when user selects a city
   function selectCity(e: { value: string; label: string }) {
-    setSearchParams((prev) => ({
+    setSearchValues((prev) => ({
       ...prev,
       city: { value: e.value, label: e.label },
     }));
@@ -83,15 +86,15 @@ export default function SearchBar() {
 
   function handleCalendarChange(item: RangeKeyDict) {
     setDateRange(item);
-    setSearchParams((prev) => ({
+    setSearchValues((prev) => ({
       ...prev,
       startDate: item.selection.startDate ?? new Date(),
       endDate: item.selection.endDate ?? new Date(),
     }));
   }
 
-  // Function to clear search params
-  function clearSearchParams(e: React.MouseEvent) {
+  // Function to clear search values
+  function clearSearchValues(e: React.MouseEvent) {
     e.preventDefault();
 
     setDateRange({
@@ -102,7 +105,7 @@ export default function SearchBar() {
       },
     });
 
-    setSearchParams({
+    setSearchValues({
       country: { value: "", label: "Choose destination Country", isoCode: "" },
       city: { value: "", label: "Choose destination City" },
       adultCount: 1,
@@ -113,16 +116,55 @@ export default function SearchBar() {
     });
   }
 
+  // Function to handle the search
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    searchParams.delete("country");
+    searchParams.delete("city");
+    searchParams.delete("adults");
+    searchParams.delete("children");
+    searchParams.delete("startDate");
+    searchParams.delete("endDate");
+
+    console.log("Search params at this point: ", searchParams);
+
+    if (searchValues.country.value.length) {
+      searchParams.set("country", searchValues.country.value);
+    }
+
+    if (searchValues.city.value.length) {
+      searchParams.set("city", searchValues.city.value);
+    }
+
+    if (searchValues.startDate.getTime() !== searchValues.endDate.getTime()) {
+      searchParams.set(
+        "startDate",
+        searchValues.startDate.getTime().toString()
+      );
+      searchParams.set("endDate", searchValues.endDate.getTime().toString());
+    }
+
+    searchParams.set("adults", searchValues.adultCount.toString());
+    searchParams.set("children", searchValues.childrenCount.toString());
+
+    setSearchParams(searchParams);
+    console.log("Search params: ", searchParams);
+  }
+
   return (
     <div className="px-5">
-      <form className="max-w-5xl mx-auto rounded-sm bg-orange-400 p-3 text-base shadow-md grid grid-cols-1 -translate-y-10 sm:grid-cols-2 sm:-translate-y-1/3 lg:grid-cols-3 gap-1 items-center">
+      <form
+        onSubmit={(e) => handleSubmit(e)}
+        className="max-w-5xl mx-auto rounded-sm bg-orange-400 p-3 text-base shadow-md grid grid-cols-1 -translate-y-10 sm:grid-cols-2 sm:-translate-y-1/3 lg:grid-cols-3 gap-1 items-center"
+      >
         {/* Dropdown to choose destination country */}
         {/* <div className="grid grid-cols-2 gap-1"> */}
         <Select
           placeholder="Destination country"
           options={allCountryNames}
           onChange={(e) => e && selectCountry(e)}
-          value={searchParams.country}
+          value={searchValues.country}
           hideSelectedOptions
         />
 
@@ -131,10 +173,10 @@ export default function SearchBar() {
           placeholder="Destination city"
           options={cityOptions()}
           onChange={(e) => e && selectCity(e)}
-          value={searchParams.city}
+          value={searchValues.city}
           hideSelectedOptions
           noOptionsMessage={() => {
-            if (searchParams.country.value) {
+            if (searchValues.country.value) {
               return "No cities found";
             }
             return "Please select a country";
@@ -154,12 +196,12 @@ export default function SearchBar() {
               type="number"
               className="border-none h-full w-full"
               min={1}
-              value={searchParams.adultCount}
+              value={searchValues.adultCount}
               onChange={(e) => {
                 if (Number.isNaN(parseInt(e.target.value))) {
                   e.target.value = "01";
                 }
-                setSearchParams((prev) => ({
+                setSearchValues((prev) => ({
                   ...prev,
                   adultCount: parseInt(e.target.value),
                 }));
@@ -177,12 +219,12 @@ export default function SearchBar() {
               type="number"
               className="border-none h-full w-full"
               min={0}
-              value={searchParams.childrenCount}
+              value={searchValues.childrenCount}
               onChange={(e) => {
                 if (Number.isNaN(parseInt(e.target.value))) {
                   e.target.value = "0";
                 }
-                setSearchParams((prev) => ({
+                setSearchValues((prev) => ({
                   ...prev,
                   childrenCount: parseInt(e.target.value),
                 }));
@@ -198,6 +240,7 @@ export default function SearchBar() {
         />
         {/* Search and clear buttons */}
         <Button
+          type="submit"
           variant="primary"
           className="flex justify-center items-center px-3 gap-2"
         >
@@ -206,8 +249,8 @@ export default function SearchBar() {
         </Button>
 
         <Button
-          className="flex justify-center items-center bg-red-500 px-3 gap-2"
-          onClick={(e: React.MouseEvent) => clearSearchParams(e)}
+          className="flex justify-center items-center bg-red-600 px-3 gap-2 hover:bg-red-500"
+          onClick={(e: React.MouseEvent) => clearSearchValues(e)}
         >
           <SearchX />
           <span>Clear</span>

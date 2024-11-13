@@ -17,6 +17,7 @@ import {
   NotFound404,
 } from "./pages";
 import Redirect from "./utils/Redirect";
+import SearchResultsPage from "./pages/SearchResults/SearchResultsPage";
 
 export default function App() {
   const router = createBrowserRouter(
@@ -35,6 +36,7 @@ export default function App() {
             <Route index element={<Redirect target="/my-hotels" />} />
             <Route path=":slug" element={<EditHotelPage />} />
           </Route>
+          <Route path="search" element={<SearchResultsPage />} />
         </Route>
 
         {/* 404 Page */}
