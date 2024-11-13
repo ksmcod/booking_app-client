@@ -39,6 +39,12 @@ export default function CalendarComponent({
     if (dateRange.selection.startDate && dateRange.selection.endDate) {
       if (
         dateRange.selection.startDate.getTime() ===
+        dateRange.selection.endDate.getTime()
+      ) {
+        return "Select a date";
+      }
+      if (
+        dateRange.selection.startDate.getTime() ===
           new Date(new Date().setHours(0, 0, 0, 0)).getTime() &&
         dateRange.selection.endDate.getTime() > new Date().getTime()
       ) {

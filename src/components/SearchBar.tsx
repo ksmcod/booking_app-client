@@ -36,8 +36,8 @@ export default function SearchBar() {
   });
 
   const [searchParams, setSearchParams] = useState<SearchParams>({
-    country: { value: "", label: "Country", isoCode: "" },
-    city: { value: "", label: "City" },
+    country: { value: "", label: "Choose destination Country", isoCode: "" },
+    city: { value: "", label: "Choose destination City" },
     adultCount: 1,
     childrenCount: 0,
     isoCode: "",
@@ -69,7 +69,7 @@ export default function SearchBar() {
     // Clear the city field
     setSearchParams((prev) => ({
       ...prev,
-      city: { value: "", label: "City" },
+      city: { value: "", label: "Choose destination City" },
     }));
   }
 
@@ -103,8 +103,8 @@ export default function SearchBar() {
     });
 
     setSearchParams({
-      country: { value: "", label: "Country", isoCode: "" },
-      city: { value: "", label: "City" },
+      country: { value: "", label: "Choose destination Country", isoCode: "" },
+      city: { value: "", label: "Choose destination City" },
       adultCount: 1,
       childrenCount: 0,
       isoCode: "",
