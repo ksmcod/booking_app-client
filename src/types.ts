@@ -40,3 +40,19 @@ export interface HotelSearchResponse {
     pages: number;
   };
 }
+
+export interface SearchValuesType {
+  country: {
+    value: string;
+    label: string;
+    isoCode: string;
+  };
+  city: {
+    value: string;
+    label: string;
+  };
+  adultCount: number;
+  childrenCount: number;
+  startDate: Date;
+  endDate: Date;
+}

@@ -67,7 +67,7 @@ export default function Layout() {
         {/* <Header /> */}
         <div className="">
           <Header />
-          {location.pathname === "/" && (
+          {(location.pathname === "/" || location.pathname === "/search") && (
             <>
               <Hero />
               <SearchBar />

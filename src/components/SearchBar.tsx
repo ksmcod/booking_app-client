@@ -11,22 +11,7 @@ import { Label } from "./ui/label";
 import Button from "./ui/button";
 import CalendarComponent from "./Calendar";
 
-interface SearchValuesType {
-  country: {
-    value: string;
-    label: string;
-    isoCode: string;
-  };
-  isoCode: string;
-  city: {
-    value: string;
-    label: string;
-  };
-  adultCount: number;
-  childrenCount: number;
-  startDate: Date;
-  endDate: Date;
-}
+import { SearchValuesType } from "@/types";
 
 export default function SearchBar() {
   const [dateRange, setDateRange] = useState<RangeKeyDict>({
@@ -46,7 +31,6 @@ export default function SearchBar() {
     city: { value: "", label: "Choose destination City" },
     adultCount: 1,
     childrenCount: 0,
-    isoCode: "",
     startDate: dateRange.selection.startDate ?? new Date(),
     endDate: dateRange.selection.endDate ?? new Date(),
   });
@@ -113,7 +97,6 @@ export default function SearchBar() {
       city: { value: "", label: "Choose destination City" },
       adultCount: 1,
       childrenCount: 0,
-      isoCode: "",
       startDate: new Date(),
       endDate: new Date(),
     });
