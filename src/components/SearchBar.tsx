@@ -1,14 +1,15 @@
+import { useCallback, useState } from "react";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import Select from "react-select";
-import { Search, SearchX } from "lucide-react";
 import { Country, City } from "country-state-city";
+import { RangeKeyDict } from "react-date-range";
+
+import { Search, SearchX } from "lucide-react";
 
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import Button from "./ui/button";
-import { useCallback, useState } from "react";
 import CalendarComponent from "./Calendar";
-import { RangeKeyDict } from "react-date-range";
-import { useSearchParams } from "react-router-dom";
 
 interface SearchValuesType {
   country: {
@@ -36,7 +37,9 @@ export default function SearchBar() {
     },
   });
 
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
+
+  const navigate = useNavigate();
 
   const [searchValues, setSearchValues] = useState<SearchValuesType>({
     country: { value: "", label: "Choose destination Country", isoCode: "" },
@@ -148,8 +151,7 @@ export default function SearchBar() {
     searchParams.set("adults", searchValues.adultCount.toString());
     searchParams.set("children", searchValues.childrenCount.toString());
 
-    setSearchParams(searchParams);
-    console.log("Search params: ", searchParams);
+    navigate(`search?${searchParams.toString()}`);
   }
 
   return (
