@@ -32,7 +32,7 @@ export interface ApiErrorType {
   message?: string;
 }
 
-export interface HotelSearchResponse {
+export interface HotelSearchResponseType {
   hotels: HotelType[];
   pagination: {
     pageNumber: number;
@@ -42,17 +42,10 @@ export interface HotelSearchResponse {
 }
 
 export interface SearchValuesType {
-  country: {
-    value: string;
-    label: string;
-    isoCode: string;
-  };
-  city: {
-    value: string;
-    label: string;
-  };
-  adultCount: number;
-  childrenCount: number;
-  startDate: Date;
-  endDate: Date;
+  country: string;
+  city: string;
+  adultCount: string;
+  childrenCount: string;
+  startDate: string;
+  endDate: string;
 }

@@ -26,7 +26,7 @@ export default function App() {
         <Route index element={<IndexPage />} />
         <Route path="register" element={<RegisterPage />} />
         <Route path="login" element={<LoginPage />} />
-        <Route path="search" element={<p>Search page</p>} />
+        <Route path="search" element={<SearchResultsPage />} />
 
         {/* PROTECTED ROUTES */}
         <Route element={<ProtectedRoutes />}>
@@ -36,7 +36,6 @@ export default function App() {
             <Route index element={<Redirect target="/my-hotels" />} />
             <Route path=":slug" element={<EditHotelPage />} />
           </Route>
-          <Route path="search" element={<SearchResultsPage />} />
         </Route>
 
         {/* 404 Page */}

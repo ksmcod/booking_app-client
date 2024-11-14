@@ -11,7 +11,21 @@ import { Label } from "./ui/label";
 import Button from "./ui/button";
 import CalendarComponent from "./Calendar";
 
-import { SearchValuesType } from "@/types";
+interface FormState {
+  country: {
+    value: string;
+    label: string;
+    isoCode: string;
+  };
+  city: {
+    value: string;
+    label: string;
+  };
+  adultCount: number;
+  childrenCount: number;
+  startDate: Date;
+  endDate: Date;
+}
 
 export default function SearchBar() {
   const [dateRange, setDateRange] = useState<RangeKeyDict>({
@@ -26,7 +40,7 @@ export default function SearchBar() {
 
   const navigate = useNavigate();
 
-  const [searchValues, setSearchValues] = useState<SearchValuesType>({
+  const [formState, setFormState] = useState<FormState>({
     country: { value: "", label: "Choose destination Country", isoCode: "" },
     city: { value: "", label: "Choose destination City" },
     adultCount: 1,
@@ -44,20 +58,20 @@ export default function SearchBar() {
 
   //   Get all cities within the selected country
   const cityOptions = useCallback(() => {
-    const cities = City.getCitiesOfCountry(searchValues.country.isoCode);
+    const cities = City.getCitiesOfCountry(formState.country.isoCode);
     return cities?.map((city) => ({ label: city.name, value: city.name }));
-  }, [searchValues.country.isoCode]);
+  }, [formState.country.isoCode]);
 
   //   Function to execute when user selects a country in the dropdown
   function selectCountry(e: { value: string; label: string; isoCode: string }) {
     // Set the selected country
-    setSearchValues((prev) => ({
+    setFormState((prev) => ({
       ...prev,
       country: { value: e.value, label: e.label, isoCode: e.isoCode },
     }));
 
     // Clear the city field
-    setSearchValues((prev) => ({
+    setFormState((prev) => ({
       ...prev,
       city: { value: "", label: "Choose destination City" },
     }));
@@ -65,7 +79,7 @@ export default function SearchBar() {
 
   //   Function to run when user selects a city
   function selectCity(e: { value: string; label: string }) {
-    setSearchValues((prev) => ({
+    setFormState((prev) => ({
       ...prev,
       city: { value: e.value, label: e.label },
     }));
@@ -73,7 +87,7 @@ export default function SearchBar() {
 
   function handleCalendarChange(item: RangeKeyDict) {
     setDateRange(item);
-    setSearchValues((prev) => ({
+    setFormState((prev) => ({
       ...prev,
       startDate: item.selection.startDate ?? new Date(),
       endDate: item.selection.endDate ?? new Date(),
@@ -81,7 +95,7 @@ export default function SearchBar() {
   }
 
   // Function to clear search values
-  function clearSearchValues(e: React.MouseEvent) {
+  function clearFormState(e: React.MouseEvent) {
     e.preventDefault();
 
     setDateRange({
@@ -92,7 +106,7 @@ export default function SearchBar() {
       },
     });
 
-    setSearchValues({
+    setFormState({
       country: { value: "", label: "Choose destination Country", isoCode: "" },
       city: { value: "", label: "Choose destination City" },
       adultCount: 1,
@@ -115,24 +129,21 @@ export default function SearchBar() {
 
     console.log("Search params at this point: ", searchParams);
 
-    if (searchValues.country.value.length) {
-      searchParams.set("country", searchValues.country.value);
+    if (formState.country.value.length) {
+      searchParams.set("country", formState.country.value);
     }
 
-    if (searchValues.city.value.length) {
-      searchParams.set("city", searchValues.city.value);
+    if (formState.city.value.length) {
+      searchParams.set("city", formState.city.value);
     }
 
-    if (searchValues.startDate.getTime() !== searchValues.endDate.getTime()) {
-      searchParams.set(
-        "startDate",
-        searchValues.startDate.getTime().toString()
-      );
-      searchParams.set("endDate", searchValues.endDate.getTime().toString());
+    if (formState.startDate.getTime() !== formState.endDate.getTime()) {
+      searchParams.set("startDate", formState.startDate.getTime().toString());
+      searchParams.set("endDate", formState.endDate.getTime().toString());
     }
 
-    searchParams.set("adults", searchValues.adultCount.toString());
-    searchParams.set("children", searchValues.childrenCount.toString());
+    searchParams.set("adults", formState.adultCount.toString());
+    searchParams.set("children", formState.childrenCount.toString());
 
     navigate(`search?${searchParams.toString()}`);
   }
@@ -149,7 +160,7 @@ export default function SearchBar() {
           placeholder="Destination country"
           options={allCountryNames}
           onChange={(e) => e && selectCountry(e)}
-          value={searchValues.country}
+          value={formState.country}
           hideSelectedOptions
         />
 
@@ -158,10 +169,10 @@ export default function SearchBar() {
           placeholder="Destination city"
           options={cityOptions()}
           onChange={(e) => e && selectCity(e)}
-          value={searchValues.city}
+          value={formState.city}
           hideSelectedOptions
           noOptionsMessage={() => {
-            if (searchValues.country.value) {
+            if (formState.country.value) {
               return "No cities found";
             }
             return "Please select a country";
@@ -181,12 +192,12 @@ export default function SearchBar() {
               type="number"
               className="border-none h-full w-full"
               min={1}
-              value={searchValues.adultCount}
+              value={formState.adultCount}
               onChange={(e) => {
                 if (Number.isNaN(parseInt(e.target.value))) {
                   e.target.value = "01";
                 }
-                setSearchValues((prev) => ({
+                setFormState((prev) => ({
                   ...prev,
                   adultCount: parseInt(e.target.value),
                 }));
@@ -204,12 +215,12 @@ export default function SearchBar() {
               type="number"
               className="border-none h-full w-full"
               min={0}
-              value={searchValues.childrenCount}
+              value={formState.childrenCount}
               onChange={(e) => {
                 if (Number.isNaN(parseInt(e.target.value))) {
                   e.target.value = "0";
                 }
-                setSearchValues((prev) => ({
+                setFormState((prev) => ({
                   ...prev,
                   childrenCount: parseInt(e.target.value),
                 }));
@@ -235,7 +246,7 @@ export default function SearchBar() {
 
         <Button
           className="flex justify-center items-center bg-red-600 px-3 gap-2 hover:bg-red-500"
-          onClick={(e: React.MouseEvent) => clearSearchValues(e)}
+          onClick={(e: React.MouseEvent) => clearFormState(e)}
         >
           <SearchX />
           <span>Clear</span>
