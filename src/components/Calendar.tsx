@@ -81,7 +81,7 @@ export default function CalendarComponent({
   return (
     <div
       ref={calendarRef}
-      className="relative bg-white h-full rounded-sm flex justify-center items-center gap-2 p-2 hover:cursor-pointer red-"
+      className="relative bg-white h-full rounded-sm flex justify-center items-center gap-2 p-2 hover:cursor-pointer"
       onClick={(e) => {
         e.stopPropagation();
         setShowCalendar(true);
@@ -97,6 +97,7 @@ export default function CalendarComponent({
             direction="vertical"
             showDateDisplay={false}
             onChange={(item) => onChange(item)}
+            className=""
           />
         </div>
       )}

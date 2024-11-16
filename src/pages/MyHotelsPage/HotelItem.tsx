@@ -11,7 +11,9 @@ export default function HotelItem({ hotel }: HotelItemProps) {
   return (
     <div className="flex flex-col justify-between border border-slate-300 rounded p-4 gap-3">
       <h2 className="text-xl font-bold">{hotel.name}</h2>
-      <div className="whitespace-pre-line">{hotel.description}</div>
+      <div className="whitespace-pre-line line-clamp-3">
+        {hotel.description}
+      </div>
 
       {/* Grid Section */}
       <div className="flex flex-col sm:flex-row flex-wrap gap-2 text-sm text-nowrap">

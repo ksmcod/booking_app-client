@@ -34,6 +34,7 @@ export interface ApiErrorType {
 
 export interface HotelSearchResponseType {
   hotels: HotelType[];
+  totalNumberOfMatches: number;
   pagination: {
     pageNumber: number;
     itemsPerPage: number;

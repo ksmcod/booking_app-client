@@ -73,7 +73,7 @@ export default function Header() {
 
             {/* Dropdown Zone */}
             {isDropdownOpen && (
-              <div className="p-2 absolute z-50 right-0 w-screen sm:w-60 ">
+              <div className="p-2 absolute z-10 right-0 w-screen sm:w-60 ">
                 <div className="bg-white p-1 shadow-md border rounded-sm w-full sm:top-full flex flex-col space-y-1">
                   <Link
                     to={"/my-account"}

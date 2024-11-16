@@ -3,7 +3,7 @@ import IndexPage from "./HomePage/IndexPage";
 import LoginPage from "./LoginPage/LoginPage";
 import RegisterPage from "./RegisterPage/RegisterPage";
 import MyHotelsPage from "./MyHotelsPage/MyHotelsPage";
-import EditHotelPage from "./EditHotel.tsx/EditHotelPage";
+import EditHotelPage from "./EditHotel/EditHotelPage";
 import NotFound404 from "./NotFound/NotFound404";
 
 export {

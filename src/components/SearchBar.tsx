@@ -127,8 +127,6 @@ export default function SearchBar() {
     searchParams.delete("startDate");
     searchParams.delete("endDate");
 
-    console.log("Search params at this point: ", searchParams);
-
     if (formState.country.value.length) {
       searchParams.set("country", formState.country.value);
     }
@@ -152,7 +150,7 @@ export default function SearchBar() {
     <div className="px-5">
       <form
         onSubmit={(e) => handleSubmit(e)}
-        className="max-w-5xl mx-auto rounded-sm bg-orange-400 p-3 text-base shadow-md grid grid-cols-1 -translate-y-10 sm:grid-cols-2 sm:-translate-y-1/3 lg:grid-cols-3 gap-1 items-center"
+        className="max-w-5xl mx-auto rounded-sm bg-orange-400 p-3 text-base shadow-md grid grid-cols-1 -translate-y-10 sm:-translate-y-1/3 sm:grid-cols-2 lg:grid-cols-3 gap-1 items-center"
       >
         {/* Dropdown to choose destination country */}
         {/* <div className="grid grid-cols-2 gap-1"> */}
