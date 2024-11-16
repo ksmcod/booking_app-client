@@ -14,6 +14,7 @@ const hotelsApi = api.injectEndpoints({
           childrenCount: params.childrenCount.toString(),
           startDate: params.startDate,
           endDate: params.endDate,
+          page: params.page,
         });
         return `${HOTELS_URL}/search?${queryString.toString()}`;
       },
@@ -21,4 +22,4 @@ const hotelsApi = api.injectEndpoints({
   }),
 });
 
-export const { useSearchHotelQuery } = hotelsApi;
+export const { useSearchHotelQuery, useLazySearchHotelQuery } = hotelsApi;

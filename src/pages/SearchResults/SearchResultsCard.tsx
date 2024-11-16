@@ -7,8 +7,6 @@ interface SearchResultCardProps {
 }
 
 export default function SearchResultsCard({ hotel }: SearchResultCardProps) {
-  console.log("Hotel is: ", hotel);
-
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[2fr_3fr] border border-slate-300 rounded-lg p-4 gap-4">
       <div className="w-full h-[300px]">
@@ -53,11 +51,14 @@ export default function SearchResultsCard({ hotel }: SearchResultCardProps) {
             )}
           </div>
 
-          <div className="font-bold">${hotel.price}</div>
+          <div className="flex gap-1">
+            <span className="font-bold">${hotel.price}</span>
+            <span>a night</span>
+          </div>
         </div>
 
         {/* Link to hotel */}
-        <ButtonLink target="">Book now</ButtonLink>
+        <ButtonLink target={`/hotel/${hotel.slug}`}>Book now</ButtonLink>
       </div>
     </div>
   );

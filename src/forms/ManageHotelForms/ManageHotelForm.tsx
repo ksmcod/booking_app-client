@@ -60,9 +60,11 @@ export default function ManageHotelForm({
       formData.append("imageFiles", image);
     });
 
-    data.imageUrls.forEach((url, index) => {
-      formData.append(`imageUrls[${index}]`, url);
-    });
+    if (data.imageUrls) {
+      data.imageUrls.forEach((url, index) => {
+        formData.append(`imageUrls[${index}]`, url);
+      });
+    }
 
     submitFunction({ slug, body: formData });
   });

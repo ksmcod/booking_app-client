@@ -49,4 +49,5 @@ export interface SearchValuesType {
   childrenCount: string;
   startDate: string;
   endDate: string;
+  page: string;
 }
