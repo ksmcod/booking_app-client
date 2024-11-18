@@ -50,4 +50,9 @@ export interface SearchValuesType {
   startDate: string;
   endDate: string;
   page: string;
+  searchFilters: SearchFiltersType;
+}
+
+export interface SearchFiltersType {
+  selectedStars: string[];
 }

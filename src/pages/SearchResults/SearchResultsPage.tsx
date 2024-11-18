@@ -1,13 +1,18 @@
 import { useLazySearchHotelQuery } from "@/app/api/hotelsApi";
 import Loader from "@/components/Loader";
-import { SearchValuesType } from "@/types";
+import { SearchFiltersType, SearchValuesType } from "@/types";
 import { Link, useSearchParams } from "react-router-dom";
-import SearchResultsCard from "./SearchResultsCard";
+import SearchResultsCard from "./components/SearchResultsCard";
 import Pagination from "@/components/Pagination";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
+import StarRatingFilter from "./components/StarRatingFilter";
 
 export default function SearchResultsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
+
+  const [searchFilters, setSearchFilters] = useState<SearchFiltersType>({
+    selectedStars: [],
+  });
 
   const queryValues: SearchValuesType = useMemo(() => {
     return {
@@ -18,10 +23,32 @@ export default function SearchResultsPage() {
       startDate: searchParams.get("startDate") || "",
       endDate: searchParams.get("endDate") || "",
       page: searchParams.get("page") || "1",
+      searchFilters: searchFilters,
     };
-  }, [searchParams]);
+  }, [searchParams, searchFilters]);
 
-  console.log("QUERY VALUES: ", queryValues);
+  function handleStarFilter(e: React.ChangeEvent<HTMLInputElement>) {
+    const selectedStars = Array.from(searchFilters.selectedStars);
+
+    if (selectedStars.includes(e.target.value)) {
+      const updatedSelectedStars = selectedStars.filter(
+        (star) => star !== e.target.value
+      );
+      updatedSelectedStars.sort();
+      setSearchFilters((prev) => ({
+        ...prev,
+        selectedStars: updatedSelectedStars,
+      }));
+      return;
+    }
+    selectedStars.push(e.target.value);
+    selectedStars.sort();
+
+    setSearchFilters((prev) => ({
+      ...prev,
+      selectedStars: selectedStars,
+    }));
+  }
 
   const [searchQuery, { data, isFetching, isError }] =
     useLazySearchHotelQuery();
@@ -29,9 +56,6 @@ export default function SearchResultsPage() {
   useEffect(() => {
     searchQuery(queryValues);
   }, [searchQuery, queryValues]);
-
-  console.log("Query Values: ", queryValues);
-  console.log("Data", data);
 
   // Display error if there is an error
   if (isError) {
@@ -48,11 +72,9 @@ export default function SearchResultsPage() {
     );
   }
 
-  return isFetching ? (
-    <div className="flex-1 flex justify-center items-center">
-      <Loader className="size-16" />
-    </div>
-  ) : (
+  console.log("Stars in state:: ", searchFilters.selectedStars);
+
+  return (
     <div className="grid grid-cols-1 md:grid-cols-[250px_1fr] gap-5 flex-1">
       {/* Filters */}
       <div className="rounded-lg border border-slate-300 p-5 h-fit">
@@ -60,37 +82,48 @@ export default function SearchResultsPage() {
           <h3 className="text-lg font-semibold border-b border-slate-300">
             Filter by:
           </h3>
+
+          <StarRatingFilter
+            selectedStars={searchFilters.selectedStars}
+            onChange={handleStarFilter}
+          />
         </div>
       </div>
 
       {/* Search results */}
-      <div className="flex flex-col gap-4">
-        <div className="flex justify-between items-center">
-          <h3 className="text-xl font-bold flex gap-1">
-            <span>{data?.totalNumberOfMatches} Hotel(s) found</span>
-            <span>
-              {queryValues.city.length ? `in ${queryValues.city}` : ""}
-            </span>
-          </h3>
+      <div className="min-h-screen">
+        {isFetching ? (
+          <div className="flex justify-center items-center mt-10">
+            <Loader className="size-16" />
+          </div>
+        ) : (
+          <div className="flex flex-col gap-4">
+            <div className="flex justify-between items-center">
+              <h3 className="text-xl font-bold flex gap-1">
+                <span>{data?.totalNumberOfMatches} Hotel(s) found</span>
+                <span>
+                  {queryValues.city.length ? `in ${queryValues.city}` : ""}
+                </span>
+              </h3>
 
-          {/* TODO Sort Options */}
-        </div>
-        {data?.hotels.map((hotel) => (
-          <SearchResultsCard key={hotel.id} hotel={hotel} />
-        ))}
+              {/* TODO Sort Options */}
+            </div>
+            {data?.hotels.map((hotel) => (
+              <SearchResultsCard key={hotel.id} hotel={hotel} />
+            ))}
 
-        {data && (
-          <Pagination
-            currentPage={data.pagination.pageNumber}
-            totalPages={data.pagination.pages}
-            onPageChange={(pageNo) => {
-              const newSearchParams = new URLSearchParams(searchParams);
-              newSearchParams.set("page", pageNo.toString());
-              setSearchParams(newSearchParams);
-              console.log("New search params: ", newSearchParams);
-              console.log("Query values: ", queryValues);
-            }}
-          />
+            {data && (
+              <Pagination
+                currentPage={data.pagination.pageNumber}
+                totalPages={data.pagination.pages}
+                onPageChange={(pageNo) => {
+                  const newSearchParams = new URLSearchParams(searchParams);
+                  newSearchParams.set("page", pageNo.toString());
+                  setSearchParams(newSearchParams);
+                }}
+              />
+            )}
+          </div>
         )}
       </div>
     </div>
