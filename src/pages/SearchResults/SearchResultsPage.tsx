@@ -6,12 +6,14 @@ import SearchResultsCard from "./components/SearchResultsCard";
 import Pagination from "@/components/Pagination";
 import { useEffect, useMemo, useState } from "react";
 import StarRatingFilter from "./components/StarRatingFilter";
+import HotelTypeFilter from "./components/HotelTypeFilter";
 
 export default function SearchResultsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [searchFilters, setSearchFilters] = useState<SearchFiltersType>({
     selectedStars: [],
+    selectedHotelType: [],
   });
 
   const queryValues: SearchValuesType = useMemo(() => {
@@ -50,6 +52,29 @@ export default function SearchResultsPage() {
     }));
   }
 
+  function handleHotelTypeFilter(e: React.ChangeEvent<HTMLInputElement>) {
+    const selectedHotelType = Array.from(searchFilters.selectedHotelType);
+
+    if (selectedHotelType.includes(e.target.value)) {
+      const updatedSelectedHotelType = selectedHotelType.filter(
+        (hotelType) => hotelType !== e.target.value
+      );
+      updatedSelectedHotelType.sort();
+      setSearchFilters((prev) => ({
+        ...prev,
+        selectedHotelType: updatedSelectedHotelType,
+      }));
+      return;
+    }
+    selectedHotelType.push(e.target.value);
+    selectedHotelType.sort();
+
+    setSearchFilters((prev) => ({
+      ...prev,
+      selectedHotelType: selectedHotelType,
+    }));
+  }
+
   const [searchQuery, { data, isFetching, isError }] =
     useLazySearchHotelQuery();
 
@@ -72,7 +97,7 @@ export default function SearchResultsPage() {
     );
   }
 
-  console.log("Stars in state:: ", searchFilters.selectedStars);
+  console.log("HotelType in state:: ", searchFilters.selectedHotelType);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[250px_1fr] gap-5 flex-1">
@@ -86,6 +111,13 @@ export default function SearchResultsPage() {
           <StarRatingFilter
             selectedStars={searchFilters.selectedStars}
             onChange={handleStarFilter}
+          />
+
+          <hr className="" />
+
+          <HotelTypeFilter
+            selectedHotelType={searchFilters.selectedHotelType}
+            onChange={handleHotelTypeFilter}
           />
         </div>
       </div>

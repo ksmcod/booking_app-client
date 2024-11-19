@@ -12,7 +12,7 @@ export default function StarRatingFilter({
 }: StarRatingFilterProps) {
   return (
     <div className="p-4">
-      <h4 className="text-base font-semibold mb-2">Property Rating</h4>
+      <h4 className="text-xl font-semibold mb-2">Property Rating</h4>
       <div className="space-y-2">
         {["5", "4", "3", "2", "1"].map((star) => (
           <Label key={star} htmlFor={star} className="flex items-center gap-2">

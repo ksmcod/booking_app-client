@@ -1,4 +1,5 @@
 import { HotelSearchResponseType, SearchValuesType } from "@/types";
+import qs from "query-string";
 import { api } from "./api";
 
 const HOTELS_URL = "hotels";
@@ -15,7 +16,13 @@ const hotelsApi = api.injectEndpoints({
           startDate: params.startDate,
           endDate: params.endDate,
           page: params.page,
-          selectedStars: params.searchFilters.selectedStars.toString(),
+          selectedStars: qs.stringify(params.searchFilters.selectedStars, {
+            arrayFormat: "comma",
+          }),
+          selectedHotelTypes: qs.stringify(
+            params.searchFilters.selectedHotelType,
+            { arrayFormat: "comma" }
+          ),
         });
 
         return `${HOTELS_URL}/search?${queryString}`;
