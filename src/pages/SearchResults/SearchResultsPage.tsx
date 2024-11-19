@@ -105,6 +105,7 @@ export default function SearchResultsPage() {
 
   useEffect(() => {
     searchQuery(queryValues);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, [searchQuery, queryValues]);
 
   // Display error if there is an error
@@ -162,7 +163,7 @@ export default function SearchResultsPage() {
           </div>
         ) : (
           <div className="flex flex-col gap-4">
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center flex-wrap gap-2">
               <h3 className="text-xl font-bold flex gap-1">
                 <span>{data?.totalNumberOfMatches} Hotel(s) found</span>
                 <span>
@@ -171,6 +172,23 @@ export default function SearchResultsPage() {
               </h3>
 
               {/* TODO Sort Options */}
+              <select
+                name="sort"
+                id="sort"
+                className="p-3 rounded-sm bg-white border shadow-sm"
+              >
+                <option value="" disabled selected hidden>
+                  Sort by
+                </option>
+
+                <option value="starRating">Star Rating</option>
+                <option value="priceLowToHigh">
+                  Price per night (low to high)
+                </option>
+                <option value="priceHighToLow">
+                  Price per night (high to low)
+                </option>
+              </select>
             </div>
             {data?.hotels.map((hotel) => (
               <SearchResultsCard key={hotel.id} hotel={hotel} />
