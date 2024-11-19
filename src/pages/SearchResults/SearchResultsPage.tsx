@@ -7,6 +7,7 @@ import Pagination from "@/components/Pagination";
 import { useEffect, useMemo, useState } from "react";
 import StarRatingFilter from "./components/StarRatingFilter";
 import HotelTypeFilter from "./components/HotelTypeFilter";
+import FacilityFilter from "./components/FacilitiesFilter";
 
 export default function SearchResultsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -14,6 +15,7 @@ export default function SearchResultsPage() {
   const [searchFilters, setSearchFilters] = useState<SearchFiltersType>({
     selectedStars: [],
     selectedHotelType: [],
+    selectedFacilities: [],
   });
 
   const queryValues: SearchValuesType = useMemo(() => {
@@ -75,6 +77,29 @@ export default function SearchResultsPage() {
     }));
   }
 
+  function handleFacilitiesFilter(e: React.ChangeEvent<HTMLInputElement>) {
+    const selectedFacilities = Array.from(searchFilters.selectedFacilities);
+
+    if (selectedFacilities.includes(e.target.value)) {
+      const updatedSelectedFacilities = selectedFacilities.filter(
+        (facility) => facility !== e.target.value
+      );
+      updatedSelectedFacilities.sort();
+      setSearchFilters((prev) => ({
+        ...prev,
+        selectedFacilities: updatedSelectedFacilities,
+      }));
+      return;
+    }
+    selectedFacilities.push(e.target.value);
+    selectedFacilities.sort();
+
+    setSearchFilters((prev) => ({
+      ...prev,
+      selectedFacilities: selectedFacilities,
+    }));
+  }
+
   const [searchQuery, { data, isFetching, isError }] =
     useLazySearchHotelQuery();
 
@@ -97,7 +122,7 @@ export default function SearchResultsPage() {
     );
   }
 
-  console.log("HotelType in state:: ", searchFilters.selectedHotelType);
+  console.log("Facilities in state:: ", searchFilters.selectedFacilities);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[250px_1fr] gap-5 flex-1">
@@ -119,11 +144,18 @@ export default function SearchResultsPage() {
             selectedHotelType={searchFilters.selectedHotelType}
             onChange={handleHotelTypeFilter}
           />
+
+          <hr className="" />
+
+          <FacilityFilter
+            selectedFacilities={searchFilters.selectedFacilities}
+            onChange={handleFacilitiesFilter}
+          />
         </div>
       </div>
 
       {/* Search results */}
-      <div className="min-h-screen">
+      <div className="">
         {isFetching ? (
           <div className="flex justify-center items-center mt-10">
             <Loader className="size-16" />

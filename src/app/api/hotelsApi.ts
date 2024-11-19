@@ -23,6 +23,10 @@ const hotelsApi = api.injectEndpoints({
             params.searchFilters.selectedHotelType,
             { arrayFormat: "comma" }
           ),
+          selectedFacilities: qs.stringify(
+            params.searchFilters.selectedFacilities,
+            { arrayFormat: "comma" }
+          ),
         });
 
         return `${HOTELS_URL}/search?${queryString}`;

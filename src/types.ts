@@ -56,4 +56,5 @@ export interface SearchValuesType {
 export interface SearchFiltersType {
   selectedStars: string[];
   selectedHotelType: string[];
+  selectedFacilities: string[];
 }
