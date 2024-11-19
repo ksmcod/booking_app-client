@@ -15,8 +15,10 @@ const hotelsApi = api.injectEndpoints({
           startDate: params.startDate,
           endDate: params.endDate,
           page: params.page,
+          selectedStars: params.searchFilters.selectedStars.toString(),
         });
-        return `${HOTELS_URL}/search?${queryString.toString()}`;
+
+        return `${HOTELS_URL}/search?${queryString}`;
       },
     }),
   }),
