@@ -27,6 +27,7 @@ const hotelsApi = api.injectEndpoints({
             params.searchFilters.selectedFacilities,
             { arrayFormat: "comma" }
           ),
+          sortBy: params.searchFilters.sortBy,
         });
 
         return `${HOTELS_URL}/search?${queryString}`;

@@ -57,4 +57,5 @@ export interface SearchFiltersType {
   selectedStars: string[];
   selectedHotelType: string[];
   selectedFacilities: string[];
+  sortBy: "none" | "starRating" | "priceLowToHigh" | "priceHighToLow";
 }

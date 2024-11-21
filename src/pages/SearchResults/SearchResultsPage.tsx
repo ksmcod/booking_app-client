@@ -16,6 +16,7 @@ export default function SearchResultsPage() {
     selectedStars: [],
     selectedHotelType: [],
     selectedFacilities: [],
+    sortBy: "none",
   });
 
   const queryValues: SearchValuesType = useMemo(() => {
@@ -100,6 +101,26 @@ export default function SearchResultsPage() {
     }));
   }
 
+  function handleHotelSorting(e: React.ChangeEvent<HTMLSelectElement>) {
+    console.log("Hotel sorting: ", e.target.value);
+
+    if (e.target.value === "starRating") {
+      setSearchFilters((prev) => ({ ...prev, sortBy: "starRating" }));
+    }
+
+    if (e.target.value === "priceLowToHigh") {
+      setSearchFilters((prev) => ({ ...prev, sortBy: "priceLowToHigh" }));
+    }
+
+    if (e.target.value === "priceHighToLow") {
+      setSearchFilters((prev) => ({ ...prev, sortBy: "priceHighToLow" }));
+    }
+
+    if (e.target.value === "no-sorting") {
+      setSearchFilters((prev) => ({ ...prev, sortBy: "none" }));
+    }
+  }
+
   const [searchQuery, { data, isFetching, isError }] =
     useLazySearchHotelQuery();
 
@@ -108,6 +129,7 @@ export default function SearchResultsPage() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [searchQuery, queryValues]);
 
+  // =================================================================================================
   // Display error if there is an error
   if (isError) {
     return (
@@ -122,8 +144,6 @@ export default function SearchResultsPage() {
       </div>
     );
   }
-
-  console.log("Facilities in state:: ", searchFilters.selectedFacilities);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[250px_1fr] gap-5 flex-1">
@@ -176,12 +196,15 @@ export default function SearchResultsPage() {
                 name="sort"
                 id="sort"
                 className="p-3 rounded-sm bg-white border shadow-sm"
+                onChange={(e) => handleHotelSorting(e)}
+                value={searchFilters.sortBy || ""}
               >
-                <option value="" disabled selected hidden>
+                <option value="" hidden>
                   Sort by
                 </option>
 
-                <option value="starRating">Star Rating</option>
+                <option value="no-sorting">No sorting</option>
+                <option value="starRating">Star rating</option>
                 <option value="priceLowToHigh">
                   Price per night (low to high)
                 </option>
