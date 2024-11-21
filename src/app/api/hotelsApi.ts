@@ -1,4 +1,4 @@
-import { HotelSearchResponseType, SearchValuesType } from "@/types";
+import { HotelSearchResponseType, HotelType, SearchValuesType } from "@/types";
 import qs from "query-string";
 import { api } from "./api";
 
@@ -33,7 +33,13 @@ const hotelsApi = api.injectEndpoints({
         return `${HOTELS_URL}/search?${queryString}`;
       },
     }),
+
+    getSingleHotel: builder.query<HotelType, string>({
+      query: (slug) => ({
+        url: `${HOTELS_URL}/${slug}`,
+      }),
+    }),
   }),
 });
 
-export const { useSearchHotelQuery, useLazySearchHotelQuery } = hotelsApi;
+export const { useLazySearchHotelQuery, useGetSingleHotelQuery } = hotelsApi;
