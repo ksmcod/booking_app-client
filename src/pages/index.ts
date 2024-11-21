@@ -5,6 +5,7 @@ import RegisterPage from "./RegisterPage/RegisterPage";
 import MyHotelsPage from "./MyHotelsPage/MyHotelsPage";
 import EditHotelPage from "./EditHotel/EditHotelPage";
 import NotFound404 from "./NotFound/NotFound404";
+import ViewHotelPage from "./ViewHotelPage/ViewHotelPage";
 
 export {
   AddHotelPage,
@@ -14,4 +15,5 @@ export {
   MyHotelsPage,
   EditHotelPage,
   NotFound404,
+  ViewHotelPage,
 };

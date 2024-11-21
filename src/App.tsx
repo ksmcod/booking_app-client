@@ -15,6 +15,7 @@ import {
   MyHotelsPage,
   EditHotelPage,
   NotFound404,
+  ViewHotelPage,
 } from "./pages";
 import Redirect from "./utils/Redirect";
 import SearchResultsPage from "./pages/SearchResults/SearchResultsPage";
@@ -36,6 +37,11 @@ export default function App() {
             <Route index element={<Redirect target="/my-hotels" />} />
             <Route path=":slug" element={<EditHotelPage />} />
           </Route>
+        </Route>
+
+        <Route path="hotel">
+          <Route index element={<Redirect target="/" />} />
+          <Route path=":slug" element={<ViewHotelPage />} />
         </Route>
 
         {/* 404 Page */}

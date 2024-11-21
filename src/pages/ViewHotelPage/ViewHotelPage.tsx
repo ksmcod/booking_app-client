@@ -1,29 +1,22 @@
-import {
-  useGetMyHotelBySlugQuery,
-  useUpdateMyHotelMutation,
-} from "@/app/api/myHotelsApi";
+import { useGetSingleHotelQuery } from "@/app/api/hotelsApi";
 import Loader from "@/components/Loader";
-import ManageHotelForm from "@/forms/ManageHotelForms/ManageHotelForm";
 import { ApiErrorType } from "@/types";
-import handleApiError from "@/utils/handleApiError";
-import toast from "react-hot-toast";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import Redirect from "@/utils/Redirect";
+import { Link, useParams } from "react-router-dom";
 
-export default function EditHotelPage() {
+export default function ViewHotelPage() {
   const { slug } = useParams();
 
-  const {
-    isLoading: loading,
-    data,
-    isError,
-    error,
-  } = useGetMyHotelBySlugQuery(slug as string);
+  if (!slug) {
+    return <Redirect target="/" />;
+  }
 
-  const [updateHotelMutation, { isLoading }] = useUpdateMyHotelMutation();
+  const { isLoading, data, error, isError } = useGetSingleHotelQuery(slug);
 
-  const navigate = useNavigate();
+  console.log("Gotten hotel is: ", data);
 
-  if (loading) {
+  //  Show when request is in flight
+  if (isLoading) {
     return (
       <div className="flex-1 flex justify-center items-center">
         <Loader className="size-16" />
@@ -31,15 +24,15 @@ export default function EditHotelPage() {
     );
   }
 
-  // Display hotel not found if server response is 404
+  //   If hotel was not found
   if (isError && (error as ApiErrorType).status === 404) {
     return (
       <div className="flex-1 flex flex-col justify-center items-center">
         <h1 className="text-4xl">Hotel not found</h1>
         <div className="flex gap-1">
           <span>The hotel you requested could not be found. Return to</span>
-          <Link to={"/my-hotels"} className="link hover:text-blue-600" replace>
-            your hotels
+          <Link to={"/"} className="link hover:text-blue-600" replace>
+            home page
           </Link>
         </div>
       </div>
@@ -80,23 +73,5 @@ export default function EditHotelPage() {
     );
   }
 
-  const submitFunction = ({ slug, body }: { slug: string; body: FormData }) => {
-    updateHotelMutation({ slug: slug, body: body })
-      .unwrap()
-      .then(() => {
-        toast.success("Hotel updated successfully");
-        navigate("/my-hotels");
-      })
-      .catch((err) => handleApiError(err as ApiErrorType));
-  };
-
-  return (
-    <ManageHotelForm
-      hotel={data}
-      title="Edit Hotel"
-      slug={slug as string}
-      isLoading={isLoading}
-      submitFunction={submitFunction}
-    />
-  );
+  return <div className="flex-1 bg-violet-500">ViewHotelPage</div>;
 }
