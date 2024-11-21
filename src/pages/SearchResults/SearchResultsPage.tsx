@@ -10,8 +10,12 @@ import HotelTypeFilter from "./components/HotelTypeFilter";
 import FacilityFilter from "./components/FacilitiesFilter";
 
 export default function SearchResultsPage() {
+  const [searchQuery, { data, isFetching, isError }] =
+    useLazySearchHotelQuery();
+
   const [searchParams, setSearchParams] = useSearchParams();
 
+  // Object that contains all search and sorting filters
   const [searchFilters, setSearchFilters] = useState<SearchFiltersType>({
     selectedStars: [],
     selectedHotelType: [],
@@ -19,6 +23,8 @@ export default function SearchResultsPage() {
     sortBy: "none",
   });
 
+  // Object to be passed to the api client to be used to create the request string
+  // All request parameters are sent to the server as url params
   const queryValues: SearchValuesType = useMemo(() => {
     return {
       country: searchParams.get("country") || "",
@@ -32,6 +38,7 @@ export default function SearchResultsPage() {
     };
   }, [searchParams, searchFilters]);
 
+  // Function to run everytime user filters results by star ratings
   function handleStarFilter(e: React.ChangeEvent<HTMLInputElement>) {
     const selectedStars = Array.from(searchFilters.selectedStars);
 
@@ -55,6 +62,7 @@ export default function SearchResultsPage() {
     }));
   }
 
+  // Function to run everytime user filters results by hotel types
   function handleHotelTypeFilter(e: React.ChangeEvent<HTMLInputElement>) {
     const selectedHotelType = Array.from(searchFilters.selectedHotelType);
 
@@ -78,6 +86,7 @@ export default function SearchResultsPage() {
     }));
   }
 
+  // Function to run everytime user filters hotels by facilities
   function handleFacilitiesFilter(e: React.ChangeEvent<HTMLInputElement>) {
     const selectedFacilities = Array.from(searchFilters.selectedFacilities);
 
@@ -101,6 +110,7 @@ export default function SearchResultsPage() {
     }));
   }
 
+  // Function to sort hotel. Sorting is done on the server
   function handleHotelSorting(e: React.ChangeEvent<HTMLSelectElement>) {
     console.log("Hotel sorting: ", e.target.value);
 
@@ -120,9 +130,6 @@ export default function SearchResultsPage() {
       setSearchFilters((prev) => ({ ...prev, sortBy: "none" }));
     }
   }
-
-  const [searchQuery, { data, isFetching, isError }] =
-    useLazySearchHotelQuery();
 
   useEffect(() => {
     searchQuery(queryValues);
@@ -191,7 +198,7 @@ export default function SearchResultsPage() {
                 </span>
               </h3>
 
-              {/* TODO Sort Options */}
+              {/* Sort Options */}
               <select
                 name="sort"
                 id="sort"
