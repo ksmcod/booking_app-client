@@ -54,6 +54,8 @@ export default function GuestInfoForm({
       }
     }
     setDateRange(item);
+    setValue("startDate", item.selection.startDate as Date);
+    setValue("endDate", item.selection.endDate as Date);
   }
 
   const bookingInfo: BookingInfoType = {
@@ -63,12 +65,16 @@ export default function GuestInfoForm({
     children: searchParams.get("children") || "0",
   };
 
-  //   Set values for adults and children from url params
+  //   Set values for adults,children,start date & end date from url params
   useEffect(() => {
     setValue("adultCount", parseInt(bookingInfo.adults));
     setValue("childrenCount", parseInt(bookingInfo.children));
+    setValue("startDate", new Date(parseInt(bookingInfo.startDate)));
+    setValue("endDate", new Date(parseInt(bookingInfo.endDate)));
   }, []);
 
+  console.log("Start date in form: ", watch("startDate"));
+  console.log("End date in form: ", watch("endDate"));
   return (
     <div className="bg-blue-200 p-4 space-y-3">
       <h3 className="text-xl font-bold">${pricePerNight} per night</h3>

@@ -3,7 +3,7 @@ import Loader from "@/components/Loader";
 import { ApiErrorType } from "@/types";
 import Redirect from "@/utils/Redirect";
 import { Star } from "lucide-react";
-import { Link, useParams, useSearchParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import FacilitiesBox from "./components/FacilitiesBox";
 import GuestInfoForm from "@/forms/GuestInfoForm/GuestInfoForm";
 
