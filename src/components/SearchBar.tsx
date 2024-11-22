@@ -28,23 +28,28 @@ interface FormState {
 }
 
 export default function SearchBar() {
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+
   const [dateRange, setDateRange] = useState<RangeKeyDict>({
     selection: {
-      startDate: new Date(),
-      endDate: new Date(),
+      startDate: new Date(
+        parseInt(
+          searchParams.get("startDate") || new Date().getTime().toString()
+        )
+      ),
+      endDate: new Date(
+        parseInt(searchParams.get("endDate") || new Date().getTime().toString())
+      ),
       key: "selection",
     },
   });
 
-  const [searchParams] = useSearchParams();
-
-  const navigate = useNavigate();
-
   const [formState, setFormState] = useState<FormState>({
     country: { value: "", label: "Choose destination Country", isoCode: "" },
     city: { value: "", label: "Choose destination City" },
-    adultCount: 1,
-    childrenCount: 0,
+    adultCount: parseInt(searchParams.get("adults") || "1"),
+    childrenCount: parseInt(searchParams.get("children") || "0"),
     startDate: dateRange.selection.startDate ?? new Date(),
     endDate: dateRange.selection.endDate ?? new Date(),
   });

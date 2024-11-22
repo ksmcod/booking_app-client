@@ -3,7 +3,7 @@ import Loader from "@/components/Loader";
 import { ApiErrorType } from "@/types";
 import Redirect from "@/utils/Redirect";
 import { Star } from "lucide-react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import FacilitiesBox from "./components/FacilitiesBox";
 import GuestInfoForm from "@/forms/GuestInfoForm/GuestInfoForm";
 
@@ -89,7 +89,7 @@ export default function ViewHotelPage() {
       <div className="flex items-center gap-5">
         <h1 className="text-4xl font-bold">{hotel.name}</h1>
         <span className="flex items-center">
-          {Array.from({ length: hotel.starRating }).map((star, index) => (
+          {Array.from({ length: hotel.starRating }).map((s, index) => (
             <Star key={index} className="fill-yellow-400 text-yellow-400" />
           ))}
         </span>

@@ -61,6 +61,14 @@ export default function Layout() {
       });
   }, [refetch, dispatch, location.key]);
 
+  const initialDate = {
+    selection: {
+      startDate: new Date(),
+      endDate: new Date(),
+      key: "selection",
+    },
+  };
+
   return (
     !isLoading && (
       <div className="flex flex-col gap-2 min-h-screen justify-between roboto relative bg-white">

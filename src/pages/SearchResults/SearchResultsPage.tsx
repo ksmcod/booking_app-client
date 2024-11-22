@@ -9,6 +9,13 @@ import StarRatingFilter from "./components/StarRatingFilter";
 import HotelTypeFilter from "./components/HotelTypeFilter";
 import FacilityFilter from "./components/FacilitiesFilter";
 
+export interface BookingInfoType {
+  startDate: string;
+  endDate: string;
+  adults: string;
+  children: string;
+}
+
 export default function SearchResultsPage() {
   const [searchQuery, { data, isFetching, isError }] =
     useLazySearchHotelQuery();

@@ -1,9 +1,11 @@
 import CalendarComponent from "@/components/Calendar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
+import { BookingInfoType } from "@/pages/SearchResults/SearchResultsPage";
+import { useEffect, useState } from "react";
 import { RangeKeyDict } from "react-date-range";
 import { useForm } from "react-hook-form";
+import { useSearchParams } from "react-router-dom";
 
 interface GuestInfoFormProps {
   hotelSlug: string;
@@ -21,6 +23,8 @@ export default function GuestInfoForm({
   hotelSlug,
   pricePerNight,
 }: GuestInfoFormProps) {
+  const [searchParams] = useSearchParams();
+
   const {
     register,
     watch,
@@ -30,8 +34,14 @@ export default function GuestInfoForm({
 
   const [dateRange, setDateRange] = useState<RangeKeyDict>({
     selection: {
-      startDate: new Date(),
-      endDate: new Date(),
+      startDate: new Date(
+        parseInt(
+          searchParams.get("startDate") || new Date().getTime().toString()
+        )
+      ),
+      endDate: new Date(
+        parseInt(searchParams.get("endDate") || new Date().getTime().toString())
+      ),
       key: "selection",
     },
   });
@@ -43,12 +53,21 @@ export default function GuestInfoForm({
         setValue("endDate", item.selection.endDate);
       }
     }
-
     setDateRange(item);
   }
 
-  console.log("Date changing: ", dateRange);
-  //   console.log("Form state: ", formState);
+  const bookingInfo: BookingInfoType = {
+    startDate: searchParams.get("startDate") || new Date().getTime().toString(),
+    endDate: searchParams.get("endDate") || new Date().getTime().toString(),
+    adults: searchParams.get("adults") || "1",
+    children: searchParams.get("children") || "0",
+  };
+
+  //   Set values for adults and children from url params
+  useEffect(() => {
+    setValue("adultCount", parseInt(bookingInfo.adults));
+    setValue("childrenCount", parseInt(bookingInfo.children));
+  }, []);
 
   return (
     <div className="bg-blue-200 p-4 space-y-3">

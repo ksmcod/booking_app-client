@@ -1,12 +1,23 @@
 import ButtonLink from "@/components/ui/buttonLink";
+import { BookingInfoType } from "../SearchResultsPage";
 import { HotelType } from "@/types";
 import { Star } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
 
 interface SearchResultCardProps {
   hotel: HotelType;
 }
 
 export default function SearchResultsCard({ hotel }: SearchResultCardProps) {
+  const [searchParams] = useSearchParams();
+
+  const bookingInfo: BookingInfoType = {
+    startDate: searchParams.get("startDate") || new Date().getTime().toString(),
+    endDate: searchParams.get("endDate") || new Date().getTime().toString(),
+    adults: searchParams.get("adults") || "1",
+    children: searchParams.get("children") || "0",
+  };
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[2fr_3fr] border border-slate-300 rounded-lg p-4 gap-4">
       <div className="w-full h-[300px]">
@@ -64,7 +75,13 @@ export default function SearchResultsCard({ hotel }: SearchResultCardProps) {
         </div>
 
         {/* Link to hotel */}
-        <ButtonLink target={`/hotel/${hotel.slug}`}>Book now</ButtonLink>
+        <ButtonLink
+          target={`/hotel/${hotel.slug}?${new URLSearchParams({
+            ...bookingInfo,
+          })}`}
+        >
+          Book now
+        </ButtonLink>
       </div>
     </div>
   );
