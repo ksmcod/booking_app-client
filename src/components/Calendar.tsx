@@ -7,11 +7,13 @@ import "react-date-range/dist/theme/default.css";
 interface CalendarComponentProps {
   dateRange: RangeKeyDict;
   onChange: (dateRange: RangeKeyDict) => void;
+  position: "up" | "down";
 }
 
 export default function CalendarComponent({
   dateRange,
   onChange,
+  position,
 }: CalendarComponentProps) {
   const [showCalendar, setShowCalendar] = useState(false);
   const calendarRef = useRef<HTMLDivElement>(null);
@@ -37,12 +39,12 @@ export default function CalendarComponent({
 
   const calendarLabel = useMemo(() => {
     if (dateRange.selection.startDate && dateRange.selection.endDate) {
-      if (
-        dateRange.selection.startDate.getTime() ===
-        dateRange.selection.endDate.getTime()
-      ) {
-        return "Select a date";
-      }
+      // if (
+      //   dateRange.selection.startDate.getTime() ===
+      //   dateRange.selection.endDate.getTime()
+      // ) {
+      //   return "Select a date";
+      // }
       if (
         dateRange.selection.startDate.getTime() ===
           new Date(new Date().setHours(0, 0, 0, 0)).getTime() &&
@@ -81,14 +83,20 @@ export default function CalendarComponent({
   return (
     <div
       ref={calendarRef}
-      className="relative bg-white h-full rounded-sm flex justify-center items-center gap-2 p-2 hover:cursor-pointer"
+      className="relative bg-white h-full rounded-sm flex justify-center items-center gap-2 p-2 hover:cursor-pointer w-full"
       onClick={(e) => {
         e.stopPropagation();
         setShowCalendar(true);
       }}
     >
       {showCalendar && (
-        <div className="absolute mt-1 border shadow-md top-full rounded-sm">
+        <div
+          className={`absolute border shadow-md rounded-sm
+         
+         ${position == "down" && "top-full mt-1"}
+         ${position == "up" && "bottom-full mb-2"}
+         `}
+        >
           <DateRange
             minDate={new Date()}
             ranges={[dateRange.selection]}

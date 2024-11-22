@@ -85,6 +85,7 @@ export default function SearchBar() {
     }));
   }
 
+  // Function to handle change in calendar
   function handleCalendarChange(item: RangeKeyDict) {
     setDateRange(item);
     setFormState((prev) => ({
@@ -231,6 +232,7 @@ export default function SearchBar() {
         <CalendarComponent
           dateRange={dateRange}
           onChange={(newDateRange) => handleCalendarChange(newDateRange)}
+          position="down"
         />
         {/* Search and clear buttons */}
         <Button
