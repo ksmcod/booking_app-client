@@ -3,7 +3,7 @@ import Button from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { BookingInfoType } from "@/pages/SearchResults/SearchResultsPage";
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { RangeKeyDict } from "react-date-range";
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
@@ -25,13 +25,12 @@ export default function GuestInfoForm({
   hotelSlug,
   pricePerNight,
 }: GuestInfoFormProps) {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const location = useLocation();
 
   const {
     register,
-    watch,
     setValue,
     formState: { errors },
     handleSubmit,
@@ -61,6 +60,18 @@ export default function GuestInfoForm({
       if (item.selection.startDate !== item.selection.endDate) {
         setValue("startDate", item.selection.startDate);
         setValue("endDate", item.selection.endDate);
+
+        const newSearchParams = searchParams;
+        newSearchParams.set(
+          "startDate",
+          item.selection.startDate.getTime().toString()
+        );
+        newSearchParams.set(
+          "endDate",
+          item.selection.endDate.getTime().toString()
+        );
+
+        setSearchParams(newSearchParams);
       }
     }
     setDateRange(item);
