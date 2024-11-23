@@ -2,7 +2,7 @@ import { useGetSingleHotelQuery } from "@/app/api/hotelsApi";
 import Loader from "@/components/Loader";
 import { ApiErrorType } from "@/types";
 import Redirect from "@/utils/Redirect";
-import { Star } from "lucide-react";
+import { MapPin, Star } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import FacilitiesBox from "./components/FacilitiesBox";
 import GuestInfoForm from "@/forms/GuestInfoForm/GuestInfoForm";
@@ -86,13 +86,21 @@ export default function ViewHotelPage() {
   return (
     <div className="space-y-8 py-6">
       {/* Hotel name and stars */}
-      <div className="flex items-center gap-5">
-        <h1 className="text-4xl font-bold">{hotel.name}</h1>
-        <span className="flex items-center">
-          {Array.from({ length: hotel.starRating }).map((s, index) => (
-            <Star key={index} className="fill-yellow-400 text-yellow-400" />
-          ))}
-        </span>
+
+      <div className="space-y-1">
+        <div className="flex items-center gap-5">
+          <h1 className="text-4xl font-bold">{hotel.name}</h1>
+          <span className="flex items-center">
+            {Array.from({ length: hotel.starRating }).map((s, index) => (
+              <Star key={index} className="fill-yellow-400 text-yellow-400" />
+            ))}
+          </span>
+        </div>
+        <div className="flex items-center gap-1">
+          <MapPin size={18} />
+          <span className="text-slate-500">{hotel.city}</span> |
+          <span className="text-slate-700 font-bold">{hotel.country}</span>
+        </div>
       </div>
 
       {/* Hotel images */}
