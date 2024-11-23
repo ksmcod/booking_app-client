@@ -50,13 +50,8 @@ export default function CalendarComponent({
           new Date(new Date().setHours(0, 0, 0, 0)).getTime() &&
         dateRange.selection.endDate.getTime() > new Date().getTime()
       ) {
-        const startDate = dateRange.selection.startDate.toLocaleString(
-          "default",
-          { dateStyle: "medium" }
-        );
-        const endDate = dateRange.selection.endDate.toLocaleString("default", {
-          dateStyle: "medium",
-        });
+        const startDate = dateRange.selection.startDate.toDateString();
+        const endDate = dateRange.selection.endDate.toDateString();
 
         return `${startDate} - ${endDate}`;
       }
@@ -65,13 +60,8 @@ export default function CalendarComponent({
         dateRange.selection.startDate.getTime() >= new Date().getTime() &&
         dateRange.selection.endDate.getTime() > new Date().getTime()
       ) {
-        const startDate = dateRange.selection.startDate.toLocaleString(
-          "default",
-          { dateStyle: "medium" }
-        );
-        const endDate = dateRange.selection.endDate.toLocaleString("default", {
-          dateStyle: "medium",
-        });
+        const startDate = dateRange.selection.startDate.toDateString();
+        const endDate = dateRange.selection.endDate.toDateString();
 
         return `${startDate} - ${endDate}`;
       }

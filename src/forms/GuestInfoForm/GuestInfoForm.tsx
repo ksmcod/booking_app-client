@@ -14,7 +14,7 @@ interface GuestInfoFormProps {
   pricePerNight: number;
 }
 
-interface GuestInfoFormData {
+export interface GuestInfoFormData {
   startDate: Date;
   endDate: Date;
   adultCount: number;
@@ -98,7 +98,7 @@ export default function GuestInfoForm({
   const bookingButtonLabel = useMemo(() => {
     if (isLoggedIn) return "Book now";
     return "Sign in to book";
-  }, []);
+  }, [isLoggedIn]);
 
   function handleSignupToBook() {
     const allSearchParams = searchParams;
@@ -107,7 +107,12 @@ export default function GuestInfoForm({
   }
 
   function onSubmit(data: GuestInfoFormData) {
-    navigate(`/book/${hotelSlug}`);
+    const newSearchParams = searchParams;
+    newSearchParams.set("adults", data.adultCount.toString());
+    newSearchParams.set("children", data.childrenCount.toString());
+    setSearchParams(newSearchParams);
+
+    navigate(`/book/${hotelSlug}?${searchParams.toString()}`);
   }
 
   return (
@@ -141,6 +146,8 @@ export default function GuestInfoForm({
                   min: { value: 1, message: "You need atleast one adult" },
                 })}
                 min={1}
+                readOnly
+                disabled
               />
             </Label>
             {errors && errors.adultCount && (
@@ -165,6 +172,8 @@ export default function GuestInfoForm({
                   },
                 })}
                 min={0}
+                readOnly
+                disabled
               />
             </Label>
             {errors && errors.childrenCount && (
