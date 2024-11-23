@@ -1,4 +1,4 @@
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Hero from "../components/Hero";
 import Footer from "../components/Footer";
@@ -16,6 +16,7 @@ import SearchBar from "@/components/SearchBar";
 // import toast from "react-hot-toast";
 
 export default function Layout() {
+  const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
   const isLoggedIn = useAppSelector((state) => state.user.isLoggedIn);
@@ -60,6 +61,17 @@ export default function Layout() {
         dispatch(clearIsLoggedIn());
       });
   }, [refetch, dispatch, location.key]);
+
+  // Redirect after login if need be
+  useEffect(() => {
+    const next = sessionStorage.getItem("next");
+
+    if (next) {
+      console.log("Next is: ", next);
+      sessionStorage.removeItem("next");
+      navigate(next);
+    }
+  }, []);
 
   const initialDate = {
     selection: {

@@ -11,7 +11,7 @@ import { useLoginUserMutation } from "@/app/api/usersApi";
 import { useAppDispatch } from "@/app/hooks";
 import { setUser, setIsLoggedIn } from "@/app/slices/userSlice";
 
-import handleGithubLogin from "@/utils/handleGithub";
+import githubLogin from "@/utils/handleGithub";
 import Button from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import handleApiError from "@/utils/handleApiError";
@@ -43,6 +43,13 @@ export default function LoginPage() {
       .then((payload) => {
         dispatch(setIsLoggedIn());
         dispatch(setUser(payload));
+        const next = searchParams.get("next");
+        if (next) {
+          searchParams.delete("next");
+          const urlInfo = searchParams;
+          toast.success("Welcome back");
+          return navigate(`${next}?${urlInfo}`);
+        }
         toast.success("Welcome back");
         navigate("/");
       })
@@ -61,6 +68,21 @@ export default function LoginPage() {
       setSearchParams(searchParams);
     }
   }, [searchParams, setSearchParams]);
+
+  // Handle the github login flow
+  function handleGithubLogin() {
+    const nextUrl = searchParams.get("next");
+
+    if (nextUrl) {
+      searchParams.delete("next");
+      const next = `${nextUrl}?${searchParams.toString()}`;
+      console.log("Next is: ", next);
+      sessionStorage.setItem("next", next);
+      return githubLogin();
+    }
+
+    githubLogin();
+  }
 
   // Runs everytime an auth page loads to show message
   useEffect(() => {
@@ -125,7 +147,7 @@ export default function LoginPage() {
 
         {/* SOCIAL MEDIA LOGIN */}
         <div className="my-1 px-4 py-2 space-y-5">
-          <Button variant="black" onClick={() => handleGithubLogin()}>
+          <Button variant="black" onClick={handleGithubLogin}>
             <span>Continue with Github</span>
             <img src={githubmarkwhite} alt="Github logo" className="w-9" />
           </Button>

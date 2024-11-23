@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { HiOutlineUserCircle } from "react-icons/hi2";
 
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
@@ -19,8 +19,6 @@ export default function Header() {
 
   const dispatch = useAppDispatch();
 
-  const navigate = useNavigate();
-
   const [logoutUser] = useLogoutUserMutation();
 
   const handleLogout = async () => {
@@ -29,7 +27,6 @@ export default function Header() {
         dispatch(clearIsLoggedIn());
         dispatch(clearUser());
         toast.success("See you soon...");
-        navigate("/");
       })
       .catch(() => {
         toast.error("An error occured");

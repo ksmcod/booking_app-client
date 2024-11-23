@@ -1,11 +1,13 @@
 import CalendarComponent from "@/components/Calendar";
+import Button from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { BookingInfoType } from "@/pages/SearchResults/SearchResultsPage";
-import { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { RangeKeyDict } from "react-date-range";
 import { useForm } from "react-hook-form";
-import { useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useAppSelector } from "@/app/hooks";
 
 interface GuestInfoFormProps {
   hotelSlug: string;
@@ -24,14 +26,18 @@ export default function GuestInfoForm({
   pricePerNight,
 }: GuestInfoFormProps) {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const {
     register,
     watch,
     setValue,
     formState: { errors },
+    handleSubmit,
   } = useForm<GuestInfoFormData>();
 
+  //   Date range state variable for calendar component
   const [dateRange, setDateRange] = useState<RangeKeyDict>({
     selection: {
       startDate: new Date(
@@ -46,6 +52,10 @@ export default function GuestInfoForm({
     },
   });
 
+  //   Check if user is currently logged in
+  const isLoggedIn = useAppSelector((state) => state.user.isLoggedIn);
+
+  //   Function to handle calendar interaction
   function handleCalendarChange(item: RangeKeyDict) {
     if (item.selection.startDate && item.selection.endDate) {
       if (item.selection.startDate !== item.selection.endDate) {
@@ -58,6 +68,7 @@ export default function GuestInfoForm({
     setValue("endDate", item.selection.endDate as Date);
   }
 
+  //   Get booking info from url
   const bookingInfo: BookingInfoType = {
     startDate: searchParams.get("startDate") || new Date().getTime().toString(),
     endDate: searchParams.get("endDate") || new Date().getTime().toString(),
@@ -73,13 +84,32 @@ export default function GuestInfoForm({
     setValue("endDate", new Date(parseInt(bookingInfo.endDate)));
   }, []);
 
-  console.log("Start date in form: ", watch("startDate"));
-  console.log("End date in form: ", watch("endDate"));
+  const bookingButtonLabel = useMemo(() => {
+    if (isLoggedIn) return "Book now";
+    return "Sign in to book";
+  }, []);
+
+  function handleSignupToBook() {
+    const allSearchParams = searchParams;
+    allSearchParams.set("next", location.pathname);
+    navigate(`/login?${allSearchParams}`);
+  }
+
+  function onSubmit(data: GuestInfoFormData) {
+    navigate(`/book/${hotelSlug}`);
+  }
+
   return (
-    <div className="bg-blue-200 p-4 space-y-3">
+    <div className="bg-blue-200 p-4 space-y-3 rounded-sm">
       <h3 className="text-xl font-bold">${pricePerNight} per night</h3>
 
-      <form action="" className="py-2 space-y-2">
+      <form
+        action=""
+        onSubmit={
+          isLoggedIn ? handleSubmit(onSubmit) : handleSubmit(handleSignupToBook)
+        }
+        className="py-2 space-y-4"
+      >
         <CalendarComponent
           dateRange={dateRange}
           onChange={(newDateRange) => handleCalendarChange(newDateRange)}
@@ -99,6 +129,7 @@ export default function GuestInfoForm({
                   valueAsNumber: true,
                   min: { value: 1, message: "You need atleast one adult" },
                 })}
+                min={1}
               />
             </Label>
             {errors && errors.adultCount && (
@@ -122,6 +153,7 @@ export default function GuestInfoForm({
                     message: "This field cannot be less than zero",
                   },
                 })}
+                min={0}
               />
             </Label>
             {errors && errors.childrenCount && (
@@ -131,6 +163,10 @@ export default function GuestInfoForm({
             )}
           </div>
         </div>
+
+        <Button variant="primary" type="submit">
+          {bookingButtonLabel}
+        </Button>
       </form>
     </div>
   );
