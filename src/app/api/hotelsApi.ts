@@ -1,8 +1,18 @@
-import { HotelSearchResponseType, HotelType, SearchValuesType } from "@/types";
+import {
+  HotelSearchResponseType,
+  HotelType,
+  PaymentIntentResponseType,
+  SearchValuesType,
+} from "@/types";
 import qs from "query-string";
 import { api } from "./api";
 
 const HOTELS_URL = "hotels";
+
+type CreatePaymentIntentArg = {
+  slug: string;
+  numberOfNights: number;
+};
 
 const hotelsApi = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -39,7 +49,20 @@ const hotelsApi = api.injectEndpoints({
         url: `${HOTELS_URL}/${slug}`,
       }),
     }),
+    createPaymentIntent: builder.mutation<
+      PaymentIntentResponseType,
+      CreatePaymentIntentArg
+    >({
+      query: (args) => ({
+        url: `${HOTELS_URL}/stripe/payment-intent`,
+        body: { numberOfNights: args.numberOfNights, slug: args.slug },
+      }),
+    }),
   }),
 });
 
-export const { useLazySearchHotelQuery, useGetSingleHotelQuery } = hotelsApi;
+export const {
+  useLazySearchHotelQuery,
+  useGetSingleHotelQuery,
+  useCreatePaymentIntentMutation,
+} = hotelsApi;

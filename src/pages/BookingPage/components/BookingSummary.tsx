@@ -67,7 +67,7 @@ export default function BookingSummary({
         </span>
         <div className="flex gap-1">
           {bookingDuration}
-          <span>days</span>
+          <span>nights</span>
         </div>
       </div>
 

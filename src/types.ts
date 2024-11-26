@@ -59,3 +59,9 @@ export interface SearchFiltersType {
   selectedFacilities: string[];
   sortBy: "none" | "starRating" | "priceLowToHigh" | "priceHighToLow";
 }
+
+export interface PaymentIntentResponseType {
+  paymentIntentId: string;
+  clientSecret: string;
+  totalCost: number;
+}
