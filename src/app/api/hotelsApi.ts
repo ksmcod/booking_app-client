@@ -1,4 +1,5 @@
 import {
+  BookHotelRequestBodyType,
   HotelSearchResponseType,
   HotelType,
   PaymentIntentResponseType,
@@ -57,6 +58,13 @@ const hotelsApi = api.injectEndpoints({
         url: `${HOTELS_URL}/payment/payment-intent/${params.slug}?numberOfNights=${params.numberOfNights}`,
       }),
     }),
+    bookHotel: builder.mutation<void, BookHotelRequestBodyType>({
+      query: (body) => ({
+        url: `${HOTELS_URL}/book`,
+        method: "POST",
+        body: body,
+      }),
+    }),
   }),
 });
 
@@ -64,4 +72,5 @@ export const {
   useLazySearchHotelQuery,
   useGetSingleHotelQuery,
   useCreatePaymentIntentQuery,
+  useBookHotelMutation,
 } = hotelsApi;

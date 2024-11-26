@@ -65,3 +65,13 @@ export interface PaymentIntentResponseType {
   clientSecret: string;
   totalCost: number;
 }
+
+export interface BookHotelRequestBodyType {
+  paymentIntentId: string;
+  slug: string;
+  checkinDate: string;
+  checkoutDate: string;
+  totalPrice: number;
+  adultCount: number;
+  childrenCount: number;
+}
