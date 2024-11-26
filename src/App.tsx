@@ -4,6 +4,7 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
+
 import Layout from "./layouts/Layout";
 import ProtectedRoutes from "./utils/ProtectedRoutes";
 

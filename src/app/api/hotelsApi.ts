@@ -49,13 +49,12 @@ const hotelsApi = api.injectEndpoints({
         url: `${HOTELS_URL}/${slug}`,
       }),
     }),
-    createPaymentIntent: builder.mutation<
+    createPaymentIntent: builder.query<
       PaymentIntentResponseType,
       CreatePaymentIntentArg
     >({
-      query: (args) => ({
-        url: `${HOTELS_URL}/stripe/payment-intent`,
-        body: { numberOfNights: args.numberOfNights, slug: args.slug },
+      query: (params) => ({
+        url: `${HOTELS_URL}/payment/payment-intent/${params.slug}?numberOfNights=${params.numberOfNights}`,
       }),
     }),
   }),
@@ -64,5 +63,5 @@ const hotelsApi = api.injectEndpoints({
 export const {
   useLazySearchHotelQuery,
   useGetSingleHotelQuery,
-  useCreatePaymentIntentMutation,
+  useCreatePaymentIntentQuery,
 } = hotelsApi;
