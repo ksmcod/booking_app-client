@@ -65,6 +65,9 @@ const hotelsApi = api.injectEndpoints({
         body: body,
       }),
     }),
+    getAllBookings: builder.query<void, HotelType[]>({
+      query: () => `${HOTELS_URL}/bookings`,
+    }),
   }),
 });
 
@@ -73,4 +76,5 @@ export const {
   useGetSingleHotelQuery,
   useCreatePaymentIntentQuery,
   useBookHotelMutation,
+  useGetAllBookingsQuery,
 } = hotelsApi;
