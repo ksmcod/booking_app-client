@@ -1,10 +1,21 @@
+import { useBookHotelMutation } from "@/app/api/hotelsApi";
+import Button from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { PaymentIntentResponseType, UserType } from "@/types";
+import {
+  ApiErrorType,
+  BookHotelRequestBodyType,
+  PaymentIntentResponseType,
+  UserType,
+} from "@/types";
+import handleApiError from "@/utils/handleApiError";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { StripeCardElement } from "@stripe/stripe-js";
+import { useMemo, useState } from "react";
 
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 interface BookingFormType {
   fullName: string;
@@ -14,14 +25,38 @@ interface BookingFormType {
 interface BookingFormProps {
   currentUser: UserType;
   paymentIntentData: PaymentIntentResponseType;
+  slug: string;
+  checkinDate: string;
+  checkoutDate: string;
+  adultCount: number;
+  childrenCount: number;
 }
 
 export default function BookingForm({
   currentUser,
   paymentIntentData,
+  slug,
+  checkinDate,
+  checkoutDate,
+  adultCount,
+  childrenCount,
 }: BookingFormProps) {
   const stripe = useStripe();
   const elements = useElements();
+
+  const navigate = useNavigate();
+
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const [paymentError, setPaymentError] = useState<string>("");
+  const [disableButton, setDisableButton] = useState<boolean>(false);
+
+  // Trigger function to create hotel booking
+  const [bookHotelMutationTrigger, { error, isLoading }] =
+    useBookHotelMutation();
+
+  if (error) {
+    handleApiError(error as ApiErrorType);
+  }
 
   const { register } = useForm<BookingFormType>({
     defaultValues: {
@@ -30,27 +65,79 @@ export default function BookingForm({
     },
   });
 
-  const onSubmit = async () => {
+  // Function that runs when payment request is submitted
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
     if (!stripe || !elements) return;
 
-    const result = await stripe.confirmCardPayment(
-      paymentIntentData.clientSecret,
-      {
-        payment_method: {
-          card: elements.getElement(CardElement) as StripeCardElement,
-        },
-      }
-    );
+    setIsProcessing(true);
 
-    if (result.paymentIntent?.status === "succeeded") {
+    try {
+      const result = await stripe.confirmCardPayment(
+        paymentIntentData.clientSecret,
+        {
+          payment_method: {
+            card: elements.getElement(CardElement) as StripeCardElement,
+          },
+        }
+      );
+
+      if (result.error) {
+        setPaymentError(
+          result.error.message ?? "Payment failed. An error occured."
+        );
+        setIsProcessing(false);
+      } else if (result.paymentIntent.status === "succeeded") {
+        toast.success("Payment successful");
+        setIsProcessing(false);
+
+        const bookingInfo: BookHotelRequestBodyType = {
+          adultCount,
+          childrenCount,
+          checkinDate,
+          checkoutDate,
+          paymentIntentId: paymentIntentData.paymentIntentId,
+          slug,
+          totalPrice: paymentIntentData.totalCost,
+        };
+
+        bookHotelMutationTrigger(bookingInfo)
+          .then(() => {
+            setDisableButton(true);
+            navigate("/my-bookings");
+            toast.success("Hotel booked");
+          })
+          .catch((err) => {
+            console.log("Error in booking hotel: ", error);
+            toast.error(
+              err.message ?? "An error occured while booking the hotel"
+            );
+          });
+      }
+    } catch (error) {
       //
+      console.log("Error while paying/booking: ", error);
+      toast.error("An error occured");
+      setIsProcessing(false);
     }
   };
+
+  // Label of the payment button
+  const paymentButtonLabel = useMemo(() => {
+    if (isProcessing) return "Processing payment...";
+
+    if (isLoading) {
+      return "Booking hotel room...";
+    }
+
+    return "Book";
+  }, [isProcessing, isLoading]);
 
   return (
     <form
       className="space-y-4 rounded-sm border border-slate-300 p-4"
-      onSubmit={onSubmit}
+      onSubmit={(e) => onSubmit(e)}
     >
       <h3 className="text-3xl font-bold">Confirm your details</h3>
 
@@ -98,6 +185,20 @@ export default function BookingForm({
           <CardElement id="payment-element" className="border p-3 rounded-sm" />
         </div>
       </div>
+
+      <Button
+        type="submit"
+        variant="primary"
+        disabled={isProcessing || isLoading || disableButton}
+      >
+        {paymentButtonLabel}
+      </Button>
+
+      {!isProcessing && !isLoading && paymentError && (
+        <div className="bg-rose-200 text-red-500 font-bold p-4">
+          {paymentError}
+        </div>
+      )}
     </form>
   );
 }

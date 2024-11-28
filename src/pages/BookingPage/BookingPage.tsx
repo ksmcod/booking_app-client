@@ -118,6 +118,11 @@ export default function BookingPage() {
             <BookingForm
               currentUser={currentUser}
               paymentIntentData={paymentIntentData}
+              slug={slug}
+              checkinDate={bookingInfo.startDate}
+              checkoutDate={bookingInfo.endDate}
+              adultCount={parseInt(bookingInfo.adults)}
+              childrenCount={parseInt(bookingInfo.children)}
             />
           </Elements>
         )
