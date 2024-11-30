@@ -18,6 +18,7 @@ import {
   NotFound404,
   ViewHotelPage,
   BookingPage,
+  UserBookingsPage,
 } from "./pages";
 import Redirect from "./utils/Redirect";
 import SearchResultsPage from "./pages/SearchResults/SearchResultsPage";
@@ -35,14 +36,18 @@ export default function App() {
         <Route element={<ProtectedRoutes />}>
           <Route path="add-hotel" element={<AddHotelPage />} />
           <Route path="my-hotels" element={<MyHotelsPage />} />
+
           <Route path="edit-hotel">
             <Route index element={<Redirect target="/my-hotels" />} />
             <Route path=":slug" element={<EditHotelPage />} />
           </Route>
+
           <Route path="book">
             <Route index element={<Redirect target="/" />} />
             <Route path=":slug" element={<BookingPage />} />
           </Route>
+
+          <Route path="my-bookings" element={<UserBookingsPage />} />
         </Route>
 
         <Route path="hotel">

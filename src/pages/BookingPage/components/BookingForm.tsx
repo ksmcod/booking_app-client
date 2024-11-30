@@ -3,12 +3,10 @@ import Button from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-  ApiErrorType,
   BookHotelRequestBodyType,
   PaymentIntentResponseType,
   UserType,
 } from "@/types";
-import handleApiError from "@/utils/handleApiError";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { StripeCardElement } from "@stripe/stripe-js";
 import { useMemo, useState } from "react";
@@ -51,12 +49,7 @@ export default function BookingForm({
   const [disableButton, setDisableButton] = useState<boolean>(false);
 
   // Trigger function to create hotel booking
-  const [bookHotelMutationTrigger, { error, isLoading }] =
-    useBookHotelMutation();
-
-  if (error) {
-    handleApiError(error as ApiErrorType);
-  }
+  const [bookHotelMutationTrigger, { isLoading }] = useBookHotelMutation();
 
   const { register } = useForm<BookingFormType>({
     defaultValues: {
@@ -109,7 +102,7 @@ export default function BookingForm({
             toast.success("Hotel booked");
           })
           .catch((err) => {
-            console.log("Error in booking hotel: ", error);
+            console.log("Error in booking hotel: ", err);
             toast.error(
               err.message ?? "An error occured while booking the hotel"
             );

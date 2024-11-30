@@ -75,3 +75,16 @@ export interface BookHotelRequestBodyType {
   adultCount: number;
   childrenCount: number;
 }
+
+export interface BookingType {
+  id: string;
+  userId: string;
+  hotelSlug: string;
+  checkinDate: Date;
+  checkoutDate: Date;
+  totalPrice: number;
+  adultCount: number;
+  childrenCount: number;
+  createdAt: Date;
+  updatedAt: Date;
+}

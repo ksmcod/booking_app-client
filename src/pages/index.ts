@@ -7,6 +7,7 @@ import EditHotelPage from "./EditHotel/EditHotelPage";
 import NotFound404 from "./NotFound/NotFound404";
 import ViewHotelPage from "./ViewHotelPage/ViewHotelPage";
 import BookingPage from "./BookingPage/BookingPage";
+import UserBookingsPage from "./UserBookingsPage/UserBookingsPage";
 
 export {
   AddHotelPage,
@@ -18,4 +19,5 @@ export {
   NotFound404,
   ViewHotelPage,
   BookingPage,
+  UserBookingsPage,
 };
