@@ -74,6 +74,12 @@ const hotelsApi = api.injectEndpoints({
       }),
       keepUnusedDataFor: 0,
     }),
+    getHotels: builder.query<HotelType[], string>({
+      query: (queryParam) => ({
+        url: `${HOTELS_URL}?${qs.stringify({ orderBy: queryParam })}`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -83,4 +89,5 @@ export const {
   useCreatePaymentIntentQuery,
   useBookHotelMutation,
   useGetAllBookingsQuery,
+  useGetHotelsQuery,
 } = hotelsApi;
