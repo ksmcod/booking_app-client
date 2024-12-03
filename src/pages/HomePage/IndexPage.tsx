@@ -39,7 +39,7 @@ export default function Index() {
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               {recentHotels?.map((hotel) => (
-                <HotelCard hotel={hotel} />
+                <HotelCard key={hotel.id} hotel={hotel} />
               ))}
             </div>
           </>
@@ -57,7 +57,7 @@ export default function Index() {
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {hotHotels?.map((hotel) => (
-                <HotelCard hotel={hotel} />
+                <HotelCard key={hotel.id} hotel={hotel} />
               ))}
             </div>
           </>

@@ -1,15 +1,15 @@
-import { useCallback, useState } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom";
-import Select from "react-select";
-import { Country, City } from "country-state-city";
+import { Label } from "@radix-ui/react-label";
+import { City, Country } from "country-state-city";
+import { useCallback, useEffect, useState } from "react";
 import { RangeKeyDict } from "react-date-range";
-
-import { Search, SearchX } from "lucide-react";
-
+import { useForm } from "react-hook-form";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import Select from "react-select";
 import { Input } from "./ui/input";
-import { Label } from "./ui/label";
-import Button from "./ui/button";
 import CalendarComponent from "./Calendar";
+import Button from "./ui/button";
+import { Search, SearchX } from "lucide-react";
+import toast from "react-hot-toast";
 
 interface FormState {
   country: {
@@ -30,7 +30,20 @@ interface FormState {
 export default function SearchBar() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const {
+    register,
+    setValue,
+    handleSubmit,
+    formState: { errors },
+    watch,
+  } = useForm<FormState>({
+    defaultValues: {
+      adultCount: 1,
+      childrenCount: 0,
+    },
+  });
 
+  //   Daterange to be passed down to the Calendar comp.
   const [dateRange, setDateRange] = useState<RangeKeyDict>({
     selection: {
       startDate: new Date(
@@ -45,6 +58,7 @@ export default function SearchBar() {
     },
   });
 
+  //   Form state
   const [formState, setFormState] = useState<FormState>({
     country: { value: "", label: "Choose destination Country", isoCode: "" },
     city: { value: "", label: "Choose destination City" },
@@ -67,7 +81,7 @@ export default function SearchBar() {
     return cities?.map((city) => ({ label: city.name, value: city.name }));
   }, [formState.country.isoCode]);
 
-  //   Function to execute when user selects a country in the dropdown
+  //   Execute when user selects a country in the dropdown
   function selectCountry(e: { value: string; label: string; isoCode: string }) {
     // Set the selected country
     setFormState((prev) => ({
@@ -75,22 +89,27 @@ export default function SearchBar() {
       country: { value: e.value, label: e.label, isoCode: e.isoCode },
     }));
 
+    setValue("country", e);
+
     // Clear the city field
     setFormState((prev) => ({
       ...prev,
       city: { value: "", label: "Choose destination City" },
     }));
+
+    setValue("city", { value: "", label: "" });
   }
 
-  //   Function to run when user selects a city
+  //   Execute when user selects a city
   function selectCity(e: { value: string; label: string }) {
     setFormState((prev) => ({
       ...prev,
       city: { value: e.value, label: e.label },
     }));
+    setValue("city", e);
   }
 
-  // Function to handle change in calendar
+  // Handle change in calendar
   function handleCalendarChange(item: RangeKeyDict) {
     setDateRange(item);
     setFormState((prev) => ({
@@ -98,9 +117,12 @@ export default function SearchBar() {
       startDate: item.selection.startDate ?? new Date(),
       endDate: item.selection.endDate ?? new Date(),
     }));
+
+    setValue("startDate", item.selection.startDate || new Date());
+    setValue("endDate", item.selection.endDate || new Date());
   }
 
-  // Function to clear search values
+  //   Function to clear form
   function clearFormState(e: React.MouseEvent) {
     e.preventDefault();
 
@@ -120,11 +142,18 @@ export default function SearchBar() {
       startDate: new Date(),
       endDate: new Date(),
     });
+
+    setValue("adultCount", 1);
+    setValue("childrenCount", 0);
+    setValue("country", formState.country);
+    setValue("city", formState.city);
+    setValue("startDate", formState.startDate);
+    setValue("endDate", formState.endDate);
   }
 
-  // Function to handle the search
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  //   Submit function
+  const onSubmit = handleSubmit((data) => {
+    console.log("Form data is: ", data);
 
     searchParams.delete("country");
     searchParams.delete("city");
@@ -133,12 +162,12 @@ export default function SearchBar() {
     searchParams.delete("startDate");
     searchParams.delete("endDate");
 
-    if (formState.country.value.length) {
-      searchParams.set("country", formState.country.value);
+    if (formState.country.value) {
+      searchParams.set("country", watch("country").value);
     }
 
-    if (formState.city.value.length) {
-      searchParams.set("city", formState.city.value);
+    if (formState.city.value) {
+      searchParams.set("city", watch("city").value);
     }
 
     if (formState.startDate.getTime() !== formState.endDate.getTime()) {
@@ -146,17 +175,26 @@ export default function SearchBar() {
       searchParams.set("endDate", formState.endDate.getTime().toString());
     }
 
-    searchParams.set("adults", formState.adultCount.toString());
-    searchParams.set("children", formState.childrenCount.toString());
+    searchParams.set("adults", watch("adultCount").toString());
+    searchParams.set("children", watch("childrenCount").toString());
 
-    navigate(`search?${searchParams.toString()}`);
-  }
+    navigate(`/search?${searchParams.toString()}`);
+  });
+
+  //   Toast error if adult count and/or children count field(s) is/are empty
+  useEffect(() => {
+    if (errors.adultCount) {
+      toast.error(errors.adultCount.message ?? "Adults");
+    } else if (errors.childrenCount) {
+      toast.error(errors.childrenCount.message ?? "Children");
+    }
+  }, [errors.adultCount, errors.childrenCount]);
 
   return (
     <div className="px-5">
       <form
-        onSubmit={(e) => handleSubmit(e)}
         className="max-w-5xl mx-auto rounded-sm bg-orange-400 p-3 text-base shadow-md grid grid-cols-1 -translate-y-10 sm:-translate-y-1/3 sm:grid-cols-2 lg:grid-cols-3 gap-1 items-center"
+        onSubmit={onSubmit}
       >
         {/* Dropdown to choose destination country */}
         {/* <div className="grid grid-cols-2 gap-1"> */}
@@ -182,30 +220,25 @@ export default function SearchBar() {
             return "Please select a country";
           }}
         />
-        {/* </div> */}
 
         {/* Select number of adults and children */}
         <div className="bg-white flex justify-center items-center gap-2 rounded-sm">
           <Label
             htmlFor="adults"
-            className="flex justify-center items-center px-1"
+            className="flex justify-center items-center px-1 gap-1"
           >
             <span>Adults:</span>
             <Input
               id="adults"
               type="number"
-              className="border-none h-full w-full"
-              min={1}
-              value={formState.adultCount}
-              onChange={(e) => {
-                if (Number.isNaN(parseInt(e.target.value))) {
-                  e.target.value = "01";
-                }
-                setFormState((prev) => ({
-                  ...prev,
-                  adultCount: parseInt(e.target.value),
-                }));
-              }}
+              className="border-none"
+              {...register("adultCount", {
+                min: { value: 1, message: "There must be at least one adult" },
+                required: {
+                  value: true,
+                  message: "You must have at least 1 adult",
+                },
+              })}
             />
           </Label>
 
@@ -217,28 +250,28 @@ export default function SearchBar() {
             <Input
               id="children"
               type="number"
-              className="border-none h-full w-full"
+              className="border-none"
               min={0}
-              value={formState.childrenCount}
-              onChange={(e) => {
-                if (Number.isNaN(parseInt(e.target.value))) {
-                  e.target.value = "0";
-                }
-                setFormState((prev) => ({
-                  ...prev,
-                  childrenCount: parseInt(e.target.value),
-                }));
-              }}
+              {...register("childrenCount", {
+                min: {
+                  value: 0,
+                  message: "You cannot have less than 0 children",
+                },
+                required: {
+                  value: true,
+                  message: "The children field may not be empty",
+                },
+              })}
             />
           </Label>
         </div>
 
-        {/* Calendar for choosing date */}
         <CalendarComponent
           dateRange={dateRange}
           onChange={(newDateRange) => handleCalendarChange(newDateRange)}
           position="down"
         />
+
         {/* Search and clear buttons */}
         <Button
           type="submit"
