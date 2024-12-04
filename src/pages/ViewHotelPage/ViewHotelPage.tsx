@@ -1,18 +1,13 @@
 import { useGetSingleHotelQuery } from "@/app/api/hotelsApi";
 import Loader from "@/components/Loader";
 import { ApiErrorType } from "@/types";
-import Redirect from "@/utils/Redirect";
-import { MapPin, Star } from "lucide-react";
+import { MapPin, Star, Users } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import FacilitiesBox from "./components/FacilitiesBox";
 import GuestInfoForm from "@/forms/GuestInfoForm/GuestInfoForm";
 
 export default function ViewHotelPage() {
-  const { slug } = useParams();
-
-  if (!slug) {
-    return <Redirect target="/" />;
-  }
+  const slug = useParams().slug as string;
 
   const {
     isLoading,
@@ -101,6 +96,17 @@ export default function ViewHotelPage() {
           <span className="text-slate-500">{hotel.city}</span> |
           <span className="text-slate-700 font-bold">{hotel.country}</span>
         </div>
+
+        <div className="flex items-center gap-2">
+          <Users size={20} />
+          <div>
+            <span className="font-bold">{hotel.adultCount}</span> adults
+          </div>
+          <div>
+            <span className="font-bold">{hotel.childrenCount}</span>
+            {hotel.childrenCount == 1 ? "child" : "children"}
+          </div>
+        </div>
       </div>
 
       {/* Hotel images */}
@@ -127,7 +133,7 @@ export default function ViewHotelPage() {
       <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-4">
         <div className="whitespace-pre-line">{hotel.description}</div>
         <div className="h-fit">
-          <GuestInfoForm hotelSlug={hotel.slug} pricePerNight={hotel.price} />
+          <GuestInfoForm hotel={hotel} pricePerNight={hotel.price} />
         </div>
       </div>
     </div>

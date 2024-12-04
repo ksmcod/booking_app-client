@@ -8,9 +8,12 @@ import { RangeKeyDict } from "react-date-range";
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useAppSelector } from "@/app/hooks";
+import { differenceInDays } from "date-fns";
+import toast from "react-hot-toast";
+import { HotelType } from "@/types";
 
 interface GuestInfoFormProps {
-  hotelSlug: string;
+  hotel: HotelType;
   pricePerNight: number;
 }
 
@@ -22,7 +25,7 @@ export interface GuestInfoFormData {
 }
 
 export default function GuestInfoForm({
-  hotelSlug,
+  hotel,
   pricePerNight,
 }: GuestInfoFormProps) {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -93,27 +96,51 @@ export default function GuestInfoForm({
     setValue("childrenCount", parseInt(bookingInfo.children));
     setValue("startDate", new Date(parseInt(bookingInfo.startDate)));
     setValue("endDate", new Date(parseInt(bookingInfo.endDate)));
-  }, []);
+  }, [
+    bookingInfo.adults,
+    bookingInfo.children,
+    bookingInfo.startDate,
+    bookingInfo.endDate,
+    setValue,
+  ]);
 
+  // Text in the button
   const bookingButtonLabel = useMemo(() => {
     if (isLoggedIn) return "Book now";
     return "Sign in to book";
   }, [isLoggedIn]);
 
+  // Function to handle signup before booking
   function handleSignupToBook() {
     const allSearchParams = searchParams;
     allSearchParams.set("next", location.pathname);
     navigate(`/login?${allSearchParams}`);
   }
 
+  // Submit function
   function onSubmit(data: GuestInfoFormData) {
+    // navigate(`/book/${hotelSlug}?${searchParams.toString()}`);
+
+    if (differenceInDays(data.endDate, data.startDate) < 1) {
+      return toast.error("Your checkin and checkout dates are identical");
+    }
+
+    if (
+      data.adultCount > hotel.adultCount ||
+      data.childrenCount > hotel.childrenCount
+    ) {
+      return toast.error("Hotel does not support that many guests");
+    }
+
     const newSearchParams = searchParams;
     newSearchParams.set("adults", data.adultCount.toString());
     newSearchParams.set("children", data.childrenCount.toString());
     setSearchParams(newSearchParams);
 
-    navigate(`/book/${hotelSlug}?${searchParams.toString()}`);
+    navigate(`/book/${hotel.slug}?${searchParams.toString()}`);
   }
+
+  useEffect(() => {}, []);
 
   return (
     <div className="bg-blue-200 p-4 space-y-3 rounded-sm">
@@ -141,17 +168,18 @@ export default function GuestInfoForm({
                 type="number"
                 className="h-fit py-1 rounded-none border-none"
                 {...register("adultCount", {
-                  required: true,
+                  required: {
+                    value: true,
+                    message: "You need at least one adult",
+                  },
                   valueAsNumber: true,
-                  min: { value: 1, message: "You need atleast one adult" },
+                  min: { value: 1, message: "You need at least one adult" },
                 })}
                 min={1}
-                readOnly
-                disabled
               />
             </Label>
             {errors && errors.adultCount && (
-              <span className="text-red-400 font-bold text-sm">
+              <span className="text-red-400 font-bold text-xs">
                 {errors.adultCount.message}
               </span>
             )}
@@ -170,14 +198,16 @@ export default function GuestInfoForm({
                     value: 0,
                     message: "This field cannot be less than zero",
                   },
+                  required: {
+                    value: true,
+                    message: "This field may not be empty",
+                  },
                 })}
                 min={0}
-                readOnly
-                disabled
               />
             </Label>
             {errors && errors.childrenCount && (
-              <span className="text-red-400 font-bold text-sm">
+              <span className="text-red-400 font-bold text-xs">
                 {errors.childrenCount.message}
               </span>
             )}

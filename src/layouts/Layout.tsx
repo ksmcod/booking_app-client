@@ -67,11 +67,10 @@ export default function Layout() {
     const next = sessionStorage.getItem("next");
 
     if (next) {
-      console.log("Next is: ", next);
       sessionStorage.removeItem("next");
       navigate(next);
     }
-  }, []);
+  }, [navigate]);
 
   return (
     !isLoading && (
