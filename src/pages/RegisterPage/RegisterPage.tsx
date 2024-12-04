@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import toast from "react-hot-toast";
 
 import { useAppDispatch } from "@/app/hooks";
@@ -10,7 +10,7 @@ import { useRegisterUserMutation } from "@/app/api/usersApi";
 import githubmarkwhite from "@/assets/github-mark/github-mark-white.png";
 import Loader from "@/components/Loader";
 
-import handleGithubLogin from "@/utils/handleGithub";
+import githubLogin from "@/utils/handleGithub";
 import Button from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import handleApiError from "@/utils/handleApiError";
@@ -25,6 +25,7 @@ export interface RegisterFormData {
 }
 export default function RegisterPage() {
   const [registerUser, { isLoading }] = useRegisterUserMutation();
+  const [searchParams] = useSearchParams();
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -40,19 +41,38 @@ export default function RegisterPage() {
     registerUser(data)
       .unwrap()
       .then((payload) => {
-        // console.log("Success... Payload: ", payload);
-        toast.success("Welcome aboard");
         dispatch(setIsLoggedIn());
         dispatch(setUser(payload));
+
+        // Redirect to specific page after signup if necessary
+        const next = searchParams.get("next");
+        if (next) {
+          searchParams.delete("next");
+          const urlInfo = searchParams;
+          toast.success("Welcome aboard");
+          return navigate(`${next}?${urlInfo}`);
+        }
+        toast.success("Welcome aboard");
         navigate("/");
       })
       .catch((error) => {
-        // toast.error(error?.data?.message ?? "An error occured", {
-        //   position: "top-center",
-        // });
         handleApiError(error as ApiErrorType);
       });
   });
+
+  // Function to handle Github signup
+  function handleGithubSignup() {
+    const nextUrl = searchParams.get("next");
+
+    if (nextUrl) {
+      searchParams.delete("next");
+      const next = `${nextUrl}?${searchParams.toString()}`;
+      sessionStorage.setItem("next", next);
+      return githubLogin();
+    }
+
+    githubLogin();
+  }
 
   return (
     <div className="p-4">
@@ -194,18 +214,10 @@ export default function RegisterPage() {
 
         {/* SOCIAL MEDIA LOGIN */}
         <div className="my-1 px-4 py-2">
-          <Button variant="black" onClick={() => handleGithubLogin()}>
+          <Button variant="black" onClick={handleGithubSignup}>
             <span>Continue with Github</span>
             <img src={githubmarkwhite} alt="Github logo" className="w-9" />
           </Button>
-
-          {/* <button
-            onClick={() => handleGithubLogin()}
-            className="w-full py-2 bg-black flex justify-center items-center gap-4 rounded text-white font-bold hover:opacity-90 active:opacity-85"
-          >
-            Continue with Github
-            <img src={githubmarkwhite} alt="Github logo" className="w-9" />
-          </button> */}
         </div>
       </div>
     </div>

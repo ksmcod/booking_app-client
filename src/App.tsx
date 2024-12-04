@@ -22,14 +22,19 @@ import {
 } from "./pages";
 import Redirect from "./utils/Redirect";
 import SearchResultsPage from "./pages/SearchResults/SearchResultsPage";
+import ProtectAuthRoutes from "./utils/ProtectAuthRoutes";
 
 export default function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<Layout />}>
         <Route index element={<IndexPage />} />
-        <Route path="register" element={<RegisterPage />} />
-        <Route path="login" element={<LoginPage />} />
+
+        <Route element={<ProtectAuthRoutes />}>
+          <Route path="register" element={<RegisterPage />} />
+          <Route path="login" element={<LoginPage />} />
+        </Route>
+
         <Route path="search" element={<SearchResultsPage />} />
 
         {/* PROTECTED ROUTES */}

@@ -43,6 +43,8 @@ export default function LoginPage() {
       .then((payload) => {
         dispatch(setIsLoggedIn());
         dispatch(setUser(payload));
+
+        // Redirect to specific page after login if necessary
         const next = searchParams.get("next");
         if (next) {
           searchParams.delete("next");
@@ -76,7 +78,6 @@ export default function LoginPage() {
     if (nextUrl) {
       searchParams.delete("next");
       const next = `${nextUrl}?${searchParams.toString()}`;
-      console.log("Next is: ", next);
       sessionStorage.setItem("next", next);
       return githubLogin();
     }
@@ -136,7 +137,10 @@ export default function LoginPage() {
 
             <span className="text-sm text-neutral-500 flex gap-1">
               Don't have an account?
-              <Link to={"/register"} className="hover:underline">
+              <Link
+                to={`/register?${searchParams.toString()}`}
+                className="hover:underline"
+              >
                 Create one
               </Link>
             </span>
