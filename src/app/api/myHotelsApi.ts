@@ -42,6 +42,7 @@ const myHotelsApi = api.injectEndpoints({
         url: `${HOTEL_URL}/${slug}`,
         method: "DELETE",
       }),
+      invalidatesTags: ["allHotels", "oneHotel"],
     }),
   }),
 });

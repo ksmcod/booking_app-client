@@ -99,12 +99,14 @@ export default function ViewHotelPage() {
 
         <div className="flex items-center gap-2">
           <Users size={20} />
-          <div>
-            <span className="font-bold">{hotel.adultCount}</span> adults
+          <div className="flex gap-1">
+            <span className="font-bold">{hotel.adultCount}</span>{" "}
+            <span>adults</span>
           </div>
-          <div>
+          <span>-</span>
+          <div className="flex gap-1">
             <span className="font-bold">{hotel.childrenCount}</span>
-            {hotel.childrenCount == 1 ? "child" : "children"}
+            <span>{hotel.childrenCount == 1 ? "child" : "children"}</span>
           </div>
         </div>
       </div>

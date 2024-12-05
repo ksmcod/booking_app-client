@@ -11,7 +11,7 @@ import githubmarkwhite from "@/assets/github-mark/github-mark-white.png";
 import Loader from "@/components/Loader";
 
 import githubLogin from "@/utils/handleGithub";
-import Button from "@/components/ui/button";
+import Button from "@/components/ui/Button";
 import { Input } from "@/components/ui/input";
 import handleApiError from "@/utils/handleApiError";
 import { ApiErrorType } from "@/types";

@@ -7,7 +7,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import Select from "react-select";
 import { Input } from "./ui/input";
 import CalendarComponent from "./Calendar";
-import Button from "./ui/button";
+import Button from "./ui/Button";
 import { Search, SearchX } from "lucide-react";
 import toast from "react-hot-toast";
 

@@ -97,6 +97,7 @@ export default function EditHotelPage() {
       slug={slug as string}
       isLoading={isLoading}
       submitFunction={submitFunction}
+      edit
     />
   );
 }

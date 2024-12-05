@@ -6,7 +6,12 @@ import FacilitiesSection from "./FacilitiesSection";
 import GuestsSection from "./GuestsSection";
 import ImagesSection from "./ImagesSection";
 import Loader from "@/components/Loader";
-import { HotelType } from "@/types";
+import { ApiErrorType, HotelType } from "@/types";
+import Modal from "@/components/Modal";
+import { useDeleteMyHotelMutation } from "@/app/api/myHotelsApi";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import handleApiError from "@/utils/handleApiError";
 
 interface ManageHotelFormProps {
   hotel?: HotelType;
@@ -14,6 +19,7 @@ interface ManageHotelFormProps {
   isLoading: boolean;
   slug: string;
   submitFunction: ({ slug, body }: { slug: string; body: FormData }) => void;
+  edit?: boolean;
 }
 export interface HotelFormData {
   name: string;
@@ -36,9 +42,15 @@ export default function ManageHotelForm({
   submitFunction,
   isLoading,
   slug,
+  edit,
 }: ManageHotelFormProps) {
+  const navigate = useNavigate();
+
   const formMethods = useForm<HotelFormData>();
   const { handleSubmit } = formMethods;
+
+  const [deleteTrigger, { isLoading: deleteLoading }] =
+    useDeleteMyHotelMutation();
 
   const onSubmit = handleSubmit((data) => {
     const formData = new FormData();
@@ -68,6 +80,17 @@ export default function ManageHotelForm({
 
     submitFunction({ slug, body: formData });
   });
+
+  function deleteHotel() {
+    deleteTrigger(slug)
+      .then(() => {
+        toast.success("Hotel deleted");
+        navigate("/my-hotels");
+      })
+      .catch((err) => {
+        handleApiError(err as ApiErrorType);
+      });
+  }
 
   return (
     <FormProvider {...formMethods}>
@@ -112,6 +135,18 @@ export default function ManageHotelForm({
           >
             {isLoading ? <Loader className="size-7 text-white" /> : "Submit"}
           </button>
+
+          {edit && (
+            <Modal
+              label={deleteLoading ? "Deleting..." : "Delete hotel"}
+              title="Are you absolutely sure?"
+              description="This action cannot be undone. This will permanently delete this hotel
+        and remove all related data from our servers."
+              proceedFn={deleteHotel}
+              triggerClassName="w-full p-2 font-bold text-xl bg-red-600 hover:bg-red-500 active:bg-red-400 text-white rounded-sm"
+              disabled={deleteLoading}
+            />
+          )}
         </form>
       </div>
     </FormProvider>

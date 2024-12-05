@@ -12,7 +12,7 @@ import { useAppDispatch } from "@/app/hooks";
 import { setUser, setIsLoggedIn } from "@/app/slices/userSlice";
 
 import githubLogin from "@/utils/handleGithub";
-import Button from "@/components/ui/button";
+import Button from "@/components/ui/Button";
 import { Input } from "@/components/ui/input";
 import handleApiError from "@/utils/handleApiError";
 import { ApiErrorType } from "@/types";
