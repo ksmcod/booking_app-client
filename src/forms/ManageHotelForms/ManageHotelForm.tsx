@@ -83,9 +83,10 @@ export default function ManageHotelForm({
 
   function deleteHotel() {
     deleteTrigger(slug)
+      .unwrap()
       .then(() => {
         toast.success("Hotel deleted");
-        navigate("/my-hotels");
+        navigate("/my-hotels", { replace: true });
       })
       .catch((err) => {
         handleApiError(err as ApiErrorType);
