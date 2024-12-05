@@ -37,6 +37,12 @@ const myHotelsApi = api.injectEndpoints({
       }),
       invalidatesTags: ["oneHotel", "allHotels"],
     }),
+    deleteMyHotel: builder.mutation<void, string>({
+      query: (slug) => ({
+        url: `${HOTEL_URL}/${slug}`,
+        method: "DELETE",
+      }),
+    }),
   }),
 });
 
@@ -45,4 +51,5 @@ export const {
   useGetMyHotelsQuery,
   useGetMyHotelBySlugQuery,
   useUpdateMyHotelMutation,
+  useDeleteMyHotelMutation,
 } = myHotelsApi;

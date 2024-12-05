@@ -11,7 +11,7 @@ export default function ProtectAuthRoutes() {
       navigate("/", { replace: true });
     }
 
-    // DO NOT ADD isLoggedIn TO DEPS ARRAY
+    // DO NOT ADD 'isLoggedIn' TO DEPS ARRAY
   }, [navigate]);
 
   if (isLoggedIn) {
