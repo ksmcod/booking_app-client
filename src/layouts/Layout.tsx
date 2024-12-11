@@ -72,6 +72,8 @@ export default function Layout() {
     }
   }, [navigate]);
 
+  console.log("Api url: ", import.meta.env.VITE_API_URL);
+
   return (
     !isLoading && (
       <div className="flex flex-col gap-2 min-h-screen justify-between roboto relative bg-white">
@@ -87,7 +89,7 @@ export default function Layout() {
         </div>
 
         {/* <div className="flex-1 max-w-7xl mx-auto w-full mt-16"> */}
-        <div className="flex-1 flex flex-col max-w-6xl mx-auto w-full px-2">
+        <div className="flex-1 flex flex-col max-w-6xl mx-auto w-full px-2 pb-10">
           <Outlet />
         </div>
 
