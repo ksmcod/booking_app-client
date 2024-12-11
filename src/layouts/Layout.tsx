@@ -36,7 +36,6 @@ export default function Layout() {
             dispatch(setUser(payload));
           })
           .catch((err) => {
-            console.log("ERROR IN GET USER: ", err);
             if (err?.status === 401) {
               dispatch(clearUser());
             }
@@ -71,8 +70,6 @@ export default function Layout() {
       navigate(next);
     }
   }, [navigate]);
-
-  console.log("Api url: ", import.meta.env.VITE_API_URL);
 
   return (
     !isLoading && (
