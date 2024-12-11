@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 import daisyui from "daisyui";
+import tailwindcssanimate from "tailwindcss-animate";
 
 export default {
   darkMode: ["class"],
@@ -62,5 +63,5 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), daisyui],
+  plugins: [tailwindcssanimate, daisyui],
 };
