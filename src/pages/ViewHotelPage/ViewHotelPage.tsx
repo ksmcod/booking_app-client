@@ -86,7 +86,7 @@ export default function ViewHotelPage() {
         <div className="flex items-center gap-5">
           <h1 className="text-4xl font-bold">{hotel.name}</h1>
           <span className="flex items-center">
-            {Array.from({ length: hotel.starRating }).map((s, index) => (
+            {Array.from({ length: hotel.starRating }).map((_, index) => (
               <Star key={index} className="fill-yellow-400 text-yellow-400" />
             ))}
           </span>

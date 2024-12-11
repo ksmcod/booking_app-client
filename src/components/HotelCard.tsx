@@ -22,7 +22,7 @@ export default function HotelCard({ hotel }: HotelCardProps) {
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <span className="flex">
-              {Array.from({ length: hotel.starRating }).map((value, index) => (
+              {Array.from({ length: hotel.starRating }).map((_, index) => (
                 <Star
                   key={index}
                   className="text-yellow-400 fill-yellow-400 size-5"
