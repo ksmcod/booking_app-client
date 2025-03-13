@@ -19,6 +19,7 @@ import {
   ViewHotelPage,
   BookingPage,
   UserBookingsPage,
+  MyAccountPage,
 } from "./pages";
 import Redirect from "./utils/Redirect";
 import SearchResultsPage from "./pages/SearchResults/SearchResultsPage";
@@ -41,6 +42,8 @@ export default function App() {
         <Route element={<ProtectedRoutes />}>
           <Route path="add-hotel" element={<AddHotelPage />} />
           <Route path="my-hotels" element={<MyHotelsPage />} />
+
+          <Route path="my-account" element={<MyAccountPage />} />
 
           <Route path="edit-hotel">
             <Route index element={<Redirect target="/my-hotels" />} />
